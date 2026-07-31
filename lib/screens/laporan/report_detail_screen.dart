@@ -30,7 +30,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     final dir = await getTemporaryDirectory();
     final file = File('${dir.path}/laporan_penjualan_${DateTime.now().millisecondsSinceEpoch}.csv');
     await file.writeAsString(buffer.toString());
-    await Share.shareXFiles([XFile(file.path)], subject: 'Laporan Penjualan UsahaKu');
+    await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], subject: 'Laporan Penjualan UsahaKu'));
   }
 
   @override
