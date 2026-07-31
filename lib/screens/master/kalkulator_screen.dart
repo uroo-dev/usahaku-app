@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:usahaku/theme/app_theme.dart';
 
-/// Kalkulator inline — tanpa riwayat, tampilkan ekspresi aktif saat memilih operator.
+/// Kalkulator dengan expression parser lengkap.
+/// Mendukung ekspresi panjang: 100+1-3×4÷2 dengan operator precedence yang benar.
 class KalkulatorScreen extends StatefulWidget {
   const KalkulatorScreen({super.key});
 
@@ -10,70 +11,203 @@ class KalkulatorScreen extends StatefulWidget {
 }
 
 class _KalkulatorScreenState extends State<KalkulatorScreen> {
-  String _display = '0';   // angka yang sedang diketik
-  String _expression = ''; // ekspresi lengkap misal "1.500 +"
-  double? _left;
-  String? _op;
-  bool _fresh = true;      // reset angka berikutnya setelah operator / hasil
+  /// Ekspresi yang ditampilkan dan diedit user (misal "100+1-3×4")
+  String _expr = '';
+
+  /// Hasil / angka yang sedang aktif di display bawah
+  String _display = '0';
+
+  /// True jika baru saja menekan "=" — ketukan angka berikutnya reset ekspresi
+  bool _justEvaled = false;
+
+  // ─── Input handling ──────────────────────────────────────────────
 
   void _tap(String key) {
     setState(() {
       switch (key) {
         case 'C':
+          _expr = '';
           _display = '0';
-          _expression = '';
-          _left = null;
-          _op = null;
-          _fresh = true;
+          _justEvaled = false;
 
         case '⌫':
-          if (_fresh) return;
-          _display = _display.length > 1
-              ? _display.substring(0, _display.length - 1)
-              : '0';
-          if (_display == '-') _display = '0';
+          if (_justEvaled) {
+            _expr = '';
+            _display = '0';
+            _justEvaled = false;
+            return;
+          }
+          if (_expr.isNotEmpty) {
+            _expr = _expr.substring(0, _expr.length - 1);
+          }
+          _display = _currentToken(_expr);
 
         case '+':
         case '-':
         case '×':
         case '÷':
-          _left = double.tryParse(_display) ?? 0;
-          _op = key;
-          _expression = '${_formatNum(_left!)} $key';
-          _fresh = true;
-
-        case '=':
-          final right = double.tryParse(_display) ?? 0;
-          if (_left != null && _op != null) {
-            final result = _compute(_left!, _op!, right);
-            _expression = '${_formatNum(_left!)} $_op ${_formatNum(right)} =';
-            _display = _formatNum(result);
-            _left = result;
-            _op = null;
+          _justEvaled = false;
+          if (_expr.isEmpty) {
+            // mulai dengan operator: asumsikan 0
+            _expr = '0$key';
+          } else {
+            final last = _expr[_expr.length - 1];
+            if (_isOperator(last)) {
+              // ganti operator terakhir
+              _expr = _expr.substring(0, _expr.length - 1) + key;
+            } else {
+              _expr += key;
+            }
           }
-          _fresh = true;
+          _display = _currentToken(_expr);
 
         case '%':
-          final val = double.tryParse(_display) ?? 0;
-          final pct = val / 100;
-          _display = _formatNum(pct);
+          // Konversi angka terakhir ke persen
+          if (_expr.isEmpty) {
+            final val = double.tryParse(_display) ?? 0;
+            _display = _fmt(val / 100);
+            _expr = _display;
+          } else {
+            final last = _expr[_expr.length - 1];
+            if (!_isOperator(last)) {
+              final token = _currentToken(_expr);
+              final val = double.tryParse(token) ?? 0;
+              final pct = _fmt(val / 100);
+              _expr = _expr.substring(0, _expr.length - token.length) + pct;
+              _display = pct;
+            }
+          }
+
+        case '=':
+          if (_expr.isEmpty) return;
+          final last = _expr[_expr.length - 1];
+          // Buang trailing operator sebelum evaluate
+          final exprToEval = _isOperator(last)
+              ? _expr.substring(0, _expr.length - 1)
+              : _expr;
+          if (exprToEval.isEmpty) return;
+          try {
+            final result = _evaluate(exprToEval);
+            _display = _fmt(result);
+            // Tampilkan ekspresi lengkap di baris atas, lalu set display ke hasil
+            _expr = '$exprToEval=';
+            _justEvaled = true;
+          } catch (_) {
+            _display = 'Error';
+            _expr = '';
+            _justEvaled = true;
+          }
 
         default:
-          if (_fresh) {
-            _display = key == '.' ? '0.' : key;
-            _fresh = false;
-          } else if (_display == '0' && key != '.') {
-            _display = key;
-          } else if (key == '.' && _display.contains('.')) {
-            // sudah ada titik, abaikan
-          } else {
-            _display += key;
+          // Digit atau titik desimal
+          if (_justEvaled) {
+            // Mulai ekspresi baru setelah hasil
+            _expr = '';
+            _justEvaled = false;
           }
+          if (_expr.isNotEmpty && _expr[_expr.length - 1] == '=') {
+            _expr = '';
+          }
+          // Hindari titik ganda dalam token yang sama
+          if (key == '.') {
+            final token = _currentToken(_expr);
+            if (token.contains('.')) return;
+          }
+          // Hindari leading zero (0123 → 123)
+          if (key != '.') {
+            final token = _currentToken(_expr);
+            if (token == '0') {
+              _expr = _expr.isEmpty ? key : _expr.substring(0, _expr.length - 1) + key;
+              _display = _currentToken(_expr);
+              return;
+            }
+          }
+          _expr += key;
+          _display = _currentToken(_expr);
       }
     });
   }
 
-  double _compute(double a, String op, double b) {
+  // ─── Expression parser (Shunting-Yard → RPN → evaluate) ──────────
+
+  /// Ambil token angka terakhir dari ekspresi (untuk display utama)
+  String _currentToken(String expr) {
+    if (expr.isEmpty) return '0';
+    if (expr.endsWith('=')) return _display;
+    final parts = expr.split(RegExp(r'(?<=[^eE])[+\-×÷]'));
+    final last = parts.last;
+    return last.isEmpty ? '0' : last;
+  }
+
+  bool _isOperator(String c) => c == '+' || c == '-' || c == '×' || c == '÷';
+
+  int _precedence(String op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '×' || op == '÷') return 2;
+    return 0;
+  }
+
+  /// Evaluate ekspresi string (tanpa tanda sama dengan) — Shunting-Yard
+  double _evaluate(String expr) {
+    final tokens = _tokenize(expr);
+    // Shunting-Yard → output queue (RPN)
+    final output = <double>[];
+    final ops = <String>[];
+
+    void applyOp() {
+      if (output.length < 2 || ops.isEmpty) return;
+      final b = output.removeLast();
+      final a = output.removeLast();
+      final op = ops.removeLast();
+      output.add(_applyOp(a, op, b));
+    }
+
+    for (final tok in tokens) {
+      final num = double.tryParse(tok);
+      if (num != null) {
+        output.add(num);
+      } else if (_isOperator(tok)) {
+        while (ops.isNotEmpty &&
+            _isOperator(ops.last) &&
+            _precedence(ops.last) >= _precedence(tok)) {
+          applyOp();
+        }
+        ops.add(tok);
+      }
+    }
+    while (ops.isNotEmpty) {
+      applyOp();
+    }
+    if (output.isEmpty) throw Exception('Invalid expression');
+    return output.last;
+  }
+
+  /// Tokenize ekspresi: pisahkan angka dan operator
+  List<String> _tokenize(String expr) {
+    final tokens = <String>[];
+    var buf = StringBuffer();
+    for (int i = 0; i < expr.length; i++) {
+      final c = expr[i];
+      if (_isOperator(c)) {
+        // Tanda minus sebagai unary (di awal atau setelah operator)
+        if (c == '-' && (i == 0 || _isOperator(expr[i - 1]))) {
+          buf.write(c);
+        } else {
+          if (buf.isNotEmpty) {
+            tokens.add(buf.toString());
+            buf.clear();
+          }
+          tokens.add(c);
+        }
+      } else {
+        buf.write(c);
+      }
+    }
+    if (buf.isNotEmpty) tokens.add(buf.toString());
+    return tokens;
+  }
+
+  double _applyOp(double a, String op, double b) {
     return switch (op) {
       '+' => a + b,
       '-' => a - b,
@@ -83,17 +217,25 @@ class _KalkulatorScreenState extends State<KalkulatorScreen> {
     };
   }
 
-  String _formatNum(double v) {
+  /// Format angka: tanpa desimal jika bulat, max 10 digit signifikan
+  String _fmt(double v) {
     if (v.isNaN) return 'Error';
     if (v.isInfinite) return v > 0 ? 'Inf' : '-Inf';
     if (v == v.roundToDouble() && v.abs() < 1e12) return v.toInt().toString();
-    // max 8 desimal, tanpa trailing zero
-    return v.toStringAsFixed(8).replaceAll(RegExp(r'0+$'), '').replaceAll(RegExp(r'\.$'), '');
+    return double.parse(v.toStringAsPrecision(10)).toString();
   }
+
+  // ─── Operator aktif (untuk highlight tombol) ──────────────────────
+  String? get _activeOp {
+    if (_expr.isEmpty || _justEvaled) return null;
+    final last = _expr[_expr.length - 1];
+    return _isOperator(last) ? last : null;
+  }
+
+  // ─── Build ────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
-    // Layout tombol: baris pertama C + ⌫ + % + ÷, lalu 3x3 angka dengan operator
     const rows = [
       ['C', '⌫', '%', '÷'],
       ['7', '8', '9', '×'],
@@ -101,6 +243,11 @@ class _KalkulatorScreenState extends State<KalkulatorScreen> {
       ['1', '2', '3', '+'],
       ['0', '.', '='],
     ];
+
+    // Ekspresi yang ditampilkan di baris atas (bersihkan trailing "=")
+    final exprDisplay = _expr.endsWith('=')
+        ? _expr // tampilkan misal "100+1-3×4="
+        : _expr;
 
     return Scaffold(
       appBar: AppBar(
@@ -110,40 +257,39 @@ class _KalkulatorScreenState extends State<KalkulatorScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Display area ──
+            // ── Display ──
             Expanded(
               flex: 3,
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
                 decoration: BoxDecoration(
                   color: AppColor.surfaceContainerLowest,
                   border: Border(
-                    bottom: BorderSide(color: AppColor.outlineVariant.withValues(alpha: 0.3)),
+                    bottom: BorderSide(
+                      color: AppColor.outlineVariant.withValues(alpha: 0.3),
+                    ),
                   ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    // Ekspresi (misal "1500 +" atau "1500 × 2 =")
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 150),
+                    // Ekspresi lengkap — scrollable horizontal
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      reverse: true,
                       child: Text(
-                        _expression,
-                        key: ValueKey(_expression),
-                        textAlign: TextAlign.right,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        exprDisplay.isEmpty ? ' ' : exprDisplay,
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 17,
                           fontWeight: FontWeight.w500,
-                          color: AppColor.onSurfaceVariant.withValues(alpha: 0.7),
+                          color: AppColor.onSurfaceVariant.withValues(alpha: 0.65),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    // Angka utama
+                    const SizedBox(height: 4),
+                    // Angka / hasil utama
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerRight,
@@ -152,10 +298,12 @@ class _KalkulatorScreenState extends State<KalkulatorScreen> {
                         style: TextStyle(
                           fontSize: 56,
                           fontWeight: FontWeight.w800,
+                          letterSpacing: -1,
                           color: _display == 'Error'
                               ? AppColor.error
-                              : AppColor.onSurface,
-                          letterSpacing: -1,
+                              : _justEvaled
+                                  ? AppColor.primary
+                                  : AppColor.onSurface,
                         ),
                       ),
                     ),
@@ -183,7 +331,7 @@ class _KalkulatorScreenState extends State<KalkulatorScreen> {
                                 label: key,
                                 type: _typeOf(key),
                                 onTap: () => _tap(key),
-                                isActiveOp: key == _op,
+                                isActiveOp: key == _activeOp,
                               ),
                             ),
                           );
@@ -204,10 +352,12 @@ class _KalkulatorScreenState extends State<KalkulatorScreen> {
     if (key == 'C') return _ButtonType.clear;
     if (key == '=') return _ButtonType.equals;
     if (key == '⌫' || key == '%') return _ButtonType.function;
-    if (key == '+' || key == '-' || key == '×' || key == '÷') return _ButtonType.operator;
+    if (_isOperator(key)) return _ButtonType.operator;
     return _ButtonType.number;
   }
 }
+
+// ─── Enum & Button widget ────────────────────────────────────────────
 
 enum _ButtonType { number, operator, equals, clear, function }
 
@@ -215,7 +365,7 @@ class _CalcButton extends StatelessWidget {
   final String label;
   final _ButtonType type;
   final VoidCallback onTap;
-  final bool isActiveOp; // highlight operator yang sedang aktif
+  final bool isActiveOp;
 
   const _CalcButton({
     required this.label,
@@ -259,15 +409,9 @@ class _CalcButton extends StatelessWidget {
         ),
     };
 
-    // Tampilkan ikon untuk backspace, label "C" untuk clear
     Widget child;
     if (label == '⌫') {
       child = Icon(Icons.backspace_outlined, color: fg, size: 22);
-    } else if (label == 'C') {
-      child = Text(
-        'C',
-        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: fg),
-      );
     } else {
       child = Text(
         label,
