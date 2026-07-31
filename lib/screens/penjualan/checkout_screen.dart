@@ -43,7 +43,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final method = c.paymentMethod;
     if (method == PaymentMethod.qris && c.qrisPath == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tambahkan gambar QRIS di Pengaturan terlebih dahulu')),
+        const SnackBar(
+            content: Text(
+                'Tambahkan gambar QRIS di Pengaturan terlebih dahulu')),
       );
       return;
     }
@@ -51,10 +53,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     try {
       final sale = await c.checkout();
       if (!mounted) return;
-      Navigator.pushReplacement(
+      // Push PaymentSuccessScreen, tunggu hasilnya.
+      // Saat user tap Selesai/Transaksi Baru di PaymentSuccessScreen,
+      // ia pop dengan result=true → kita teruskan ke SalesScreen.
+      final result = await Navigator.push<bool>(
         context,
         MaterialPageRoute(builder: (_) => PaymentSuccessScreen(sale: sale)),
       );
+      if (!mounted) return;
+      // Pop CheckoutScreen sambil membawa result = true ke SalesScreen
+      Navigator.pop(context, result ?? true);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal checkout: $e')),
+        );
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }

@@ -191,8 +191,12 @@ class SaleController extends BaseController {
 
       // Jika metode = debt, buat piutang
       if (_paymentMethod == PaymentMethod.debt) {
-        final customer = await db.select(db.customers).getSingleOrNull();
-        final relatedId = selectedCustomer?.id ?? customer?.id ?? await _ensureGeneralCustomer(db);
+        // Gunakan limit(1) agar tidak crash jika ada lebih dari 1 customer di DB
+        final firstCustomer =
+            await (db.select(db.customers)..limit(1)).getSingleOrNull();
+        final relatedId = selectedCustomer?.id ??
+            firstCustomer?.id ??
+            await _ensureGeneralCustomer(db);
         await db.into(db.debts).insert(
               DebtsCompanion.insert(
                 type: DebtType.piutang,

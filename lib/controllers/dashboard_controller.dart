@@ -6,6 +6,7 @@ import 'package:usahaku/models/dashboard_model.dart';
 import 'base_controller.dart';
 
 /// Mengumpulkan ringkasan dari SQLite untuk Dashboard.
+/// Semua nilai dihitung dari data real — tidak ada yang hardcoded.
 class DashboardController extends BaseController {
   DashboardModel? _data;
   DashboardModel get data => _data ?? DashboardModel();
@@ -17,30 +18,57 @@ class DashboardController extends BaseController {
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
       final tomorrow = today.add(const Duration(days: 1));
+      final yesterday = today.subtract(const Duration(days: 1));
       final monthStart = DateTime(now.year, now.month, 1);
       final nextMonth = DateTime(now.year, now.month + 1, 1);
 
-      // Pendapatan hari ini dari sales
+      // ── Pendapatan hari ini ──────────────────────────────────────
       final todayRevExpr = db.sales.total.sum();
-      final qRev = db.selectOnly(db.sales)
-        ..addColumns([todayRevExpr])
-        ..where(db.sales.date.isBiggerOrEqualValue(today) & db.sales.date.isSmallerThanValue(tomorrow));
-      final todayRevenue = await qRev.getSingle().then((r) => r.read(todayRevExpr) ?? 0.0);
+      final todayRevenue = await (db.selectOnly(db.sales)
+            ..addColumns([todayRevExpr])
+            ..where(db.sales.date.isBiggerOrEqualValue(today) &
+                db.sales.date.isSmallerThanValue(tomorrow)))
+          .getSingle()
+          .then((r) => r.read(todayRevExpr) ?? 0.0);
 
-      final todayCountExpr = db.sales.id.count();
-      final qCount = db.selectOnly(db.sales)
-        ..addColumns([todayCountExpr])
-        ..where(db.sales.date.isBiggerOrEqualValue(today) & db.sales.date.isSmallerThanValue(tomorrow));
-      final todayTransactions = await qCount.getSingle().then((r) => r.read(todayCountExpr) ?? 0);
+      // ── Pendapatan kemarin ──────────────────────────────────────
+      final yesterdayRevenue = await (db.selectOnly(db.sales)
+            ..addColumns([todayRevExpr])
+            ..where(db.sales.date.isBiggerOrEqualValue(yesterday) &
+                db.sales.date.isSmallerThanValue(today)))
+          .getSingle()
+          .then((r) => r.read(todayRevExpr) ?? 0.0);
 
-      // Laba hari ini: total - harga modal item
+      // ── Jumlah transaksi hari ini ────────────────────────────────
+      final countExpr = db.sales.id.count();
+      final todayTransactions = await (db.selectOnly(db.sales)
+            ..addColumns([countExpr])
+            ..where(db.sales.date.isBiggerOrEqualValue(today) &
+                db.sales.date.isSmallerThanValue(tomorrow)))
+          .getSingle()
+          .then((r) => r.read(countExpr) ?? 0);
+
+      // ── Jumlah transaksi kemarin ────────────────────────────────
+      final yesterdayTransactions = await (db.selectOnly(db.sales)
+            ..addColumns([countExpr])
+            ..where(db.sales.date.isBiggerOrEqualValue(yesterday) &
+                db.sales.date.isSmallerThanValue(today)))
+          .getSingle()
+          .then((r) => r.read(countExpr) ?? 0);
+
+      // ── Laba hari ini (revenue - harga modal item) ───────────────
       double todayModal = 0;
       final itemRows = await (db.selectOnly(db.saleItems)
-            ..addColumns([db.saleItems.productId, db.saleItems.price, db.saleItems.quantity])
+            ..addColumns([
+              db.saleItems.productId,
+              db.saleItems.price,
+              db.saleItems.quantity,
+            ])
             ..join([
               innerJoin(db.sales, db.sales.id.equalsExp(db.saleItems.saleId)),
             ])
-            ..where(db.sales.date.isBiggerOrEqualValue(today) & db.sales.date.isSmallerThanValue(tomorrow)))
+            ..where(db.sales.date.isBiggerOrEqualValue(today) &
+                db.sales.date.isSmallerThanValue(tomorrow)))
           .get();
       final prices = await _productPrices(db);
       for (final row in itemRows) {
@@ -49,26 +77,29 @@ class DashboardController extends BaseController {
       }
       final todayProfit = todayRevenue - todayModal;
 
-      // Saldo kas = income - expense
-      final incomeExpr = db.transactions.amount.sum();
-      final qIn = db.selectOnly(db.transactions)
-        ..addColumns([incomeExpr])
-        ..where(db.transactions.type.equalsValue(TransactionType.income));
-      final income = await qIn.getSingle().then((r) => r.read(incomeExpr) ?? 0.0);
-
-      final qOut = db.selectOnly(db.transactions)
-        ..addColumns([incomeExpr])
-        ..where(db.transactions.type.equalsValue(TransactionType.expense));
-      final expense = await qOut.getSingle().then((r) => r.read(incomeExpr) ?? 0.0);
+      // ── Saldo kas = total income - total expense ─────────────────
+      final amountExpr = db.transactions.amount.sum();
+      final income = await (db.selectOnly(db.transactions)
+            ..addColumns([amountExpr])
+            ..where(
+                db.transactions.type.equalsValue(TransactionType.income)))
+          .getSingle()
+          .then((r) => r.read(amountExpr) ?? 0.0);
+      final expense = await (db.selectOnly(db.transactions)
+            ..addColumns([amountExpr])
+            ..where(
+                db.transactions.type.equalsValue(TransactionType.expense)))
+          .getSingle()
+          .then((r) => r.read(amountExpr) ?? 0.0);
       final cashBalance = income - expense;
 
-      // Stok rendah
+      // ── Stok rendah ──────────────────────────────────────────────
       final lowProducts = await (db.select(db.products)
             ..where((p) => p.stock.isSmallerOrEqual(p.minStock))
             ..orderBy([(p) => OrderingTerm(expression: p.stock)]))
           .get();
 
-      // Piutang & utang
+      // ── Piutang & utang ──────────────────────────────────────────
       final debts = await db.select(db.debts).get();
       double receivable = 0;
       double payable = 0;
@@ -87,7 +118,7 @@ class DashboardController extends BaseController {
         }
       }
 
-      // Penjualan terbaru
+      // ── Penjualan terbaru ────────────────────────────────────────
       final recentSalesRows = await (db.select(db.sales)
             ..orderBy([(s) => OrderingTerm.desc(s.date)])
             ..limit(5))
@@ -100,59 +131,69 @@ class DashboardController extends BaseController {
           id: s.id,
           invoiceNo: s.invoiceNo,
           total: s.total,
-          paymentMethod: s.paymentMethod == PaymentMethod.cash
-              ? PaymentMethodLabel.cash
-              : s.paymentMethod == PaymentMethod.qris
-                  ? PaymentMethodLabel.qris
-                  : s.paymentMethod == PaymentMethod.transfer
-                      ? PaymentMethodLabel.transfer
-                      : PaymentMethodLabel.debt,
+          paymentMethod: _toLabel(s.paymentMethod),
           date: s.date,
           itemCount: itemCount,
-          customerName: s.customerId != null ? customerNames[s.customerId] ?? 'Pelanggan Umum' : 'Pelanggan Umum',
+          customerName: s.customerId != null
+              ? customerNames[s.customerId] ?? 'Pelanggan Umum'
+              : 'Pelanggan Umum',
         ));
       }
 
-      // Produk terlaris (bulan ini)
+      // ── Produk terlaris bulan ini ────────────────────────────────
       final topExpr = db.saleItems.quantity.sum();
-      final qTop = db.selectOnly(db.saleItems)
-        ..addColumns([db.saleItems.productId, topExpr])
-        ..join([innerJoin(db.sales, db.sales.id.equalsExp(db.saleItems.saleId))])
-        ..where(db.sales.date.isBiggerOrEqualValue(monthStart) & db.sales.date.isSmallerThanValue(nextMonth))
-        ..groupBy([db.saleItems.productId])
-        ..orderBy([OrderingTerm.desc(topExpr)])
-        ..limit(5);
-      final topRows = await qTop.get();
-      final topProducts = <DashboardSale>[];
+      final topRows = await (db.selectOnly(db.saleItems)
+            ..addColumns([db.saleItems.productId, topExpr])
+            ..join([
+              innerJoin(db.sales, db.sales.id.equalsExp(db.saleItems.saleId))
+            ])
+            ..where(db.sales.date.isBiggerOrEqualValue(monthStart) &
+                db.sales.date.isSmallerThanValue(nextMonth))
+            ..groupBy([db.saleItems.productId])
+            ..orderBy([OrderingTerm.desc(topExpr)])
+            ..limit(5))
+          .get();
       final productNames = await _productNames(db);
-      for (final row in topRows) {
-        final pid = row.read(db.saleItems.productId);
-        if (pid == null) continue;
+      final topProducts = topRows.map((row) {
+        final pid = row.read(db.saleItems.productId) ?? 0;
         final qty = row.read(topExpr) ?? 0;
-        topProducts.add(DashboardSale(
+        return DashboardSale(
           id: pid,
           invoiceNo: productNames[pid] ?? 'Produk',
           total: qty.toDouble(),
           paymentMethod: PaymentMethodLabel.cash,
           date: now,
           itemCount: qty,
-        ));
-      }
+        );
+      }).toList();
 
-      // Jumlah pelanggan
-      final custCountExpr = db.customers.id.count();
-      final qCust = db.selectOnly(db.customers)..addColumns([custCountExpr]);
-      final customerCount = await qCust.getSingle().then((r) => r.read(custCountExpr) ?? 0);
+      // ── Jumlah pelanggan ─────────────────────────────────────────
+      final custExpr = db.customers.id.count();
+      final customerCount = await (db.selectOnly(db.customers)
+            ..addColumns([custExpr]))
+          .getSingle()
+          .then((r) => r.read(custExpr) ?? 0);
 
-      // Total produk aktif
-      final prodCountExpr = db.products.id.count();
-      final qProd = db.selectOnly(db.products)..addColumns([prodCountExpr]);
-      final totalProducts = await qProd.getSingle().then((r) => r.read(prodCountExpr) ?? 0);
+      // ── Total produk ─────────────────────────────────────────────
+      final prodExpr = db.products.id.count();
+      final totalProducts = await (db.selectOnly(db.products)
+            ..addColumns([prodExpr]))
+          .getSingle()
+          .then((r) => r.read(prodExpr) ?? 0);
+
+      // ── Nama bisnis dari database ────────────────────────────────
+      final profile =
+          await (db.select(db.businessProfiles)..limit(1)).getSingleOrNull();
+      final businessName = (profile?.name.isNotEmpty == true)
+          ? profile!.name
+          : 'Usaha Saya';
 
       _data = DashboardModel(
         todayRevenue: todayRevenue,
+        yesterdayRevenue: yesterdayRevenue,
         todayProfit: todayProfit,
         todayTransactions: todayTransactions,
+        yesterdayTransactions: yesterdayTransactions,
         cashBalance: cashBalance,
         lowStockCount: lowProducts.length,
         lowStockProducts: lowProducts
@@ -172,12 +213,26 @@ class DashboardController extends BaseController {
         topProducts: topProducts,
         customerCount: customerCount,
         totalProducts: totalProducts,
+        businessName: businessName,
       );
       setError(null);
     } catch (e) {
       setError(e.toString());
     } finally {
       setLoading(false);
+    }
+  }
+
+  PaymentMethodLabel _toLabel(PaymentMethod m) {
+    switch (m) {
+      case PaymentMethod.cash:
+        return PaymentMethodLabel.cash;
+      case PaymentMethod.qris:
+        return PaymentMethodLabel.qris;
+      case PaymentMethod.transfer:
+        return PaymentMethodLabel.transfer;
+      case PaymentMethod.debt:
+        return PaymentMethodLabel.debt;
     }
   }
 
@@ -198,16 +253,10 @@ class DashboardController extends BaseController {
 
   Future<int> _saleItemCount(AppDatabase db, int saleId) async {
     final expr = db.saleItems.quantity.sum();
-    final q = db.selectOnly(db.saleItems)
-      ..addColumns([expr])
-      ..where(db.saleItems.saleId.equals(saleId));
-    return await q.getSingle().then((r) => r.read(expr) ?? 0);
+    return await (db.selectOnly(db.saleItems)
+          ..addColumns([expr])
+          ..where(db.saleItems.saleId.equals(saleId)))
+        .getSingle()
+        .then((r) => r.read(expr) ?? 0);
   }
-}
-
-/// List statistik kecil untuk bento grid.
-class MiniStat {
-  final double value;
-  final double trend;
-  MiniStat(this.value, this.trend);
 }

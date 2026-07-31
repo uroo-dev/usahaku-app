@@ -53,6 +53,8 @@ class ProductModel {
       unit: Value(unit),
       imagePath: Value(imagePath),
       description: Value(description),
+      // Selalu update updatedAt saat INSERT maupun UPDATE
+      updatedAt: Value(DateTime.now()),
     );
   }
 

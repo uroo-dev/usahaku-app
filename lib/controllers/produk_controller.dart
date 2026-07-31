@@ -7,13 +7,19 @@ import 'base_controller.dart';
 
 /// Manajemen produk + kategori dinamis (SQLite).
 class ProdukController extends BaseController {
-  List<ProductModel> _products = [];
+  /// Data asli dari database — JANGAN ditimpa oleh filter.
+  List<ProductModel> _allProducts = [];
+
+  /// Hasil filter yang ditampilkan di UI.
+  List<ProductModel> _filtered = [];
+
   List<Category> _categories = [];
   String _query = '';
   String? _selectedCategory;
   String _filter = 'Semua'; // Semua | Tersedia | Stok Rendah | Habis
 
-  List<ProductModel> get products => _products;
+  /// Gunakan ini di UI (sudah terfilter).
+  List<ProductModel> get products => _filtered;
   List<Category> get categories => _categories;
   String get query => _query;
   String? get selectedCategory => _selectedCategory;
@@ -27,7 +33,7 @@ class ProdukController extends BaseController {
             ..where((c) => c.type.equals('product'))
             ..orderBy([(c) => OrderingTerm(expression: c.name)]))
           .get();
-      await loadProducts();
+      await _loadAllProducts();
       setError(null);
     } catch (e) {
       setError(e.toString());
@@ -36,39 +42,42 @@ class ProdukController extends BaseController {
     }
   }
 
-  Future<void> loadProducts() async {
+  Future<void> _loadAllProducts() async {
     final db = DB.instance;
     final rows = await (db.select(db.products)
           ..orderBy([(p) => OrderingTerm(expression: p.name)]))
         .get();
     final catMap = {for (final c in _categories) c.id: c.name};
-    _products = rows.map((r) => ProductModel.fromRow(r, categoryName: catMap[r.categoryId] ?? 'Umum')).toList();
+    // Simpan ke _allProducts — ini tidak pernah ditimpa filter
+    _allProducts = rows
+        .map((r) => ProductModel.fromRow(r,
+            categoryName: catMap[r.categoryId] ?? 'Umum'))
+        .toList();
     _applyFilters();
-    notifyListeners();
   }
 
   void setQuery(String q) {
     _query = q;
     _applyFilters();
-    notifyListeners();
   }
 
   void setSelectedCategory(String? c) {
     _selectedCategory = c;
     _applyFilters();
-    notifyListeners();
   }
 
   void setFilter(String f) {
     _filter = f;
     _applyFilters();
-    notifyListeners();
   }
 
+  /// Filter dari _allProducts ke _filtered. Tidak pernah memodifikasi _allProducts.
   void _applyFilters() {
-    _products = _products.where((p) {
-      final matchQuery = _query.isEmpty || p.name.toLowerCase().contains(_query.toLowerCase());
-      final matchCat = _selectedCategory == null || p.categoryName == _selectedCategory;
+    _filtered = _allProducts.where((p) {
+      final matchQuery = _query.isEmpty ||
+          p.name.toLowerCase().contains(_query.toLowerCase());
+      final matchCat =
+          _selectedCategory == null || p.categoryName == _selectedCategory;
       bool matchFilter = true;
       switch (_filter) {
         case 'Tersedia':
@@ -89,19 +98,20 @@ class ProdukController extends BaseController {
   Future<void> addProduct(ProductModel p) async {
     final db = DB.instance;
     await db.into(db.products).insert(p.toCompanion());
-    await loadProducts();
+    await _loadAllProducts();
   }
 
   Future<void> updateProduct(ProductModel p) async {
     final db = DB.instance;
-    await (db.update(db.products)..where((t) => t.id.equals(p.id!))).write(p.toCompanion());
-    await loadProducts();
+    await (db.update(db.products)..where((t) => t.id.equals(p.id!)))
+        .write(p.toCompanion());
+    await _loadAllProducts();
   }
 
   Future<void> deleteProduct(int id) async {
     final db = DB.instance;
     await (db.delete(db.products)..where((t) => t.id.equals(id))).go();
-    await loadProducts();
+    await _loadAllProducts();
   }
 
   // --- Kategori dinamis ---
@@ -115,7 +125,8 @@ class ProdukController extends BaseController {
 
   Future<void> renameCategory(int id, String newName) async {
     final db = DB.instance;
-    await (db.update(db.categories)..where((c) => c.id.equals(id))).write(CategoriesCompanion(name: Value(newName)));
+    await (db.update(db.categories)..where((c) => c.id.equals(id)))
+        .write(CategoriesCompanion(name: Value(newName)));
     await load();
   }
 

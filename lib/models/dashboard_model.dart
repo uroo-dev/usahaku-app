@@ -1,8 +1,10 @@
-/// Data ringkasan untuk Dashboard.
+/// Data ringkasan untuk Dashboard — semua dari database, tidak ada nilai statis.
 class DashboardModel {
   final double todayRevenue;
+  final double yesterdayRevenue;   // untuk hitung % perubahan
   final double todayProfit;
   final int todayTransactions;
+  final int yesterdayTransactions; // untuk hitung % perubahan transaksi
   final double cashBalance;
   final int lowStockCount;
   final List<DashboardProduct> lowStockProducts;
@@ -14,11 +16,14 @@ class DashboardModel {
   final List<DashboardSale> topProducts;
   final int customerCount;
   final int totalProducts;
+  final String businessName;       // dari BusinessProfiles
 
   DashboardModel({
     this.todayRevenue = 0,
+    this.yesterdayRevenue = 0,
     this.todayProfit = 0,
     this.todayTransactions = 0,
+    this.yesterdayTransactions = 0,
     this.cashBalance = 0,
     this.lowStockCount = 0,
     this.lowStockProducts = const [],
@@ -30,7 +35,29 @@ class DashboardModel {
     this.topProducts = const [],
     this.customerCount = 0,
     this.totalProducts = 0,
+    this.businessName = 'Usaha Saya',
   });
+
+  /// Persentase perubahan pendapatan vs kemarin.
+  /// Positif = naik, negatif = turun, null = tidak bisa dihitung (kemarin = 0).
+  double? get revenueChangePercent {
+    if (yesterdayRevenue == 0) return null;
+    return ((todayRevenue - yesterdayRevenue) / yesterdayRevenue) * 100;
+  }
+
+  /// Label perubahan pendapatan siap pakai di UI, misal "+12% dari kemarin".
+  String get revenueChangeLabel {
+    final pct = revenueChangePercent;
+    if (pct == null) {
+      if (todayRevenue > 0) return 'Hari pertama ada penjualan';
+      return 'Belum ada penjualan';
+    }
+    final sign = pct >= 0 ? '+' : '';
+    return '$sign${pct.toStringAsFixed(1)}% dari kemarin';
+  }
+
+  /// True jika pendapatan hari ini >= kemarin.
+  bool get isRevenueUp => todayRevenue >= yesterdayRevenue;
 }
 
 class DashboardProduct {
