@@ -2,6 +2,7 @@
 import 'package:usahaku/controllers/sale_controller.dart';
 import 'package:usahaku/theme/app_theme.dart';
 import 'package:usahaku/utils/format_util.dart';
+import 'package:usahaku/widgets/barcode_scanner_sheet.dart';
 import 'package:usahaku/widgets/filter_chip.dart';
 import 'package:usahaku/widgets/product_card.dart';
 
@@ -30,6 +31,14 @@ class _SalesScreenState extends State<SalesScreen> {
     _c.dispose();
     _searchCtrl.dispose();
     super.dispose();
+  }
+
+  /// Scan barcode lalu cari produk yang cocok
+  Future<void> _scanBarcode() async {
+    final result = await BarcodeScannerSheet.show(context);
+    if (result == null || !mounted) return;
+    _searchCtrl.text = result;
+    _c.setQuery(result);
   }
 
   @override
@@ -94,7 +103,12 @@ class _SalesScreenState extends State<SalesScreen> {
               color: AppColor.primaryContainer.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Icon(Icons.qr_code_scanner, color: AppColor.primary, size: 20),
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              icon: const Icon(Icons.qr_code_scanner, color: AppColor.primary, size: 20),
+              tooltip: 'Scan Barcode',
+              onPressed: _scanBarcode,
+            ),
           ),
         ],
       ),

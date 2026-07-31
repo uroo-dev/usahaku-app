@@ -347,14 +347,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         StatCard(
           title: 'Stok Produk',
-          value: '${data.lowStockCount} Item',
+          value: '${data.totalProducts} Item',
           icon: Icons.inventory_2,
-          badge: 'Normal',
-          badgeColor: AppColor.green700,
+          badge: data.lowStockCount > 0 ? '${data.lowStockCount} Rendah' : 'Normal',
+          badgeColor: data.lowStockCount > 0 ? AppColor.red700 : AppColor.green700,
         ),
-        const StatCard(
+        StatCard(
           title: 'Pelanggan',
-          value: '82 Orang',
+          value: '${data.customerCount} Orang',
           icon: Icons.group,
         ),
         StatCard(
@@ -378,7 +378,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (data.lowStockProducts.isEmpty) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 8),
-        child: Text('Stok semua aman 🎉', style: TextStyle(fontSize: 13, color: AppColor.onSurfaceVariant)),
+        child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.check_circle_outline, size: 16, color: AppColor.onSurfaceVariant),
+                SizedBox(width: 6),
+                Text('Stok semua aman', style: TextStyle(fontSize: 13, color: AppColor.onSurfaceVariant)),
+              ],
+            ),
       );
     }
     return SizedBox(
@@ -576,9 +583,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   String _greeting(DateTime now) {
     final hour = now.hour;
-    if (hour >= 4 && hour < 11) return 'Halo, Selamat Pagi! 🌤️';
-    if (hour >= 11 && hour < 15) return 'Halo, Selamat Siang! ☀️';
-    if (hour >= 15 && hour < 18) return 'Halo, Selamat Sore! 🌇';
-    return 'Halo, Selamat Malam! 🌙';
+    if (hour >= 4 && hour < 11) return 'Halo, Selamat Pagi!';
+    if (hour >= 11 && hour < 15) return 'Halo, Selamat Siang!';
+    if (hour >= 15 && hour < 18) return 'Halo, Selamat Sore!';
+    return 'Halo, Selamat Malam!';
   }
 }

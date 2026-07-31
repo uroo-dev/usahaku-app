@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,13 +18,40 @@ class QrisScreen extends StatefulWidget {
 class _QrisScreenState extends State<QrisScreen> {
   SettingsController get c => widget.controller;
 
-  Future<void> _pickQris() async {
+  Future<void> _pickFromCamera() async {
     final picker = ImagePicker();
-    final file = await picker.pickImage(source: ImageSource.gallery, maxWidth: 1200);
+    final supported = picker.supportsImageSource(ImageSource.camera);
+    if (!supported) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Kamera tidak tersedia di perangkat ini. Membuka galeri...')),
+        );
+      }
+      return _pickFromGallery();
+    }
+    final file = await picker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 1200,
+      imageQuality: 95,
+    );
     if (file == null) return;
+    await _saveQris(file.path);
+  }
+
+  Future<void> _pickFromGallery() async {
+    final file = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1200,
+      imageQuality: 95,
+    );
+    if (file == null) return;
+    await _saveQris(file.path);
+  }
+
+  Future<void> _saveQris(String sourcePath) async {
     final docs = await getApplicationDocumentsDirectory();
     final dest = '${docs.path}/qris_${DateTime.now().millisecondsSinceEpoch}.jpg';
-    await File(file.path).copy(dest);
+    await File(sourcePath).copy(dest);
     await c.saveQris(dest);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -34,12 +61,66 @@ class _QrisScreenState extends State<QrisScreen> {
   }
 
   Future<void> _remove() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Hapus QRIS?'),
+        content: const Text('QRIS akan dihapus dari aplikasi. Lanjutkan?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Batal')),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: AppColor.error, foregroundColor: Colors.white),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Hapus'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
     await c.removeQris();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('QRIS dihapus')),
       );
     }
+  }
+
+  void _showSourceSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 16, 20, 8),
+              child: Text('Tambah Gambar QRIS', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            ),
+            ListTile(
+              leading: Container(
+                width: 40, height: 40,
+                decoration: BoxDecoration(color: AppColor.primaryContainer, borderRadius: BorderRadius.circular(10)),
+                child: const Icon(Icons.camera_alt_outlined, color: AppColor.primary),
+              ),
+              title: const Text('Kamera'),
+              subtitle: const Text('Foto langsung kertas QRIS'),
+              onTap: () { Navigator.pop(ctx); _pickFromCamera(); },
+            ),
+            ListTile(
+              leading: Container(
+                width: 40, height: 40,
+                decoration: BoxDecoration(color: AppColor.secondaryContainer, borderRadius: BorderRadius.circular(10)),
+                child: const Icon(Icons.photo_library_outlined, color: AppColor.secondary),
+              ),
+              title: const Text('Galeri'),
+              subtitle: const Text('Pilih gambar QRIS tersimpan'),
+              onTap: () { Navigator.pop(ctx); _pickFromGallery(); },
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -52,11 +133,30 @@ class _QrisScreenState extends State<QrisScreen> {
           return ListView(
             padding: const EdgeInsets.all(20),
             children: [
-              Text(
-                'Gunakan QRIS saat pelanggan membayar lewat metode QRIS di POS. Kode QR ditampilkan tanpa koneksi internet.',
-                style: const TextStyle(fontSize: 13, color: AppColor.onSurfaceVariant, height: 1.4),
+              // Info card
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColor.primaryContainer.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColor.primary.withValues(alpha: 0.2)),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.info_outline, size: 18, color: AppColor.primary),
+                    const SizedBox(width: 10),
+                    const Expanded(
+                      child: Text(
+                        'Unggah gambar QRIS Anda. Kode QR akan ditampilkan saat pelanggan memilih pembayaran QRIS di kasir, tanpa perlu koneksi internet.',
+                        style: TextStyle(fontSize: 13, color: AppColor.onPrimaryContainer, height: 1.4),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
+              // Preview QRIS
               Container(
                 height: 260,
                 decoration: BoxDecoration(
@@ -75,35 +175,47 @@ class _QrisScreenState extends State<QrisScreen> {
                           ),
                         ),
                       )
-                    : const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.qr_code_2, size: 80, color: AppColor.outlineVariant),
-                            SizedBox(height: 12),
-                            Text(
-                              'Belum ada QRIS',
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColor.onSurfaceVariant),
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: AppColor.surfaceContainer,
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          ],
-                        ),
+                            child: const Icon(Icons.qr_code_2, size: 44, color: AppColor.outlineVariant),
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            'Belum ada QRIS',
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColor.onSurfaceVariant),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'Tambahkan gambar QRIS di bawah',
+                            style: TextStyle(fontSize: 12, color: AppColor.outline),
+                          ),
+                        ],
                       ),
               ),
               const SizedBox(height: 20),
+              // Tombol aksi
               if (!c.qrExists)
                 SizedBox(
                   height: 56,
                   child: FilledButton.icon(
-                    onPressed: _pickQris,
+                    onPressed: _showSourceSheet,
                     icon: const Icon(Icons.add_photo_alternate_outlined, size: 20),
-                    label: const Text('Unggah Gambar QRIS'),
+                    label: const Text('Tambah Gambar QRIS'),
                   ),
                 )
               else ...[
                 SizedBox(
                   height: 56,
                   child: FilledButton.icon(
-                    onPressed: _pickQris,
+                    onPressed: _showSourceSheet,
                     icon: const Icon(Icons.refresh, size: 20),
                     label: const Text('Ganti QRIS'),
                   ),

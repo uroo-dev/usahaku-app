@@ -139,6 +139,16 @@ class DashboardController extends BaseController {
         ));
       }
 
+      // Jumlah pelanggan
+      final custCountExpr = db.customers.id.count();
+      final qCust = db.selectOnly(db.customers)..addColumns([custCountExpr]);
+      final customerCount = await qCust.getSingle().then((r) => r.read(custCountExpr) ?? 0);
+
+      // Total produk aktif
+      final prodCountExpr = db.products.id.count();
+      final qProd = db.selectOnly(db.products)..addColumns([prodCountExpr]);
+      final totalProducts = await qProd.getSingle().then((r) => r.read(prodCountExpr) ?? 0);
+
       _data = DashboardModel(
         todayRevenue: todayRevenue,
         todayProfit: todayProfit,
@@ -160,6 +170,8 @@ class DashboardController extends BaseController {
         overduePayableCount: overduePayable,
         recentSales: recentSales,
         topProducts: topProducts,
+        customerCount: customerCount,
+        totalProducts: totalProducts,
       );
       setError(null);
     } catch (e) {

@@ -12,6 +12,8 @@ class DashboardModel {
   final int overduePayableCount;
   final List<DashboardSale> recentSales;
   final List<DashboardSale> topProducts;
+  final int customerCount;
+  final int totalProducts;
 
   DashboardModel({
     this.todayRevenue = 0,
@@ -26,6 +28,8 @@ class DashboardModel {
     this.overduePayableCount = 0,
     this.recentSales = const [],
     this.topProducts = const [],
+    this.customerCount = 0,
+    this.totalProducts = 0,
   });
 }
 

@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +8,7 @@ import 'package:usahaku/controllers/produk_controller.dart';
 import 'package:usahaku/controllers/unit_controller.dart';
 import 'package:usahaku/models/product_model.dart';
 import 'package:usahaku/theme/app_theme.dart';
+import 'package:usahaku/widgets/barcode_scanner_sheet.dart';
 import 'package:usahaku/widgets/labeled_field.dart';
 
 /// Form Tambah / Edit Produk — sesuai produk-created-edit.html.
@@ -67,13 +68,51 @@ class _AddProductScreenState extends State<AddProductScreen> {
     super.dispose();
   }
 
-  Future<void> _pickImage() async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 800);
+  /// Ambil foto dari kamera (fallback ke galeri jika platform tidak mendukung)
+  Future<void> _pickImageCamera() async {
+    final picker = ImagePicker();
+    final supported = picker.supportsImageSource(ImageSource.camera);
+    if (!supported) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Kamera tidak tersedia di perangkat ini. Membuka galeri...')),
+        );
+      }
+      return _pickImageGallery();
+    }
+    final picked = await picker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 800,
+      imageQuality: 85,
+    );
     if (picked == null) return;
+    await _savePickedImage(picked.path);
+  }
+
+  /// Pilih foto dari galeri
+  Future<void> _pickImageGallery() async {
+    final picked = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 800,
+      imageQuality: 85,
+    );
+    if (picked == null) return;
+    await _savePickedImage(picked.path);
+  }
+
+  Future<void> _savePickedImage(String sourcePath) async {
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/product_${DateTime.now().millisecondsSinceEpoch}.jpg');
-    await File(picked.path).copy(file.path);
-    setState(() => _imagePath = file.path);
+    await File(sourcePath).copy(file.path);
+    if (mounted) setState(() => _imagePath = file.path);
+  }
+
+  /// Scan barcode menggunakan kamera
+  Future<void> _scanBarcode() async {
+    final result = await BarcodeScannerSheet.show(context);
+    if (result != null && mounted) {
+      setState(() => _barcodeCtrl.text = result);
+    }
   }
 
   Future<void> _save() async {
@@ -141,14 +180,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Container(
-                      width: 52,
-                      height: 52,
-                      decoration: BoxDecoration(
-                        color: AppColor.secondaryContainer,
-                        borderRadius: BorderRadius.circular(14),
+                    // Tombol scan barcode dengan kamera
+                    GestureDetector(
+                      onTap: _scanBarcode,
+                      child: Container(
+                        width: 52,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: AppColor.secondaryContainer,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: const Icon(Icons.qr_code_scanner, color: AppColor.onSecondaryContainer),
                       ),
-                      child: const Icon(Icons.qr_code_scanner, color: AppColor.onSecondaryContainer),
                     ),
                   ],
                 ),
@@ -245,7 +288,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     return Column(
       children: [
         GestureDetector(
-          onTap: _pickImage,
+          onTap: _showImageSourceSheet,
           child: Container(
             height: 160,
             width: double.infinity,
@@ -279,7 +322,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           children: [
             Expanded(
               child: OutlinedButton.icon(
-                onPressed: _pickImage,
+                onPressed: _pickImageCamera,
                 icon: const Icon(Icons.photo_camera_outlined, size: 18),
                 label: const Text('Ambil Foto'),
               ),
@@ -287,7 +330,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             const SizedBox(width: 12),
             Expanded(
               child: OutlinedButton.icon(
-                onPressed: _pickImage,
+                onPressed: _pickImageGallery,
                 icon: const Icon(Icons.image_outlined, size: 18),
                 label: const Text('Galeri'),
               ),
@@ -295,6 +338,45 @@ class _AddProductScreenState extends State<AddProductScreen> {
           ],
         ),
       ],
+    );
+  }
+
+  /// Bottom sheet pilih sumber gambar
+  void _showImageSourceSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 16, 20, 8),
+              child: Text('Pilih Sumber Foto', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            ),
+            ListTile(
+              leading: Container(
+                width: 40, height: 40,
+                decoration: BoxDecoration(color: AppColor.primaryContainer, borderRadius: BorderRadius.circular(10)),
+                child: const Icon(Icons.camera_alt_outlined, color: AppColor.primary),
+              ),
+              title: const Text('Kamera'),
+              subtitle: const Text('Ambil foto langsung'),
+              onTap: () { Navigator.pop(ctx); _pickImageCamera(); },
+            ),
+            ListTile(
+              leading: Container(
+                width: 40, height: 40,
+                decoration: BoxDecoration(color: AppColor.secondaryContainer, borderRadius: BorderRadius.circular(10)),
+                child: const Icon(Icons.photo_library_outlined, color: AppColor.secondary),
+              ),
+              title: const Text('Galeri'),
+              subtitle: const Text('Pilih dari foto tersimpan'),
+              onTap: () { Navigator.pop(ctx); _pickImageGallery(); },
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
     );
   }
 
