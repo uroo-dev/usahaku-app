@@ -1,0 +1,207 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-tertiary-fixed": "#360f00", "on-surface-variant": "#434655", "tertiary": "#943700", "surface-bright": "#faf8ff", "on-secondary-container": "#fefcff", "inverse-primary": "#b4c5ff", "secondary-fixed": "#d8e2ff", "inverse-on-surface": "#f0f0fb", "on-error-container": "#93000a", "on-primary-container": "#eeefff", "on-primary-fixed": "#00174b", "primary-container": "#2563eb", "surface-dim": "#d9d9e5", "secondary": "#0058be", "on-error": "#ffffff", "on-primary-fixed-variant": "#003ea8", "surface-container-lowest": "#ffffff", "on-surface": "#191b23", "error-container": "#ffdad6", "error": "#ba1a1a", "secondary-container": "#2170e4", "tertiary-fixed": "#ffdbcd", "primary-fixed": "#dbe1ff", "tertiary-container": "#bc4800", "on-primary": "#ffffff", "surface-tint": "#0053db", "background": "#faf8ff", "on-tertiary-fixed-variant": "#7d2d00", "surface-container-low": "#f3f3fe", "on-background": "#191b23", "inverse-surface": "#2e3039", "surface-container-highest": "#e1e2ed", "on-secondary": "#ffffff", "on-secondary-fixed": "#001a42", "primary": "#004ac6", "on-tertiary-container": "#ffede6", "on-secondary-fixed-variant": "#004395", "surface-container-high": "#e7e7f3", "secondary-fixed-dim": "#adc6ff", "primary-fixed-dim": "#b4c5ff", "outline-variant": "#c3c6d7", "tertiary-fixed-dim": "#ffb596", "surface-variant": "#e1e2ed", "on-tertiary": "#ffffff", "surface": "#faf8ff", "surface-container": "#ededf9", "outline": "#737686" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin-mobile": "20px", "base": "4px", "xs": "8px", "md": "16px", "touch-target": "48px", "sm": "12px", "lg": "24px", "xl": "32px", "gutter": "16px" }, "fontFamily": { "body-md": ["Inter"], "headline-sm": ["Inter"], "headline-lg": ["Inter"], "label-lg": ["Inter"], "label-md": ["Inter"], "body-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "headline-md": ["Inter"], "display-lg": ["Inter"] }, "fontSize": { "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "600" }], "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }] } } } }</script><style>@layer base { body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: contain; } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } } .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }</style></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><h1 class="font-headline-md text-headline-md text-primary tracking-tight">UsahaKu</h1><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 pb-24 min-h-screen bg-background"><div class="flex flex-col w-full pb-8">
+<!-- Header Area -->
+<div class="px-margin-mobile flex flex-col gap-4 mb-6">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Manajemen</span>
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface">Utang Usaha</h2>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-active active:scale-95">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-active active:scale-95">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Summary Stats: Horizontal Scroll -->
+<div class="flex gap-3 overflow-x-auto pb-2 -mx-margin-mobile px-margin-mobile no-scrollbar">
+<!-- Total Utang Card -->
+<div class="flex-shrink-0 w-[160px] p-4 rounded-xl bg-primary shadow-sm relative overflow-hidden">
+<div class="relative z-10">
+<span class="text-label-md font-label-md text-primary-fixed/80 block mb-1">Total Utang</span>
+<span class="text-headline-sm font-headline-sm text-on-primary">Rp 8.500.000</span>
+</div>
+<div class="absolute -right-2 -bottom-2 opacity-10">
+<span class="material-symbols-outlined text-[64px]">account_balance_wallet</span>
+</div>
+</div>
+<!-- Dibayar Card -->
+<div class="flex-shrink-0 w-[160px] p-4 rounded-xl bg-surface-container-highest shadow-sm">
+<span class="text-label-md font-label-md text-on-surface-variant block mb-1">Dibayar Bln Ini</span>
+<span class="text-headline-sm font-headline-sm text-primary">Rp 3.200.000</span>
+</div>
+<!-- Segera Jatuh Tempo -->
+<div class="flex-shrink-0 w-[140px] p-4 rounded-xl bg-tertiary-fixed shadow-sm">
+<span class="text-label-md font-label-md text-on-tertiary-fixed-variant block mb-1">Segera</span>
+<div class="flex items-baseline gap-1">
+<span class="text-headline-sm font-headline-sm text-on-tertiary-fixed">2</span>
+<span class="text-label-md font-label-md text-on-tertiary-fixed-variant">Faktur</span>
+</div>
+</div>
+<!-- Terlambat -->
+<div class="flex-shrink-0 w-[140px] p-4 rounded-xl bg-error-container shadow-sm border border-error/10">
+<span class="text-label-md font-label-md text-on-error-container block mb-1">Terlambat</span>
+<div class="flex items-baseline gap-1">
+<span class="text-headline-sm font-headline-sm text-error">1</span>
+<span class="text-label-md font-label-md text-on-error-container">Faktur</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Filter Tabs -->
+<div class="flex px-margin-mobile gap-2 mb-6 overflow-x-auto no-scrollbar">
+<button class="tab-btn px-4 py-2 rounded-full bg-secondary text-on-secondary text-label-lg font-label-lg whitespace-nowrap shadow-md transition-all" onclick="filterUtang('semua')">Semua</button>
+<button class="tab-btn px-4 py-2 rounded-full bg-surface-container text-on-surface-variant text-label-lg font-label-lg whitespace-nowrap transition-all" onclick="filterUtang('belum')">Belum Lunas</button>
+<button class="tab-btn px-4 py-2 rounded-full bg-surface-container text-on-surface-variant text-label-lg font-label-lg whitespace-nowrap transition-all" onclick="filterUtang('sebagian')">Sebagian</button>
+<button class="tab-btn px-4 py-2 rounded-full bg-surface-container text-on-surface-variant text-label-lg font-label-lg whitespace-nowrap transition-all" onclick="filterUtang('terlambat')">Terlambat</button>
+</div>
+<!-- Debt List -->
+<div class="px-margin-mobile flex flex-col gap-4" id="debt-list">
+<!-- Card 1: Terlambat -->
+<div class="bg-surface-container-lowest p-5 rounded-[20px] shadow-sm border border-outline-variant/30 flex flex-col gap-4 active:scale-[0.98] transition-transform">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-error-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-error">local_shipping</span>
+</div>
+<div class="flex flex-col">
+<h3 class="text-body-lg font-label-lg text-on-surface">PT. Maju Logistik</h3>
+<span class="text-label-md font-label-md text-on-surface-variant">#INV-SUP-08</span>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-[11px] font-bold uppercase tracking-tight">Terlambat</span>
+</div>
+<div class="flex justify-between items-end pt-2 border-t border-surface-variant/50">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface-variant">Sisa Utang</span>
+<span class="text-headline-sm font-headline-sm text-error">Rp 4.500.000</span>
+</div>
+<div class="text-right">
+<span class="text-label-md font-label-md text-on-surface-variant block">Jatuh Tempo</span>
+<span class="text-label-lg font-label-lg text-on-surface">15 Nov 2023</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Sebagian -->
+<div class="bg-surface-container-lowest p-5 rounded-[20px] shadow-sm border border-outline-variant/30 flex flex-col gap-4 active:scale-[0.98] transition-transform">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">inventory</span>
+</div>
+<div class="flex flex-col">
+<h3 class="text-body-lg font-label-lg text-on-surface">CV. Sumber Rejeki</h3>
+<span class="text-label-md font-label-md text-on-surface-variant">#INV-SUP-12</span>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-[11px] font-bold uppercase tracking-tight">Sebagian</span>
+</div>
+<div class="flex justify-between items-end pt-2 border-t border-surface-variant/50">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface-variant">Sisa Utang</span>
+<span class="text-headline-sm font-headline-sm text-on-surface">Rp 2.000.000</span>
+</div>
+<div class="text-right">
+<span class="text-label-md font-label-md text-on-surface-variant block">Jatuh Tempo</span>
+<span class="text-label-lg font-label-lg text-on-surface">28 Nov 2023</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Belum Lunas -->
+<div class="bg-surface-container-lowest p-5 rounded-[20px] shadow-sm border border-outline-variant/30 flex flex-col gap-4 active:scale-[0.98] transition-transform">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">storefront</span>
+</div>
+<div class="flex flex-col">
+<h3 class="text-body-lg font-label-lg text-on-surface">Grosir Jaya Abadi</h3>
+<span class="text-label-md font-label-md text-on-surface-variant">#INV-SUP-15</span>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-bold uppercase tracking-tight">Belum Lunas</span>
+</div>
+<div class="flex justify-between items-end pt-2 border-t border-surface-variant/50">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface-variant">Sisa Utang</span>
+<span class="text-headline-sm font-headline-sm text-on-surface">Rp 2.000.000</span>
+</div>
+<div class="text-right">
+<span class="text-label-md font-label-md text-on-surface-variant block">Jatuh Tempo</span>
+<span class="text-label-lg font-label-lg text-on-surface">02 Des 2023</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden by default) -->
+<div class="hidden flex flex-col items-center justify-center px-margin-mobile py-20 text-center" id="empty-state">
+<div class="w-48 h-48 mb-6 relative">
+<div class="absolute inset-0 bg-primary/5 rounded-full animate-pulse"></div>
+<div class="absolute inset-4 bg-primary/10 rounded-full animate-pulse" style="animation-delay: 1s"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-[80px] text-primary/30">task_alt</span>
+</div>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">Semua Lunas!</h3>
+<p class="text-body-md font-body-md text-on-surface-variant max-w-[240px]">Belum ada utang supplier yang tercatat saat ini. Bisnis Anda sehat!</p>
+</div>
+<!-- Extended FAB -->
+<button class="fixed bottom-24 right-margin-mobile h-14 pl-4 pr-6 rounded-2xl bg-primary text-on-primary flex items-center gap-3 shadow-xl active:scale-95 transition-transform z-40">
+<span class="material-symbols-outlined">add_card</span>
+<span class="text-label-lg font-label-lg">Tambah Utang</span>
+</button>
+</div>
+<script>
+  function filterUtang(type) {
+    // Reset all tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.remove('bg-secondary', 'text-on-secondary', 'shadow-md');
+      btn.classList.add('bg-surface-container', 'text-on-surface-variant');
+    });
+
+    // Active tab styling
+    const activeBtn = event.currentTarget;
+    activeBtn.classList.remove('bg-surface-container', 'text-on-surface-variant');
+    activeBtn.classList.add('bg-secondary', 'text-on-secondary', 'shadow-md');
+
+    // Simple visual feedback for demo
+    const list = document.getElementById('debt-list');
+    const empty = document.getElementById('empty-state');
+    
+    // Smooth transition effect
+    list.style.opacity = '0';
+    setTimeout(() => {
+      if(type === 'empty_demo') { // Just for simulation logic
+        list.classList.add('hidden');
+        empty.classList.remove('hidden');
+      } else {
+        list.classList.remove('hidden');
+        empty.classList.add('hidden');
+        list.style.opacity = '1';
+      }
+    }, 200);
+  }
+
+  // Micro-interaction: Card press
+  document.querySelectorAll('#debt-list > div').forEach(card => {
+    card.addEventListener('click', () => {
+      // Simulate selection or navigation
+      card.classList.add('bg-primary-fixed');
+      setTimeout(() => card.classList.remove('bg-primary-fixed'), 150);
+    });
+  });
+</script>
+<style>
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style></main><nav class="fixed bottom-0 w-full z-50 bg-surface/80 backdrop-blur-xl pb-safe shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-semibold"></nav>
+
+</body></html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="en" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior:none;min-height:100vh;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"outline-variant":"#c3c6d7","on-error-container":"#93000a","surface-container-high":"#e7e7f3",error:"#ba1a1a","secondary-container":"#2170e4","surface-dim":"#d9d9e5",secondary:"#0058be","inverse-on-surface":"#f0f0fb","on-secondary-fixed":"#001a42","on-primary":"#ffffff","on-tertiary-container":"#ffede6","on-tertiary-fixed":"#360f00","on-primary-container":"#eeefff","surface-container":"#ededf9","surface-container-lowest":"#ffffff","on-primary-fixed-variant":"#003ea8","on-secondary-fixed-variant":"#004395","on-error":"#ffffff","tertiary-container":"#bc4800","on-tertiary":"#ffffff","surface-container-low":"#f3f3fe","primary-container":"#2563eb","on-surface-variant":"#434655","on-surface":"#191b23","tertiary-fixed-dim":"#ffb596","tertiary-fixed":"#ffdbcd","secondary-fixed":"#d8e2ff","surface-variant":"#e1e2ed","on-tertiary-fixed-variant":"#7d2d00","on-secondary":"#ffffff","error-container":"#ffdad6",background:"#faf8ff","surface-bright":"#faf8ff",surface:"#faf8ff","inverse-primary":"#b4c5ff",outline:"#737686","secondary-fixed-dim":"#adc6ff","on-primary-fixed":"#00174b","surface-container-highest":"#e1e2ed","primary-fixed":"#dbe1ff",tertiary:"#943700","inverse-surface":"#2e3039","on-background":"#191b23","primary-fixed-dim":"#b4c5ff","on-secondary-container":"#fefcff",primary:"#004ac6","surface-tint":"#0053db"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{sm:"12px",xs:"8px",md:"16px","margin-mobile":"20px",base:"4px","touch-target":"48px",gutter:"16px",xl:"32px",lg:"24px"},fontFamily:{"body-lg":["Inter"],"display-lg":["Inter"],"headline-lg-mobile":["Inter"],"headline-sm":["Inter"],"headline-lg":["Inter"],"body-md":["Inter"],"label-md":["Inter"],"headline-md":["Inter"],"label-lg":["Inter"]},fontSize:{"body-lg":["16px",{lineHeight:"24px",fontWeight:"400"}],"display-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"headline-lg-mobile":["22px",{lineHeight:"28px",fontWeight:"600"}],"headline-sm":["18px",{lineHeight:"24px",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-md":["14px",{lineHeight:"20px",fontWeight:"400"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"500"}],"headline-md":["20px",{lineHeight:"28px",fontWeight:"600"}],"label-lg":["14px",{lineHeight:"20px",fontWeight:"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><h1 class="font-headline-md text-headline-md text-on-surface tracking-tight truncate">Lainnya</h1><div class="flex items-center gap-base"><button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant active:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined">search</span></button><button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant active:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined">notifications</span></button><div class="ml-xs w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-32 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Header Space Placeholder (Title handled by Shell) -->
+<div class="px-margin-mobile pt-sm flex items-center gap-sm">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container active:scale-95 transition-transform" onclick="window.history.back()">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest">Metode QRIS</span>
+</div>
+<!-- Main Payment Card -->
+<div class="px-margin-mobile mt-md">
+<div class="bg-surface-container-lowest rounded-[32px] p-xl shadow-sm flex flex-col items-center">
+<!-- Total Amount -->
+<div class="text-center mb-xl">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Total Tagihan</p>
+<h2 class="font-display-lg text-display-lg text-primary">Rp 725.000</h2>
+</div>
+<!-- QR Container -->
+<div class="relative w-full aspect-square bg-white rounded-3xl p-lg flex flex-col items-center justify-center shadow-[inset_0_0_0_1px_rgba(0,0,0,0.05)]">
+<!-- QR Code Image -->
+<img alt="QRIS Payment Code" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLvzV-vrSEwb5L0SpWed4GsX5UsfFdUir7TJkAP1Ax_Y1bxaFrV0EBu4678IvmcSW2q80J6Hj1LMh0iCXNgW9H-rsUf3Q1fPJlSmeGeiwA2aE-_HU6DcdVwB-OjcFbZRHwptcT8SE9kNPwg8iOik9o_OjGZgUw-Pr0h1TMTdQpRO0JMtyqAX4PmjUovJYZ2cGuaolQ65StPVSbyeFRhoNsW03_OjYO3ocyujg65I0DMs1LQxLLYVmpBD6IFE">
+<!-- Brand Badge -->
+<div class="absolute -bottom-4 bg-surface-container-lowest px-md py-xs rounded-full shadow-md flex items-center gap-2">
+<div class="w-6 h-6 bg-red-600 rounded-sm flex items-center justify-center text-[10px] font-bold text-white">QRIS</div>
+<span class="font-label-md text-label-md text-on-surface">Pembayaran Aman</span>
+</div>
+</div>
+<!-- Instructions -->
+<div class="mt-xl text-center">
+<p class="font-body-md text-body-md text-on-surface-variant px-md">
+                    Scan QR code di atas menggunakan aplikasi bank atau e-wallet pilihan Anda.
+                </p>
+</div>
+<!-- Timer -->
+
+</div>
+</div>
+<!-- Actions Area -->
+<div class="px-margin-mobile mt-xl flex flex-col gap-md">
+
+<button class="w-full h-14 bg-surface-container text-on-surface-variant rounded-2xl font-label-lg text-label-lg active:bg-surface-container-high transition-colors">
+            Selesai</button>
+</div>
+<!-- Security Footer -->
+<div class="mt-xl flex flex-col items-center gap-base opacity-60">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span class="font-label-md text-label-md">Enkripsi Keamanan 256-bit</span>
+</div>
+<div class="w-full flex justify-center gap-lg mt-sm">
+<div class="h-4 w-12 bg-on-surface-variant/20 rounded-full"></div>
+<div class="h-4 w-12 bg-on-surface-variant/20 rounded-full"></div>
+<div class="h-4 w-12 bg-on-surface-variant/20 rounded-full"></div>
+</div>
+</div>
+<!-- Client-side Timer Logic -->
+<script>
+        (function() {
+            let timeLeft = 15 * 60; // 15 minutes
+            const display = document.getElementById('countdown');
+            
+            const timer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                display.innerText = `Berlaku selama ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    display.innerText = "QR Kadaluwarsa";
+                    display.parentElement.classList.replace('bg-error-container/30', 'bg-surface-variant');
+                }
+                timeLeft--;
+            }, 1000);
+        })();
+    </script>
+</div></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-20 px-xs"><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="dashboard" href="#"><span class="material-symbols-outlined">dashboard</span><span class="text-label-md font-label-md">Dashboard</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="produk" href="#"><span class="material-symbols-outlined">inventory_2</span><span class="text-label-md font-label-md">Produk</span></a><a class="flex flex-col items-center justify-center -mt-8" data-path="penjualan" href="#"><div class="w-14 h-14 bg-primary rounded-xl shadow-lg flex items-center justify-center text-on-primary mb-1 transform active:scale-95 transition-transform"><span class="material-symbols-outlined text-[32px]">point_of_sale</span></div><span class="text-label-md font-label-md text-primary">Penjualan</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="kas" href="#"><span class="material-symbols-outlined">account_balance_wallet</span><span class="text-label-md font-label-md">Kas</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-primary font-bold" data-path="lainnya" href="#"><span class="material-symbols-outlined">menu</span><span class="text-label-md font-label-md">Lainnya</span></a></div></nav>
+
+</body></html>

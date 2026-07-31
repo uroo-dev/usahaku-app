@@ -1,0 +1,181 @@
+<!DOCTYPE html><html lang="en" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior:none;min-height:100vh;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"outline-variant":"#c3c6d7","on-error-container":"#93000a","surface-container-high":"#e7e7f3",error:"#ba1a1a","secondary-container":"#2170e4","surface-dim":"#d9d9e5",secondary:"#0058be","inverse-on-surface":"#f0f0fb","on-secondary-fixed":"#001a42","on-primary":"#ffffff","on-tertiary-container":"#ffede6","on-tertiary-fixed":"#360f00","on-primary-container":"#eeefff","surface-container":"#ededf9","surface-container-lowest":"#ffffff","on-primary-fixed-variant":"#003ea8","on-secondary-fixed-variant":"#004395","on-error":"#ffffff","tertiary-container":"#bc4800","on-tertiary":"#ffffff","surface-container-low":"#f3f3fe","primary-container":"#2563eb","on-surface-variant":"#434655","on-surface":"#191b23","tertiary-fixed-dim":"#ffb596","tertiary-fixed":"#ffdbcd","secondary-fixed":"#d8e2ff","surface-variant":"#e1e2ed","on-tertiary-fixed-variant":"#7d2d00","on-secondary":"#ffffff","error-container":"#ffdad6",background:"#faf8ff","surface-bright":"#faf8ff",surface:"#faf8ff","inverse-primary":"#b4c5ff",outline:"#737686","secondary-fixed-dim":"#adc6ff","on-primary-fixed":"#00174b","surface-container-highest":"#e1e2ed","primary-fixed":"#dbe1ff",tertiary:"#943700","inverse-surface":"#2e3039","on-background":"#191b23","primary-fixed-dim":"#b4c5ff","on-secondary-container":"#fefcff",primary:"#004ac6","surface-tint":"#0053db"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{sm:"12px",xs:"8px",md:"16px","margin-mobile":"20px",base:"4px","touch-target":"48px",gutter:"16px",xl:"32px",lg:"24px"},fontFamily:{"body-lg":["Inter"],"display-lg":["Inter"],"headline-lg-mobile":["Inter"],"headline-sm":["Inter"],"headline-lg":["Inter"],"body-md":["Inter"],"label-md":["Inter"],"headline-md":["Inter"],"label-lg":["Inter"]},fontSize:{"body-lg":["16px",{lineHeight:"24px",fontWeight:"400"}],"display-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"headline-lg-mobile":["22px",{lineHeight:"28px",fontWeight:"600"}],"headline-sm":["18px",{lineHeight:"24px",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-md":["14px",{lineHeight:"20px",fontWeight:"400"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"500"}],"headline-md":["20px",{lineHeight:"28px",fontWeight:"600"}],"label-lg":["14px",{lineHeight:"20px",fontWeight:"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><h1 class="font-headline-md text-headline-md text-on-surface tracking-tight truncate">Produk</h1><div class="flex items-center gap-base"><button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant active:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined">search</span></button><button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant active:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined">notifications</span></button><div class="ml-xs w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-32 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Search & Filter Section -->
+<div class="px-margin-mobile flex flex-col gap-md sticky top-0 bg-background/95 backdrop-blur-md z-40 pb-4">
+<!-- Search Bar -->
+<div class="relative flex items-center mt-base">
+<span class="material-symbols-outlined absolute left-md text-on-surface-variant">search</span>
+<input class="w-full h-[56px] pl-[52px] pr-md bg-surface-container-low rounded-xl font-body-lg text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Cari produk..." type="text">
+</div>
+<!-- Filter Chips -->
+<div class="flex overflow-x-auto gap-sm pb-2 -mx-margin-mobile px-margin-mobile no-scrollbar">
+<button class="flex-none px-lg h-10 rounded-full bg-primary text-on-primary font-label-lg flex items-center justify-center whitespace-nowrap">Semua</button>
+<button class="flex-none px-lg h-10 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg flex items-center justify-center whitespace-nowrap">Tersedia</button>
+<button class="flex-none px-lg h-10 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg flex items-center justify-center whitespace-nowrap">Stok Rendah</button>
+<button class="flex-none px-lg h-10 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg flex items-center justify-center whitespace-nowrap">Habis</button>
+<button class="flex-none px-lg h-10 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg flex items-center justify-center whitespace-nowrap gap-xs">
+<span class="">Kategori</span>
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+</button>
+</div>
+</div>
+<!-- Product List -->
+<div class="px-margin-mobile flex flex-col gap-md pb-32">
+<!-- Product Card 1: Healthy Stock -->
+<div class="relative bg-surface-container-lowest rounded-[20px] p-md shadow-sm active:scale-[0.98] transition-transform duration-200">
+<div class="flex gap-md">
+<div class="w-24 h-24 rounded-xl overflow-hidden bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional studio product shot of a traditional Indonesian batik shirt neatly folded on a clean white background, soft lighting, 8k resolution, minimalist commercial photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDZlsFA7TIBjlUHgD4VtHu9w2kHPMnealO6Tz4H4cjMw05Uw3Jj-hj8v_EraxFkUKQo4lPdxBJiqk7mJ3YM5CipPxukhWsDZbl6CV3dD2dss9E-bRrfpYBGgD9JaNifYTngRKAIZz24T6xajzWwuvkIhT7vUysw1IF0rIA3RrgQSxcZbGMO-1XWwTsc-ytKmCtAchkncStrk-auH7yXlpuxLwGtswFzjB2iIQIfzxEN8_GxRHhJ_Wa-g">
+</div>
+<div class="flex flex-col flex-1 min-w-0 justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-sm text-on-surface truncate">Batik Pria Slimfit</h3>
+<div class="flex gap-xs">
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant bg-surface-container-low rounded-full"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="w-8 h-8 flex items-center justify-center text-error bg-error-container rounded-full"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+<p class="font-label-md text-on-surface-variant -mt-1">Pakaian</p>
+</div>
+<div class="flex justify-between items-end mt-sm">
+<div>
+<p class="font-label-md text-outline uppercase tracking-wider">Harga Jual</p>
+<p class="font-headline-md text-primary">Rp 185.000</p>
+<p class="font-label-md text-on-surface-variant">Modal: Rp 120.000</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="px-sm py-1 rounded-full bg-secondary-container/10 text-secondary font-label-md mb-xs">Tersedia</span>
+<p class="font-label-lg text-on-surface">Stok: <span class="text-primary">42</span></p>
+<p class="font-label-md text-outline">Min: 10</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 2: Low Stock -->
+<div class="relative bg-surface-container-lowest rounded-[20px] p-md shadow-sm active:scale-[0.98] transition-transform duration-200">
+<div class="flex gap-md">
+<div class="w-24 h-24 rounded-xl overflow-hidden bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up high quality photo of premium roasted coffee beans in a glass jar, warm morning sunlight, bokeh background, rich textures, deep browns and golden tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAl-ccz8FI5g-RVNPsk13O5Un2MOk41xBnVLmRxfrdE579X-etKQOzNYLbt5tFgYyaaoSjU6gBKH9j0RJLqpYWYtFBghd3a7U1VADq48laaDjGzlpS9Lu_1yeBYKhx7cPU7pJC7_md2bU7vaFcgg1NygfVZuI0R5fsTgne82ntpwhAhMvz8IEqng8acPcBrnPAuI9TSBGHLP1HyTEVGVkL5iQIrMijmrOZB9fab4OW2cV7Nv8teProPMA">
+</div>
+<div class="flex flex-col flex-1 min-w-0 justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-sm text-on-surface truncate">Kopi Arabika 250g</h3>
+<div class="flex gap-xs">
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant bg-surface-container-low rounded-full"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="w-8 h-8 flex items-center justify-center text-error bg-error-container rounded-full"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+<p class="font-label-md text-on-surface-variant -mt-1">Minuman</p>
+</div>
+<div class="flex justify-between items-end mt-sm">
+<div>
+<p class="font-label-md text-outline uppercase tracking-wider">Harga Jual</p>
+<p class="font-headline-md text-primary">Rp 65.000</p>
+<p class="font-label-md text-on-surface-variant">Modal: Rp 45.000</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="px-sm py-1 rounded-full bg-tertiary-container text-on-tertiary font-label-md mb-xs tracking-wider uppercase text-[10px] flex items-center justify-center">Menipis</span>
+<p class="font-label-lg text-tertiary">Stok: <span class="font-bold">3</span></p>
+<p class="font-label-md text-outline">Min: 5</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 3: Out of Stock -->
+<div class="relative bg-surface-container-lowest rounded-[20px] p-md shadow-sm active:scale-[0.98] transition-transform duration-200 grayscale-[0.6] opacity-90">
+<div class="flex gap-md">
+<div class="w-24 h-24 rounded-xl overflow-hidden bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A sleek modern electronic gadget, wireless earbuds in a matte black case, futuristic lighting with neon accents, professional product catalog style, clean and tech-focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhJf6GcfoeS83DsWSb8IMgR1FVAgqQvT7J2lATK-dDLeF2AokiFbT-yKAys4hXgrtiUucKh7YiHX1Si0sKv2t6vnc6dAdaZrai9puSZ8LOyISXu1I0MPtNBOdZY7Ci52P88-8LsF7M6zUD-FDHGwMf1C0kXqx1q6xpBE_c_9EOQkj2YzXK7VBHTrjMykmkUWADTW00CiA_jzPh1gk-7JB4toA2cgabLp2GrWqG3DTOXXPeyRXqEcEfdw">
+</div>
+<div class="flex flex-col flex-1 min-w-0 justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-sm text-on-surface truncate">Earbuds Wireless X1</h3>
+<div class="flex gap-xs">
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant bg-surface-container-low rounded-full"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="w-8 h-8 flex items-center justify-center text-error bg-error-container rounded-full"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+<p class="font-label-md text-on-surface-variant -mt-1">Elektronik</p>
+</div>
+<div class="flex justify-between items-end mt-sm">
+<div>
+<p class="font-label-md text-outline uppercase tracking-wider">Harga Jual</p>
+<p class="font-headline-md text-primary">Rp 350.000</p>
+<p class="font-label-md text-on-surface-variant">Modal: Rp 210.000</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="px-sm py-1 rounded-full bg-error-container text-error font-label-md mb-xs">Habis</span>
+<p class="font-label-lg text-error">Stok: <span class="font-bold">0</span></p>
+<p class="font-label-md text-outline">Min: 2</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State Micro-moment (Shown only when list is empty) -->
+<div class="hidden flex flex-col items-center justify-center py-xl px-xl text-center" id="empty-state">
+<div class="w-24 h-24 bg-surface-container-high rounded-full flex items-center justify-center mb-lg">
+<span class="material-symbols-outlined text-outline text-[48px]">inventory_2</span>
+</div>
+<p class="font-headline-sm text-on-surface">Belum ada produk</p>
+<p class="font-body-md text-on-surface-variant mt-xs">Mulai kelola bisnis Anda dengan menambahkan produk pertama.</p>
+</div>
+</div>
+<!-- Extended FAB -->
+<button class="fixed bottom-24 right-margin-mobile flex items-center gap-sm px-lg h-[56px] bg-primary text-on-primary rounded-2xl shadow-xl active:scale-95 transition-transform z-50" id="fab-add">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-lg">Tambah Produk</span>
+</button>
+<script>
+    // Particle effect for FAB click
+    const fab = document.getElementById('fab-add');
+    fab.addEventListener('click', (e) => {
+      for(let i = 0; i < 8; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'fixed w-2 h-2 bg-primary rounded-full pointer-events-none z-[60]';
+        const rect = fab.getBoundingClientRect();
+        particle.style.left = rect.left + rect.width / 2 + 'px';
+        particle.style.top = rect.top + rect.height / 2 + 'px';
+        document.body.appendChild(particle);
+        
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 5 + Math.random() * 5;
+        let x = 0;
+        let y = 0;
+        let opacity = 1;
+        
+        const animate = () => {
+          x += Math.cos(angle) * velocity;
+          y += Math.sin(angle) * velocity;
+          opacity -= 0.05;
+          particle.style.transform = `translate(${x}px, ${y}px)`;
+          particle.style.opacity = opacity;
+          
+          if(opacity > 0) {
+            requestAnimationFrame(animate);
+          } else {
+            particle.remove();
+          }
+        };
+        requestAnimationFrame(animate);
+      }
+    });
+
+    // Simple scroll behavior for header elevation
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 10) {
+        header.classList.add('shadow-md');
+      } else {
+        header.classList.remove('shadow-md');
+      }
+    });
+  </script>
+</div></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-20 px-xs"><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="dashboard" href="#"><span class="material-symbols-outlined">dashboard</span><span class="text-label-md font-label-md">Dashboard</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-primary font-bold" data-path="produk" href="#"><span class="material-symbols-outlined">inventory_2</span><span class="text-label-md font-label-md">Produk</span></a><a class="flex flex-col items-center justify-center -mt-8" data-path="penjualan" href="#"><div class="w-14 h-14 bg-primary rounded-xl shadow-lg flex items-center justify-center text-on-primary mb-1 transform active:scale-95 transition-transform"><span class="material-symbols-outlined text-[32px]">point_of_sale</span></div><span class="text-label-md font-label-md text-primary">Penjualan</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="kas" href="#"><span class="material-symbols-outlined">account_balance_wallet</span><span class="text-label-md font-label-md">Kas</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="lainnya" href="#"><span class="material-symbols-outlined">menu</span><span class="text-label-md font-label-md">Lainnya</span></a></div></nav>
+
+</body></html>

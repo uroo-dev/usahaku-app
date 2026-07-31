@@ -1,0 +1,169 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior:none;min-height:100vh;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"outline-variant":"#c3c6d7","on-error-container":"#93000a","surface-container-high":"#e7e7f3",error:"#ba1a1a","secondary-container":"#2170e4","surface-dim":"#d9d9e5",secondary:"#0058be","inverse-on-surface":"#f0f0fb","on-secondary-fixed":"#001a42","on-primary":"#ffffff","on-tertiary-container":"#ffede6","on-tertiary-fixed":"#360f00","on-primary-container":"#eeefff","surface-container":"#ededf9","surface-container-lowest":"#ffffff","on-primary-fixed-variant":"#003ea8","on-secondary-fixed-variant":"#004395","on-error":"#ffffff","tertiary-container":"#bc4800","on-tertiary":"#ffffff","surface-container-low":"#f3f3fe","primary-container":"#2563eb","on-surface-variant":"#434655","on-surface":"#191b23","tertiary-fixed-dim":"#ffb596","tertiary-fixed":"#ffdbcd","secondary-fixed":"#d8e2ff","surface-variant":"#e1e2ed","on-tertiary-fixed-variant":"#7d2d00","on-secondary":"#ffffff","error-container":"#ffdad6",background:"#faf8ff","surface-bright":"#faf8ff",surface:"#faf8ff","inverse-primary":"#b4c5ff",outline:"#737686","secondary-fixed-dim":"#adc6ff","on-primary-fixed":"#00174b","surface-container-highest":"#e1e2ed","primary-fixed":"#dbe1ff",tertiary:"#943700","inverse-surface":"#2e3039","on-background":"#191b23","primary-fixed-dim":"#b4c5ff","on-secondary-container":"#fefcff",primary:"#004ac6","surface-tint":"#0053db"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{sm:"12px",xs:"8px",md:"16px","margin-mobile":"20px",base:"4px","touch-target":"48px",gutter:"16px",xl:"32px",lg:"24px"},fontFamily:{"body-lg":["Inter"],"display-lg":["Inter"],"headline-lg-mobile":["Inter"],"headline-sm":["Inter"],"headline-lg":["Inter"],"body-md":["Inter"],"label-md":["Inter"],"headline-md":["Inter"],"label-lg":["Inter"]},fontSize:{"body-lg":["16px",{lineHeight:"24px",fontWeight:"400"}],"display-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"headline-lg-mobile":["22px",{lineHeight:"28px",fontWeight:"600"}],"headline-sm":["18px",{lineHeight:"24px",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-md":["14px",{lineHeight:"20px",fontWeight:"400"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"500"}],"headline-md":["20px",{lineHeight:"28px",fontWeight:"600"}],"label-lg":["14px",{lineHeight:"20px",fontWeight:"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><h1 class="font-headline-md text-headline-md text-on-surface tracking-tight truncate">Penjualan</h1><div class="flex items-center gap-base"><button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant active:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined">search</span></button><button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant active:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined">notifications</span></button><div class="ml-xs w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-32 bg-background min-h-screen"><div class="flex flex-col w-full relative">
+<!-- Living Background Shader -->
+<div class="fixed inset-0 z-0 pointer-events-none opacity-40">
+
+</div>
+<!-- Content Layer -->
+<div class="relative z-10 px-margin-mobile">
+<!-- Quick Search & Scanner Area -->
+<div class="flex flex-col gap-md mb-lg pt-base">
+<div class="flex items-center gap-sm bg-surface-container-lowest shadow-sm rounded-xl px-md h-14 w-full group focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="flex-1 bg-transparent border-none outline-none text-body-lg text-on-surface placeholder:text-outline-variant" placeholder="Cari produk atau scan barcode..." type="text"/>
+<button class="w-10 h-10 flex items-center justify-center bg-primary-container/10 text-primary rounded-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined">barcode_scanner</span>
+</button>
+</div>
+<!-- Category Filter -->
+<div class="flex gap-sm overflow-x-auto pb-xs no-scrollbar -mx-margin-mobile px-margin-mobile">
+<button class="flex-none px-lg py-sm bg-primary text-on-primary rounded-full font-label-lg shadow-md">Semua</button>
+<button class="flex-none px-lg py-sm bg-surface-container-high text-on-surface-variant rounded-full font-label-lg active:bg-surface-dim transition-colors">Makanan</button>
+<button class="flex-none px-lg py-sm bg-surface-container-high text-on-surface-variant rounded-full font-label-lg active:bg-surface-dim transition-colors">Minuman</button>
+<button class="flex-none px-lg py-sm bg-surface-container-high text-on-surface-variant rounded-full font-label-lg active:bg-surface-dim transition-colors">Elektronik</button>
+<button class="flex-none px-lg py-sm bg-surface-container-high text-on-surface-variant rounded-full font-label-lg active:bg-surface-dim transition-colors">Pakaian</button>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-2 gap-md pb-40">
+<!-- Product Card 1: In Cart State -->
+<div class="bg-surface-container-lowest rounded-[20px] shadow-sm overflow-hidden flex flex-col relative group active:scale-[0.98] transition-transform">
+<div class="relative h-32 w-full">
+<img class="w-full h-full object-cover" data-alt="A professional, high-end close-up shot of a creamy iced latte in a tall glass with condensation, soft studio lighting with blue and white tones, minimalist cafe background, 8k resolution, commercial photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZgXlVP8LIjMzSieaMZkyVND92RGdxlFRwHski3LgOzIrY7ODBuOg5hV5rr_tbvQvYXumfhovQGr3iIXdTLRX1lAdismjZVs5oFEaGnay68S2FgTt5PDPnWlAoKwnMSKwNlgxk_Qiox4wlsyJfSfwJmmYJjkzVqCZ_lAur0yn3WOBX8PfV0taTmop0IgN9wKzHhvOXWkD5PLFQEBLEOVklWS-95xAcJj5hLntW4D8A2WUFj9T1jmMc6w"/>
+<div class="absolute top-2 left-2 bg-white/90 backdrop-blur-md px-xs py-[2px] rounded-full">
+<span class="text-[10px] font-bold text-primary uppercase tracking-wider">Minuman</span>
+</div>
+</div>
+<div class="p-sm flex flex-col gap-1">
+<h3 class="font-label-lg text-on-surface truncate">Iced Caramel Latte</h3>
+<p class="font-headline-sm text-primary">Rp 28.000</p>
+<p class="text-label-md text-outline">Stok: 12</p>
+</div>
+<!-- Quantity Stepper Overlay (Active) -->
+<div class="absolute inset-0 bg-primary/10 backdrop-blur-[2px] flex items-center justify-center p-sm">
+<div class="flex items-center bg-white rounded-full shadow-lg border border-primary/20 overflow-hidden">
+<button class="w-10 h-10 flex items-center justify-center text-primary active:bg-primary/10"><span class="material-symbols-outlined">remove</span></button>
+<span class="px-md font-headline-sm text-on-surface">2</span>
+<button class="w-10 h-10 flex items-center justify-center text-primary active:bg-primary/10"><span class="material-symbols-outlined">add</span></button>
+</div>
+</div>
+</div>
+<!-- Product Card 2: Low Stock -->
+<div class="bg-surface-container-lowest rounded-[20px] shadow-sm overflow-hidden flex flex-col active:scale-[0.98] transition-transform">
+<div class="relative h-32 w-full">
+<img class="w-full h-full object-cover" data-alt="A gourmet artisan croissant on a minimalist ceramic plate, golden brown flaky texture, soft morning light, clean professional food photography, blue-tinted shadows, high detail." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD15Y8jMjko0x3pMt6k878NxntR4qqJBqz6avZ88oudAg78g-sFiNONfBsaIuzcIELRf0MnM_KptT3iYiD1Sf9wqKQEOC8NsJfnccgNE2eNUwPAvqQuSlMZkJrIKCA9rHl92pJBzKPg3xxu3RHgH_r5qAnTcw5HVJgansrTU31bZgmno70rHR6Ibu7Z9HvoB3Phm6x-W3FxWj420DAD3qL0qPBrviyXoixEAn31IWeEo7Wy6sZifsCsrQ"/>
+<div class="absolute top-2 right-2 bg-tertiary text-on-tertiary px-xs py-[2px] rounded-lg shadow-sm">
+<span class="text-[10px] font-bold uppercase">Stok Menipis</span>
+</div>
+</div>
+<div class="p-sm flex flex-col gap-1">
+<h3 class="font-label-lg text-on-surface truncate">Butter Croissant</h3>
+<p class="font-headline-sm text-primary">Rp 18.000</p>
+<p class="text-label-md text-tertiary font-bold">Stok: 3</p>
+</div>
+</div>
+<!-- Product Card 3: Normal -->
+<div class="bg-surface-container-lowest rounded-[20px] shadow-sm overflow-hidden flex flex-col active:scale-[0.98] transition-transform">
+<div class="relative h-32 w-full">
+<img class="w-full h-full object-cover" data-alt="Modern sleek wireless headphones in matte black, studio lighting, floating in air, professional product photography for tech accessories, minimalist blue background, 8k resolution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBumb1rBqwMIBvj-WSDjasP6S4WvstmDn4gHCW9T6QUzqNxg66gQWcfnyy3xG0yBdOjwAqjFWx8uzRYLDZOkYTe12p5yTjcZ1fdRaRBDxu35eqI4KCa2YPUbuPxqEUWOfkpeY58R-dRCuM4hyWkdrbAS5QmKHa2CsejShWJ-jNBc0DiCxEOBiQqhqdiy5J3rcMgeZBfgpAwddaj067Oh8mo8Ybj8INXdcVazY0KPH2_H8dARxFcD-Zl0A"/>
+</div>
+<div class="p-sm flex flex-col gap-1">
+<h3 class="font-label-lg text-on-surface truncate">Audio Pro X1</h3>
+<p class="font-headline-sm text-primary">Rp 850.000</p>
+<p class="text-label-md text-outline">Stok: 5</p>
+</div>
+</div>
+<!-- Product Card 4: Out of Stock -->
+<div class="bg-surface-container-lowest rounded-[20px] shadow-sm overflow-hidden flex flex-col opacity-60 grayscale relative">
+<div class="relative h-32 w-full">
+<img class="w-full h-full object-cover" data-alt="A premium chocolate bar with elegant packaging, minimalist design, macro shot of the texture, high-end confectionery photography, studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNBjshvYnO1upxA3aMhc9oPd4LA5YhtGuNwIQ7pTnaIhC1IACTP23HzdMql1vQrFHai9Ml5BZDdo-rcwWazTX4LLhvWbRAEIjhgT1FO8Tf63aLpUYgZ5tYo6qxhzKcGKuRn-GfG6XonhIT1fU5pyrHbUI8lfKmmy5IBVaTfSVL5n2hkhZKQMX4e4f1UMnEcv6OiwrLlbQ6Wqgy2eqFJuUoIDK7fcAzhxf-QKrACp0vM-PCJDz4UcjsDQ"/>
+<div class="absolute inset-0 bg-on-surface/40 flex items-center justify-center">
+<span class="text-white font-bold text-label-lg uppercase tracking-widest bg-black/50 px-md py-1 rounded">Habis</span>
+</div>
+</div>
+<div class="p-sm flex flex-col gap-1">
+<h3 class="font-label-lg text-on-surface truncate">Dark Cacao 70%</h3>
+<p class="font-headline-sm text-primary">Rp 45.000</p>
+<p class="text-label-md text-error">Stok: 0</p>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="bg-surface-container-lowest rounded-[20px] shadow-sm overflow-hidden flex flex-col active:scale-[0.98] transition-transform">
+<div class="relative h-32 w-full">
+<img class="w-full h-full object-cover" data-alt="Freshly packed gourmet potato chips in a stylish bag, bright studio lighting, vibrant colors, professional snack photography, minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo_Y-TrkSubTXlp9zAeYWmSlZYXVoRhVpXh_IrpZ6-Z_lrRasETysZk-I2ZTXdjQsdAGUO_QU_5KlMAQrsasnGjsghsV5L_2c6FtZWsnLofuXmOr4-7eMcK26jLQN-fs_3ztxVAP8eOe3Xz1NZOV8-mBtl2-Ri-k-q9q6sSlNqqHJFYeXd5PSsGIOqmZHnBxN0l6qp44Ujq1PNlZyZMlOlUKcHSw8sO00dpc4IADz550yf79dcOC6AcA"/>
+</div>
+<div class="p-sm flex flex-col gap-1">
+<h3 class="font-label-lg text-on-surface truncate">Truffle Chips</h3>
+<p class="font-headline-sm text-primary">Rp 22.500</p>
+<p class="text-label-md text-outline">Stok: 24</p>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="bg-surface-container-lowest rounded-[20px] shadow-sm overflow-hidden flex flex-col active:scale-[0.98] transition-transform">
+<div class="relative h-32 w-full">
+<img class="w-full h-full object-cover" data-alt="A premium stainless steel reusable water bottle, matte finish, elegant design, lifestyle photography, soft natural lighting, blue and white color scheme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI6OpF_FLm2wemA70Er4HVxAlwErt8RVq7HABxr4Lbv7BfddSokf3tKSbCzFYNonLRXE7JGyVtRqFuawp9UbZfTSNIJH_-GQL0uc7LYMCk8QcpufNK4bWD2MKAL-XO4k4V8I_joTWUNEs6CD_vxn3k6a2ATPtDMNPeLQNNeG5fkd-doc2dxaKoEG7cmR2jSZ7QcB36ttzjK1qoZvSaojTmnRguUkTPI-42BPwo_WQi3P3Z5OwN6NFMxQ"/>
+</div>
+<div class="p-sm flex flex-col gap-1">
+<h3 class="font-label-lg text-on-surface truncate">Eco Bottle 500ml</h3>
+<p class="font-headline-sm text-primary">Rp 125.000</p>
+<p class="text-label-md text-outline">Stok: 10</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Checkout Bar -->
+<div class="fixed bottom-24 inset-x-0 px-margin-mobile z-40">
+<div class="bg-white/90 backdrop-blur-xl rounded-[24px] shadow-xl border border-white/40 overflow-hidden transition-all duration-300 transform" id="checkout-bar">
+<!-- Collapsed View / Summary -->
+<div class="p-md flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary relative">
+<span class="material-symbols-outlined">shopping_basket</span>
+<span class="absolute -top-1 -right-1 bg-primary text-on-primary text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">2</span>
+</div>
+<div>
+<p class="text-label-md text-on-surface-variant">2 Item terpilih</p>
+<p class="font-headline-md text-on-surface">Rp 125.000</p>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-lg h-14 rounded-xl font-label-lg flex items-center gap-sm active:scale-95 transition-transform shadow-lg shadow-primary/25">
+          Bayar
+          <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const checkoutBar = document.getElementById('checkout-bar');
+      let lastScrollY = window.scrollY;
+
+      // Simple animation on scroll
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > lastScrollY) {
+          // Scrolling down - slightly tuck away
+          checkoutBar.style.transform = 'translateY(10px) scale(0.98)';
+          checkoutBar.style.opacity = '0.9';
+        } else {
+          // Scrolling up - bring back
+          checkoutBar.style.transform = 'translateY(0) scale(1)';
+          checkoutBar.style.opacity = '1';
+        }
+        lastScrollY = window.scrollY;
+      });
+
+      // Product card haptic feedback simulation
+      const cards = document.querySelectorAll('.active\\:scale-\\[0\\.98\\]');
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          // Add a temporary highlight effect
+          const overlay = document.createElement('div');
+          overlay.className = 'absolute inset-0 bg-primary/5 pointer-events-none';
+          card.appendChild(overlay);
+          setTimeout(() => overlay.remove(), 200);
+        });
+      });
+    });
+  </script>
+</div></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-20 px-xs"><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="dashboard" href="#"><span class="material-symbols-outlined">dashboard</span><span class="text-label-md font-label-md">Dashboard</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="produk" href="#"><span class="material-symbols-outlined">inventory_2</span><span class="text-label-md font-label-md">Produk</span></a><a aria-current="page" class="flex flex-col items-center justify-center -mt-8 text-primary font-bold" data-path="penjualan" href="#"><div class="w-14 h-14 bg-primary rounded-xl shadow-lg flex items-center justify-center text-on-primary mb-1 transform active:scale-95 transition-transform"><span class="material-symbols-outlined text-[32px]">point_of_sale</span></div><span class="text-label-md font-label-md text-primary">Penjualan</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="kas" href="#"><span class="material-symbols-outlined">account_balance_wallet</span><span class="text-label-md font-label-md">Kas</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="lainnya" href="#"><span class="material-symbols-outlined">menu</span><span class="text-label-md font-label-md">Lainnya</span></a></div></nav></body></html>

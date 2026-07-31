@@ -1,0 +1,363 @@
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body { width: 100vw; margin: 0; padding: 0; background-color: #faf8ff; }
+      body { overscroll-behavior: none; min-height: 100vh; }
+      .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+      .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+    }
+    ::-webkit-scrollbar { display: none; }
+    .card-shadow { shadow-color: rgba(0, 0, 0, 0.04); }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#2563eb",
+            "on-primary": "#ffffff",
+            "primary-container": "#dbe1ff",
+            "on-primary-container": "#00174b",
+            "secondary": "#0058be",
+            "surface": "#faf8ff",
+            "surface-container": "#ededf9",
+            "surface-container-high": "#e7e7f3",
+            "surface-container-low": "#f3f3fe",
+            "surface-container-lowest": "#ffffff",
+            "on-surface": "#191b23",
+            "on-surface-variant": "#434655",
+            "outline-variant": "#c3c6d7",
+            "error": "#ba1a1a",
+            "background": "#faf8ff"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "20px",
+            "3xl": "24px",
+            "full": "9999px"
+          },
+          spacing: {
+            "sm": "12px",
+            "xs": "8px",
+            "md": "16px",
+            "margin-mobile": "20px",
+            "base": "4px",
+            "touch-target": "48px",
+            "gutter": "16px",
+            "xl": "32px",
+            "lg": "24px"
+          },
+          fontFamily: {
+            "body": ["Inter", "sans-serif"],
+            "display": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background font-body text-on-surface">
+<header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe">
+<div class="h-16 px-margin-mobile flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl">storefront</span>
+</div>
+<h1 class="font-bold text-lg tracking-tight">UsahaKu</h1>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined">notifications</span></button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_szXZOdTgSyV_Oh-BQ8NlGLVZ5yBzd2YThA2n1nacBeooadDIaY4Bjp2m8gbBGXeG1kVlvw5WX5YTuUHsTH4EhR30J9gMMlvLZw7THHq5TklkAmYiijNFq5l1MAGKaT_DO56sOP3lFJknaN0oyAYMeaILXMHMb8ASCF57JA82qRV_vEEiKFC_qSOHowVgDql_IKM_Nzkqo88bMYeFAgX7cLMIzrLuvQw-BAh3-2wOqOYv4KTDiN5Ngw"/>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-32">
+<!-- Header & Greeting -->
+<section class="px-margin-mobile mb-6">
+<span class="text-xs font-semibold text-primary uppercase tracking-widest">Senin, 24 Juni 2024</span>
+<h2 class="text-2xl font-bold text-on-surface mt-1">Halo, Selamat Pagi! 👋</h2>
+<p class="text-sm text-on-surface-variant font-medium">Warung Berkah Jaya</p>
+<p class="text-xs text-on-surface-variant/80 mt-1 italic">"Semoga usahamu hari ini semakin lancar."</p>
+</section>
+<!-- Today's Summary Card -->
+<section class="px-margin-mobile mb-6">
+<div class="bg-primary p-6 rounded-3xl shadow-xl shadow-primary/20 relative overflow-hidden">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<span class="text-white/80 text-sm font-medium">Pendapatan Hari Ini</span>
+<span class="bg-white/20 px-2 py-1 rounded-full text-[10px] text-white font-bold uppercase tracking-wider">Terupdate</span>
+</div>
+<div class="flex flex-col mb-4">
+<span class="text-3xl font-bold text-white tracking-tight">Rp 1.250.000</span>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-xs text-green-300">trending_up</span>
+<span class="text-xs text-green-100 font-medium">+8% dari kemarin</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+<div>
+<span class="text-white/60 text-[10px] uppercase font-bold tracking-wider">Laba Bersih</span>
+<p class="text-white font-bold">Rp 450.000</p>
+</div>
+<div>
+<span class="text-white/60 text-[10px] uppercase font-bold tracking-wider">Transaksi</span>
+<p class="text-white font-bold">12 Trx</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="px-margin-mobile mb-8">
+<div class="grid grid-cols-4 gap-3">
+<button class="flex flex-col items-center gap-2">
+<div class="w-full aspect-square bg-primary-container rounded-2xl flex items-center justify-center text-primary active:scale-95 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-3xl">add_shopping_cart</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant text-center leading-tight">Jual Baru</span>
+</button>
+<button class="flex flex-col items-center gap-2">
+<div class="w-full aspect-square bg-surface-container-high rounded-2xl flex items-center justify-center text-on-surface-variant active:scale-95 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-3xl">inventory</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant text-center leading-tight">Tambah Produk</span>
+</button>
+<button class="flex flex-col items-center gap-2">
+<div class="w-full aspect-square bg-green-50 rounded-2xl flex items-center justify-center text-green-600 active:scale-95 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-3xl">account_balance_wallet</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant text-center leading-tight">Kas Masuk</span>
+</button>
+<button class="flex flex-col items-center gap-2">
+<div class="w-full aspect-square bg-red-50 rounded-2xl flex items-center justify-center text-red-600 active:scale-95 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-3xl">payments</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant text-center leading-tight">Kas Keluar</span>
+</button>
+</div>
+</section>
+<!-- Pengingat (Reminders) -->
+<section class="px-margin-mobile mb-8">
+<div class="bg-amber-50 border border-amber-100 p-4 rounded-2xl flex items-center gap-4">
+<div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-700">
+<span class="material-symbols-outlined">notification_important</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-amber-900">Perlu Perhatian</h4>
+<p class="text-xs text-amber-800">3 Piutang belum dibayar &amp; 2 Hutang jatuh tempo.</p>
+</div>
+<span class="material-symbols-outlined text-amber-400">chevron_right</span>
+</div>
+</section>
+<!-- Business Overview Grid -->
+<section class="px-margin-mobile mb-8">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/30">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-primary text-xl">inventory_2</span>
+<span class="px-2 py-0.5 bg-green-100 text-green-700 text-[9px] font-bold rounded-full uppercase">Normal</span>
+</div>
+<span class="text-xs font-medium text-on-surface-variant">Stok Produk</span>
+<p class="text-lg font-bold">124 Item</p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/30">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-primary text-xl">group</span>
+</div>
+<span class="text-xs font-medium text-on-surface-variant">Pelanggan</span>
+<p class="text-lg font-bold">82 Orang</p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/30">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-primary text-xl">account_balance</span>
+</div>
+<span class="text-xs font-medium text-on-surface-variant">Saldo Kas</span>
+<p class="text-lg font-bold">Rp 8.210k</p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/30">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-red-600 text-xl">history_edu</span>
+<span class="px-2 py-0.5 bg-red-100 text-red-700 text-[9px] font-bold rounded-full uppercase">Perhatian</span>
+</div>
+<span class="text-xs font-medium text-on-surface-variant">Hutang/Piutang</span>
+<p class="text-lg font-bold text-red-600">Rp 1.150k</p>
+</div>
+</div>
+</section>
+<!-- Monthly Sales Chart -->
+<section class="px-margin-mobile mb-8">
+<div class="bg-surface-container-lowest p-6 rounded-3xl shadow-sm border border-outline-variant/30">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-base font-bold">Grafik Penjualan</h3>
+<p class="text-xs text-on-surface-variant">Performa 7 hari terakhir</p>
+</div>
+<button class="text-primary text-xs font-bold flex items-center gap-1">
+            Minggu Ini <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+<div class="relative h-40 w-full">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 400 120">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#2563eb" stop-opacity="0.1"></stop>
+<stop offset="100%" stop-color="#2563eb" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,90 Q50,50 100,80 T200,40 T300,60 T400,30 L400,120 L0,120 Z" fill="url(#chartGradient)"></path>
+<path d="M0,90 Q50,50 100,80 T200,40 T300,60 T400,30" fill="none" stroke="#2563eb" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="100" cy="80" fill="#2563eb" r="4"></circle>
+<circle cx="200" cy="40" fill="#2563eb" r="4"></circle>
+<circle cx="300" cy="60" fill="#2563eb" r="4"></circle>
+</svg>
+<div class="flex justify-between mt-4">
+<span class="text-[10px] font-bold text-on-surface-variant/50 uppercase">Sen</span>
+<span class="text-[10px] font-bold text-on-surface-variant/50 uppercase">Sel</span>
+<span class="text-[10px] font-bold text-on-surface-variant/50 uppercase text-primary font-black">Rab</span>
+<span class="text-[10px] font-bold text-on-surface-variant/50 uppercase">Kam</span>
+<span class="text-[10px] font-bold text-on-surface-variant/50 uppercase">Jum</span>
+<span class="text-[10px] font-bold text-on-surface-variant/50 uppercase">Sab</span>
+<span class="text-[10px] font-bold text-on-surface-variant/50 uppercase">Min</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Stok Rendah -->
+<section class="mb-8">
+<div class="px-margin-mobile flex items-center justify-between mb-4">
+<h3 class="text-base font-bold">Stok Rendah</h3>
+<button class="text-primary text-xs font-bold">Lihat Semua</button>
+</div>
+<div class="flex gap-4 overflow-x-auto px-margin-mobile pb-2 no-scrollbar">
+<div class="flex-none w-48 bg-surface-container-lowest p-3 rounded-2xl shadow-sm border border-outline-variant/30">
+<div class="flex justify-between items-start mb-2">
+<div class="w-10 h-10 bg-surface-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">lunch_dining</span>
+</div>
+<span class="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded">Sisa 2</span>
+</div>
+<h4 class="text-xs font-bold truncate">Roti Tawar Kasino</h4>
+<button class="w-full mt-3 py-1.5 bg-primary text-white text-[10px] font-bold rounded-lg">Restok</button>
+</div>
+<div class="flex-none w-48 bg-surface-container-lowest p-3 rounded-2xl shadow-sm border border-outline-variant/30">
+<div class="flex justify-between items-start mb-2">
+<div class="w-10 h-10 bg-surface-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">water_drop</span>
+</div>
+<span class="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded">Sisa 5</span>
+</div>
+<h4 class="text-xs font-bold truncate">Minyak Goreng 1L</h4>
+<button class="w-full mt-3 py-1.5 bg-primary text-white text-[10px] font-bold rounded-lg">Restok</button>
+</div>
+</div>
+</section>
+<!-- Aktivitas Hari Ini -->
+<section class="px-margin-mobile mb-8">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-base font-bold">Aktivitas Hari Ini</h3>
+<button class="text-primary text-xs font-bold">Semua</button>
+</div>
+<div class="flex flex-col gap-3">
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex items-center gap-4">
+<div class="w-10 h-10 bg-green-50 text-green-600 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined">receipt_long</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-bold truncate">INV/20240624/001</h4>
+<span class="text-[10px] text-on-surface-variant">10:45 • Tunai</span>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold">Rp 145.000</p>
+<span class="text-[9px] font-black text-green-600 uppercase">Sukses</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex items-center gap-4">
+<div class="w-10 h-10 bg-green-50 text-green-600 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined">receipt_long</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-bold truncate">INV/20240624/002</h4>
+<span class="text-[10px] text-on-surface-variant">11:20 • QRIS</span>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold">Rp 32.000</p>
+<span class="text-[9px] font-black text-green-600 uppercase">Sukses</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Top Selling Products -->
+<section class="px-margin-mobile">
+<h3 class="text-base font-bold mb-4">Produk Terlaris</h3>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container-high rounded-xl flex items-center justify-center font-bold text-primary">#1</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold">Beras Pandan Wangi 5kg</h4>
+<p class="text-[10px] text-on-surface-variant">Terjual 24 kali</p>
+</div>
+<span class="text-sm font-bold text-primary">Rp 75k</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container-high rounded-xl flex items-center justify-center font-bold text-primary">#2</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold">Telur Ayam (1kg)</h4>
+<p class="text-[10px] text-on-surface-variant">Terjual 18 kali</p>
+</div>
+<span class="text-sm font-bold text-primary">Rp 28k</span>
+</div>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl border-t border-outline-variant/30">
+<div class="flex justify-around items-center h-20 px-xs">
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] text-primary font-bold" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold">Beranda</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px] font-medium">Stok</span>
+</a>
+<a class="flex flex-col items-center justify-center -mt-8" href="#">
+<div class="w-14 h-14 bg-primary rounded-2xl shadow-lg shadow-primary/30 flex items-center justify-center text-white active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl">point_of_sale</span>
+</div>
+<span class="text-[10px] font-bold text-primary mt-1">Kasir</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="text-[10px] font-medium">Laporan</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-medium">Lainnya</span>
+</a>
+</div>
+</nav>
+<script>
+    // Simple entrance animation
+    document.addEventListener('DOMContentLoaded', () => {
+      const summaryCard = document.querySelector('.bg-primary');
+      summaryCard.style.opacity = '0';
+      summaryCard.style.transform = 'translateY(10px)';
+      
+      setTimeout(() => {
+        summaryCard.style.transition = 'all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+        summaryCard.style.opacity = '1';
+        summaryCard.style.transform = 'translateY(0)';
+      }, 50);
+    });
+  </script>
+</body></html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-tertiary-fixed": "#360f00", "on-surface-variant": "#434655", "tertiary": "#943700", "surface-bright": "#faf8ff", "on-secondary-container": "#fefcff", "inverse-primary": "#b4c5ff", "secondary-fixed": "#d8e2ff", "inverse-on-surface": "#f0f0fb", "on-error-container": "#93000a", "on-primary-container": "#eeefff", "on-primary-fixed": "#00174b", "primary-container": "#2563eb", "surface-dim": "#d9d9e5", "secondary": "#0058be", "on-error": "#ffffff", "on-primary-fixed-variant": "#003ea8", "surface-container-lowest": "#ffffff", "on-surface": "#191b23", "error-container": "#ffdad6", "error": "#ba1a1a", "secondary-container": "#2170e4", "tertiary-fixed": "#ffdbcd", "primary-fixed": "#dbe1ff", "tertiary-container": "#bc4800", "on-primary": "#ffffff", "surface-tint": "#0053db", "background": "#faf8ff", "on-tertiary-fixed-variant": "#7d2d00", "surface-container-low": "#f3f3fe", "on-background": "#191b23", "inverse-surface": "#2e3039", "surface-container-highest": "#e1e2ed", "on-secondary": "#ffffff", "on-secondary-fixed": "#001a42", "primary": "#004ac6", "on-tertiary-container": "#ffede6", "on-secondary-fixed-variant": "#004395", "surface-container-high": "#e7e7f3", "secondary-fixed-dim": "#adc6ff", "primary-fixed-dim": "#b4c5ff", "outline-variant": "#c3c6d7", "tertiary-fixed-dim": "#ffb596", "surface-variant": "#e1e2ed", "on-tertiary": "#ffffff", "surface": "#faf8ff", "surface-container": "#ededf9", "outline": "#737686" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin-mobile": "20px", "base": "4px", "xs": "8px", "md": "16px", "touch-target": "48px", "sm": "12px", "lg": "24px", "xl": "32px", "gutter": "16px" }, "fontFamily": { "body-md": ["Inter"], "headline-sm": ["Inter"], "headline-lg": ["Inter"], "label-lg": ["Inter"], "label-md": ["Inter"], "body-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "headline-md": ["Inter"], "display-lg": ["Inter"] }, "fontSize": { "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "600" }], "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }] } } } }</script><style>@layer base { body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: contain; } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } } .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }</style><style>
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><h1 class="font-headline-md text-headline-md text-primary tracking-tight">UsahaKu</h1><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 pb-24 min-h-screen bg-background"><div class="flex flex-col w-full pb-32">
+<!-- Header Navigation -->
+<div class="flex items-center px-margin-mobile h-14 gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Detail Utang</h2>
+</div>
+<!-- Debt Summary Hero Card -->
+<div class="px-margin-mobile mt-xs">
+<div class="bg-primary-container rounded-xl p-lg relative overflow-hidden shadow-md">
+<!-- Decorative Background Element -->
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-on-primary-container/10 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-md text-label-md text-on-primary-container/80 uppercase tracking-wider">Sisa Utang</p>
+<h3 class="font-display-lg text-display-lg text-on-primary-container mt-1">Rp 4.500.000</h3>
+</div>
+<span class="bg-on-primary-container/20 text-on-primary-container px-3 py-1 rounded-full font-label-md text-label-md">Overdue</span>
+</div>
+<div class="mt-xl flex flex-wrap gap-y-4">
+<div class="w-1/2">
+<p class="font-label-md text-label-md text-on-primary-container/70">Nomor Invoice</p>
+<p class="font-label-lg text-label-lg text-on-primary-container">#INV-SUP-08</p>
+</div>
+<div class="w-1/2">
+<p class="font-label-md text-label-md text-on-primary-container/70">Jatuh Tempo</p>
+<p class="font-label-lg text-label-lg text-on-primary-container">25 Okt 2023</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Supplier Information Card -->
+<div class="px-margin-mobile mt-md">
+<div class="bg-surface-container-low rounded-xl p-lg shadow-sm">
+<div class="flex items-center gap-md mb-md">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-fixed">store</span>
+</div>
+<div class="min-w-0">
+<h4 class="font-headline-sm text-headline-sm text-on-surface truncate">Tekstil Maju Jaya</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Supplier Bahan Baku</p>
+</div>
+</div>
+<div class="space-y-md pt-md border-t border-outline-variant/30">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary text-[20px]">call</span>
+<span class="font-body-md text-body-md text-on-surface">+62 812 3456 7890</span>
+</div>
+<div class="flex items-start gap-md">
+<span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+<span class="font-body-md text-body-md text-on-surface leading-relaxed">Kawasan Industri Jababeka Blok C-14, Cikarang, Jawa Barat</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Internal Notes -->
+<div class="px-margin-mobile mt-md">
+<div class="bg-tertiary-fixed rounded-xl p-md">
+<div class="flex gap-sm">
+<span class="material-symbols-outlined text-on-tertiary-fixed text-[20px]">sticky_note_2</span>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-tertiary-fixed">Catatan Internal</span>
+<p class="font-body-md text-body-md text-on-tertiary-fixed-variant mt-1 italic">"Pembayaran bahan baku kain katun untuk produksi koleksi musim panas."</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Payment History Timeline -->
+<div class="px-margin-mobile mt-xl">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-md">Riwayat Pembayaran</h4>
+<div class="relative">
+<!-- Timeline Line -->
+<div class="absolute left-[19px] top-4 bottom-4 w-0.5 bg-outline-variant"></div>
+<div class="space-y-xl">
+<!-- Timeline Entry 1 -->
+<div class="relative flex gap-md items-start">
+<div class="relative z-10 w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">check</span>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Rp 1.000.000</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Transfer Bank</p>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">20 Okt 2023</span>
+</div>
+</div>
+</div>
+<!-- Timeline Entry 2 -->
+<div class="relative flex gap-md items-start opacity-70">
+<div class="relative z-10 w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-[18px]">history</span>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Rp 500.000</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Tunai</p>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">15 Okt 2023</span>
+</div>
+</div>
+</div>
+<!-- Initial Debt Entry -->
+<div class="relative flex gap-md items-start">
+<div class="relative z-10 w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-fixed text-[18px]">receipt</span>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Utang Dibuat</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Total: Rp 6.000.000</p>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">01 Okt 2023</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Fixed Bottom Action Area -->
+<div class="fixed bottom-16 left-0 right-0 p-margin-mobile bg-gradient-to-t from-background via-background/90 to-transparent">
+<button class="w-full h-[56px] bg-primary text-on-primary rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-sm shadow-lg active:scale-[0.98] transition-all overflow-hidden relative" id="payButton">
+<span class="material-symbols-outlined">payments</span>
+            Bayar Utang
+            <!-- Shine Effect -->
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+</button>
+</div>
+</div>
+<script>
+    // Particle effect on button press for "Delight"
+    document.getElementById('payButton').addEventListener('click', function(e) {
+        const btn = e.currentTarget;
+        const rect = btn.getBoundingClientRect();
+        
+        for(let i = 0; i < 8; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'fixed pointer-events-none w-2 h-2 rounded-full bg-primary z-[100]';
+            document.body.appendChild(particle);
+            
+            const startX = e.clientX;
+            const startY = e.clientY;
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = 2 + Math.random() * 4;
+            let posX = startX;
+            let posY = startY;
+            let opacity = 1;
+            
+            const animate = () => {
+                posX += Math.cos(angle) * velocity;
+                posY += Math.sin(angle) * velocity;
+                opacity -= 0.02;
+                
+                particle.style.transform = `translate(${posX}px, ${posY}px)`;
+                particle.style.opacity = opacity;
+                
+                if(opacity > 0) {
+                    requestAnimationFrame(animate);
+                } else {
+                    particle.remove();
+                }
+            };
+            requestAnimationFrame(animate);
+        }
+    });
+
+    // Custom Shimmer Animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    `;
+    document.head.appendChild(style);
+</script></main><nav class="fixed bottom-0 w-full z-50 bg-surface/80 backdrop-blur-xl pb-safe shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-semibold"></nav>
+
+</body></html>

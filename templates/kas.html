@@ -1,0 +1,172 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior:none;min-height:100vh;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"outline-variant":"#c3c6d7","on-error-container":"#93000a","surface-container-high":"#e7e7f3",error:"#ba1a1a","secondary-container":"#2170e4","surface-dim":"#d9d9e5",secondary:"#0058be","inverse-on-surface":"#f0f0fb","on-secondary-fixed":"#001a42","on-primary":"#ffffff","on-tertiary-container":"#ffede6","on-tertiary-fixed":"#360f00","on-primary-container":"#eeefff","surface-container":"#ededf9","surface-container-lowest":"#ffffff","on-primary-fixed-variant":"#003ea8","on-secondary-fixed-variant":"#004395","on-error":"#ffffff","tertiary-container":"#bc4800","on-tertiary":"#ffffff","surface-container-low":"#f3f3fe","primary-container":"#2563eb","on-surface-variant":"#434655","on-surface":"#191b23","tertiary-fixed-dim":"#ffb596","tertiary-fixed":"#ffdbcd","secondary-fixed":"#d8e2ff","surface-variant":"#e1e2ed","on-tertiary-fixed-variant":"#7d2d00","on-secondary":"#ffffff","error-container":"#ffdad6",background:"#faf8ff","surface-bright":"#faf8ff",surface:"#faf8ff","inverse-primary":"#b4c5ff",outline:"#737686","secondary-fixed-dim":"#adc6ff","on-primary-fixed":"#00174b","surface-container-highest":"#e1e2ed","primary-fixed":"#dbe1ff",tertiary:"#943700","inverse-surface":"#2e3039","on-background":"#191b23","primary-fixed-dim":"#b4c5ff","on-secondary-container":"#fefcff",primary:"#004ac6","surface-tint":"#0053db"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{sm:"12px",xs:"8px",md:"16px","margin-mobile":"20px",base:"4px","touch-target":"48px",gutter:"16px",xl:"32px",lg:"24px"},fontFamily:{"body-lg":["Inter"],"display-lg":["Inter"],"headline-lg-mobile":["Inter"],"headline-sm":["Inter"],"headline-lg":["Inter"],"body-md":["Inter"],"label-md":["Inter"],"headline-md":["Inter"],"label-lg":["Inter"]},fontSize:{"body-lg":["16px",{lineHeight:"24px",fontWeight:"400"}],"display-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"headline-lg-mobile":["22px",{lineHeight:"28px",fontWeight:"600"}],"headline-sm":["18px",{lineHeight:"24px",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-md":["14px",{lineHeight:"20px",fontWeight:"400"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"500"}],"headline-md":["20px",{lineHeight:"28px",fontWeight:"600"}],"label-lg":["14px",{lineHeight:"20px",fontWeight:"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><h1 class="font-headline-md text-headline-md text-on-surface tracking-tight truncate">Kas</h1><div class="flex items-center gap-base"><button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant active:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined">search</span></button><button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant active:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined">notifications</span></button><div class="ml-xs w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-32 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Header Section: Summary Card -->
+<div class="px-margin-mobile pt-md">
+<div class="flex items-center justify-between mb-md">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface-variant">Hari ini</span>
+<span class="text-headline-sm font-headline-sm text-on-surface">24 Oktober 2023</span>
+</div>
+<div class="flex gap-xs">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">ios_share</span>
+</button>
+</div>
+</div>
+<!-- Premium Total Balance Card -->
+<div class="relative overflow-hidden bg-primary p-lg rounded-[24px] shadow-xl shadow-primary/20 text-on-primary">
+<!-- Decorative SVG background elements -->
+<div class="absolute top-0 right-0 -mr-8 -mt-8 opacity-20">
+<svg fill="none" height="160" viewbox="0 0 160 160" width="160" xmlns="http://www.w3.org/2000/svg">
+<circle cx="80" cy="80" fill="white" r="80"></circle>
+</svg>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-xs opacity-80 mb-base">
+<span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+<span class="text-label-lg font-label-lg">Total Saldo Kas</span>
+</div>
+<div class="flex items-baseline gap-xs mb-lg">
+<span class="text-label-lg font-label-lg opacity-80">Rp</span>
+<span class="text-display-lg font-display-lg tracking-tight">42.850.000</span>
+</div>
+<div class="grid grid-cols-2 gap-md pt-lg border-t border-white/10">
+<div class="flex flex-col gap-base">
+<div class="flex items-center gap-xs text-white/80">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+<span class="text-label-md font-label-md">Pemasukan</span>
+</div>
+<span class="text-headline-sm font-headline-sm">Rp 1.240k</span>
+</div>
+<div class="flex flex-col gap-base border-l border-white/10 pl-md">
+<div class="flex items-center gap-xs text-white/80">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+<span class="text-label-md font-label-md">Pengeluaran</span>
+</div>
+<span class="text-headline-sm font-headline-sm text-tertiary-fixed">Rp 450k</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Filter Chips -->
+<div class="flex items-center gap-sm overflow-x-auto px-margin-mobile py-lg no-scrollbar">
+<button class="flex-none px-md h-10 rounded-full bg-primary-container text-on-primary-container font-label-lg">Hari ini</button>
+<button class="flex-none px-md h-10 rounded-full bg-surface-container text-on-surface-variant font-label-lg">Minggu ini</button>
+<button class="flex-none px-md h-10 rounded-full bg-surface-container text-on-surface-variant font-label-lg">Bulan ini</button>
+<button class="flex-none px-md h-10 rounded-full bg-surface-container text-on-surface-variant font-label-lg flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>Pilih Tanggal</span>
+</button>
+</div>
+<!-- Transaction List Container -->
+<div class="px-margin-mobile flex flex-col gap-lg">
+<!-- Group: Today -->
+<div class="flex flex-col gap-md">
+<div class="flex items-center justify-between">
+<span class="text-label-lg font-label-lg text-on-surface-variant">Hari Ini, 24 Okt</span>
+<span class="text-label-md font-label-md text-on-surface-variant opacity-60">Rp +790.000</span>
+</div>
+<!-- Transaction Item 1 -->
+<div class="flex items-center gap-md p-md bg-surface-container-lowest rounded-xl shadow-sm active:scale-[0.98] transition-transform">
+<div class="w-12 h-12 flex-none rounded-full bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">point_of_sale</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-base">
+<h4 class="text-body-lg font-label-lg text-on-surface truncate">Penjualan Kedai</h4>
+<span class="text-body-lg font-label-lg text-primary whitespace-nowrap">+ Rp 1.240.000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-md text-on-surface-variant truncate">Penjualan 12 item (POS)</span>
+<span class="text-label-md text-on-surface-variant/60">14:20</span>
+</div>
+</div>
+</div>
+<!-- Transaction Item 2 -->
+<div class="flex items-center gap-md p-md bg-surface-container-lowest rounded-xl shadow-sm active:scale-[0.98] transition-transform">
+<div class="w-12 h-12 flex-none rounded-full bg-tertiary/10 text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-base">
+<h4 class="text-body-lg font-label-lg text-on-surface truncate">Listrik &amp; Air</h4>
+<span class="text-body-lg font-label-lg text-error whitespace-nowrap">- Rp 450.000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-md text-on-surface-variant truncate">Token Listrik Bulan Okt</span>
+<span class="text-label-md text-on-surface-variant/60">09:15</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Group: Yesterday -->
+<div class="flex flex-col gap-md">
+<div class="flex items-center justify-between">
+<span class="text-label-lg font-label-lg text-on-surface-variant">Kemarin, 23 Okt</span>
+<span class="text-label-md font-label-md text-on-surface-variant opacity-60">Rp -1.150.000</span>
+</div>
+<!-- Transaction Item 3 -->
+<div class="flex items-center gap-md p-md bg-surface-container-lowest rounded-xl shadow-sm active:scale-[0.98] transition-transform">
+<div class="w-12 h-12 flex-none rounded-full bg-secondary-container/20 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-base">
+<h4 class="text-body-lg font-label-lg text-on-surface truncate">Belanja Bahan Baku</h4>
+<span class="text-body-lg font-label-lg text-error whitespace-nowrap">- Rp 1.150.000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-md text-on-surface-variant truncate">Pasar Induk Kramat Jati</span>
+<span class="text-label-md text-on-surface-variant/60">10:45</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State Micro-interaction Container (Hidden by default) -->
+<div class="hidden flex flex-col items-center justify-center py-20 px-xl text-center" id="empty-state">
+<div class="w-48 h-48 mb-lg">
+<img class="w-full h-full object-contain" data-alt="A playful and friendly 3D illustration of an empty wallet with small floating sparkles around it, set against a soft pastel background. Professional corporate minimalist style with rounded shapes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfCyCfjPGJHmyC7cbNt0pVy7cSp2o4imImDq1-3eLqrbexOiKZvADCHGVMj98Bi06YzSppPHt7CTQndIM7gYu4NE5hG-Qbgdgk01q3CLuNUC3z0OQtXQiwVnN3Xeb0OpChZ_HqH9MlNnM56-7KG5k_xxLmiEhO567IWhUwdas-gEE7cuwG0fMEn_ldqqwvcLx1SLfyA5G7DZ2HDOXpl-1Mr00sjCROfNOK_vcJDnJyDQzkgHgGTA-oaA"/>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-xs">Belum ada transaksi</h3>
+<p class="text-body-md text-on-surface-variant">Mulai catat pemasukan dan pengeluaran usahamu sekarang!</p>
+</div>
+<!-- Floating Action Button -->
+<div class="fixed bottom-24 right-margin-mobile z-40">
+<button class="group flex items-center gap-sm bg-primary text-on-primary px-lg py-md rounded-2xl shadow-lg shadow-primary/30 active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined text-[24px]">add</span>
+<span class="font-label-lg">Tambah Transaksi</span>
+</button>
+</div>
+<script>
+        // Simple micro-interaction for filter chips
+        const chips = document.querySelectorAll('.no-scrollbar button');
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                chips.forEach(c => {
+                    c.classList.remove('bg-primary-container', 'text-on-primary-container');
+                    c.classList.add('bg-surface-container', 'text-on-surface-variant');
+                });
+                chip.classList.add('bg-primary-container', 'text-on-primary-container');
+                chip.classList.remove('bg-surface-container', 'text-on-surface-variant');
+            });
+        });
+
+        // Toggle empty state for demo purposes (Trigger via console if needed)
+        function toggleView(isEmpty) {
+            const list = document.querySelector('.px-margin-mobile.flex-col');
+            const empty = document.getElementById('empty-state');
+            if (isEmpty) {
+                list.classList.add('hidden');
+                empty.classList.remove('hidden');
+            } else {
+                list.classList.remove('hidden');
+                empty.classList.add('hidden');
+            }
+        }
+    </script>
+</div></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-20 px-xs"><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="dashboard" href="#"><span class="material-symbols-outlined">dashboard</span><span class="text-label-md font-label-md">Dashboard</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="produk" href="#"><span class="material-symbols-outlined">inventory_2</span><span class="text-label-md font-label-md">Produk</span></a><a class="flex flex-col items-center justify-center -mt-8" data-path="penjualan" href="#"><div class="w-14 h-14 bg-primary rounded-xl shadow-lg flex items-center justify-center text-on-primary mb-1 transform active:scale-95 transition-transform"><span class="material-symbols-outlined text-[32px]">point_of_sale</span></div><span class="text-label-md font-label-md text-primary">Penjualan</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-primary font-bold" data-path="kas" href="#"><span class="material-symbols-outlined">account_balance_wallet</span><span class="text-label-md font-label-md">Kas</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="lainnya" href="#"><span class="material-symbols-outlined">menu</span><span class="text-label-md font-label-md">Lainnya</span></a></div></nav></body></html>

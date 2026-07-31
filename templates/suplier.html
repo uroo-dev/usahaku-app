@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior:none;min-height:100vh;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"outline-variant":"#c3c6d7","on-error-container":"#93000a","surface-container-high":"#e7e7f3",error:"#ba1a1a","secondary-container":"#2170e4","surface-dim":"#d9d9e5",secondary:"#0058be","inverse-on-surface":"#f0f0fb","on-secondary-fixed":"#001a42","on-primary":"#ffffff","on-tertiary-container":"#ffede6","on-tertiary-fixed":"#360f00","on-primary-container":"#eeefff","surface-container":"#ededf9","surface-container-lowest":"#ffffff","on-primary-fixed-variant":"#003ea8","on-secondary-fixed-variant":"#004395","on-error":"#ffffff","tertiary-container":"#bc4800","on-tertiary":"#ffffff","surface-container-low":"#f3f3fe","primary-container":"#2563eb","on-surface-variant":"#434655","on-surface":"#191b23","tertiary-fixed-dim":"#ffb596","tertiary-fixed":"#ffdbcd","secondary-fixed":"#d8e2ff","surface-variant":"#e1e2ed","on-tertiary-fixed-variant":"#7d2d00","on-secondary":"#ffffff","error-container":"#ffdad6",background:"#faf8ff","surface-bright":"#faf8ff",surface:"#faf8ff","inverse-primary":"#b4c5ff",outline:"#737686","secondary-fixed-dim":"#adc6ff","on-primary-fixed":"#00174b","surface-container-highest":"#e1e2ed","primary-fixed":"#dbe1ff",tertiary:"#943700","inverse-surface":"#2e3039","on-background":"#191b23","primary-fixed-dim":"#b4c5ff","on-secondary-container":"#fefcff",primary:"#004ac6","surface-tint":"#0053db"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{sm:"12px",xs:"8px",md:"16px","margin-mobile":"20px",base:"4px","touch-target":"48px",gutter:"16px",xl:"32px",lg:"24px"},fontFamily:{"body-lg":["Inter"],"display-lg":["Inter"],"headline-lg-mobile":["Inter"],"headline-sm":["Inter"],"headline-lg":["Inter"],"body-md":["Inter"],"label-md":["Inter"],"headline-md":["Inter"],"label-lg":["Inter"]},fontSize:{"body-lg":["16px",{lineHeight:"24px",fontWeight:"400"}],"display-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"headline-lg-mobile":["22px",{lineHeight:"28px",fontWeight:"600"}],"headline-sm":["18px",{lineHeight:"24px",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-md":["14px",{lineHeight:"20px",fontWeight:"400"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"500"}],"headline-md":["20px",{lineHeight:"28px",fontWeight:"600"}],"label-lg":["14px",{lineHeight:"20px",fontWeight:"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><h1 class="font-headline-md text-headline-md text-on-surface tracking-tight truncate">Suplier</h1><div class="flex items-center gap-base"><button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant active:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined">search</span></button><button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant active:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined">notifications</span></button><div class="ml-xs w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-32 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Search & Filter Section -->
+<div class="px-margin-mobile py-md flex flex-col gap-md">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full h-14 pl-12 pr-md bg-surface-container-lowest text-body-lg text-on-surface rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant/50" placeholder="Cari supplier..." type="text">
+<button class="absolute right-xs top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-primary bg-primary-fixed rounded-lg">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+<!-- Quick Filter Chips -->
+<div class="flex gap-xs overflow-x-auto pb-xs no-scrollbar">
+<button class="px-md py-xs bg-primary text-on-primary rounded-full font-label-md text-label-md whitespace-nowrap">Semua</button>
+<button class="px-md py-xs bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap">Ada Hutang</button>
+<button class="px-md py-xs bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap">Paling Sering</button>
+<button class="px-md py-xs bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap">Terbaru</button>
+</div>
+</div>
+<!-- Supplier List Container -->
+<div class="px-margin-mobile flex flex-col gap-md pb-xl" id="supplier-list">
+<!-- Card 1: Outstanding Payable -->
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-sm flex flex-col gap-sm relative overflow-hidden group active:scale-[0.98] transition-transform">
+<div class="flex justify-between items-start">
+<div class="flex gap-md items-center">
+<div class="w-12 h-12 bg-error-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-on-error-container">factory</span>
+</div>
+<div class="min-w-0">
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">PT. Maju Logistik</h3>
+<p class="text-label-md font-label-md text-on-surface-variant">Bpk. Heryanto</p>
+</div>
+</div>
+<div class="px-xs py-1 bg-error-container text-on-error-container rounded-lg font-label-md text-[10px] tracking-wider uppercase">HUTANG</div>
+</div>
+<div class="grid grid-cols-2 gap-sm py-xs">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface-variant">Hutang</span>
+<span class="text-body-lg font-bold text-error">Rp 4.500.000</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface-variant">Terakhir Belanja</span>
+<span class="text-body-md font-body-md text-on-surface">12 Okt 2023</span>
+</div>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="text-body-md font-body-md truncate">Jl. Industri Raya No. 45, Kawasan MM2100...</span>
+</div>
+<div class="flex items-center gap-sm mt-xs pt-sm border-t border-surface-container">
+<button class="w-touch-target h-touch-target flex items-center justify-center bg-surface-container-high rounded-xl text-primary active:bg-primary-fixed">
+<span class="material-symbols-outlined">call</span>
+</button>
+<button class="w-touch-target h-touch-target flex items-center justify-center bg-surface-container-high rounded-xl text-primary active:bg-primary-fixed">
+<span class="material-symbols-outlined">chat</span>
+</button>
+<button class="flex-1 h-touch-target bg-primary text-on-primary rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-xs shadow-md">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                    Catat Pembelian
+                </button>
+</div>
+</div>
+<!-- Card 2: Active Regular -->
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-sm flex flex-col gap-sm relative overflow-hidden group active:scale-[0.98] transition-transform">
+<div class="flex justify-between items-start">
+<div class="flex gap-md items-center">
+<div class="w-12 h-12 bg-primary-fixed rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-fixed">local_shipping</span>
+</div>
+<div class="min-w-0">
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Sinar Jaya Grosir</h3>
+<p class="text-label-md font-label-md text-on-surface-variant">Ibu Sari</p>
+</div>
+</div>
+<div class="px-xs py-1 bg-secondary-container text-on-secondary-container rounded-lg font-label-md text-[10px] tracking-wider uppercase">AKTIF</div>
+</div>
+<div class="grid grid-cols-2 gap-sm py-xs">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface-variant">Hutang</span>
+<span class="text-body-lg font-bold text-on-surface">Rp 0</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface-variant">Terakhir Belanja</span>
+<span class="text-body-md font-body-md text-on-surface">Hari ini</span>
+</div>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="text-body-md font-body-md truncate">Pasar Pagi Blok A, Lt. 2 No. 12</span>
+</div>
+<div class="flex items-center gap-sm mt-xs pt-sm border-t border-surface-container">
+<button class="w-touch-target h-touch-target flex items-center justify-center bg-surface-container-high rounded-xl text-primary active:bg-primary-fixed">
+<span class="material-symbols-outlined">call</span>
+</button>
+<button class="w-touch-target h-touch-target flex items-center justify-center bg-surface-container-high rounded-xl text-primary active:bg-primary-fixed">
+<span class="material-symbols-outlined">chat</span>
+</button>
+<button class="flex-1 h-touch-target bg-primary text-on-primary rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-xs shadow-md">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                    Catat Pembelian
+                </button>
+</div>
+</div>
+<!-- Empty State (Hidden by default, shown via JS if list is empty) -->
+<div class="hidden flex flex-col items-center justify-center py-xl px-xl text-center gap-lg" id="empty-state">
+<div class="w-48 h-48 rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+<img class="w-32 h-32 object-contain opacity-60" data-alt="A warm and playful 3D illustration of a friendly shopkeeper looking into an empty crate with a magnifying glass. Soft pastel lighting, professional claymorphism style, set against a clean white background with subtle blue accents. The mood is helpful and inviting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoSi2xtWf6ukZEAyEHvTPFys7c3x7uU80nGviStcDOOAlxIJYAQHaTiok37IH4m4yXegi6h82Q9gEYRQwWlezLXsVRzqaxFXswGH3rQn2Wfz4jwq5suORYfA2x8t3IO2s75uPPdERZ1PJBaO4wuip5FTBWXJ31yGsffSpqIjongFTTJIOpI64faff_ar2qfGVR86PkWYlZkpEc6s1nXyql8cXRWuV8XPzIeNOXWzJIhxN3Na3kJuSlTQ">
+</div>
+<div class="flex flex-col gap-xs">
+<h3 class="font-headline-md text-headline-md text-on-surface">Belum ada supplier</h3>
+<p class="text-body-md font-body-md text-on-surface-variant px-md">Daftar supplier yang Anda tambahkan akan muncul di sini untuk memudahkan pencatatan stok.</p>
+</div>
+<button class="px-xl h-14 bg-primary text-on-primary rounded-xl font-label-lg text-label-lg flex items-center gap-sm shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined">person_add</span>
+                Tambah Supplier
+            </button>
+</div>
+</div>
+<!-- Floating Action Button -->
+<div class="fixed bottom-24 right-margin-mobile flex flex-col items-end gap-md">
+<button class="flex items-center gap-md pl-md pr-lg h-14 bg-primary text-on-primary rounded-2xl shadow-xl active:scale-95 transition-all group overflow-hidden" id="fab">
+<span class="material-symbols-outlined">person_add</span>
+<span class="font-label-lg text-label-lg whitespace-nowrap">Tambah Supplier</span>
+</button>
+</div>
+<!-- Micro-interactions Script -->
+<script>
+        // Handle Empty State Toggle (Example)
+        function toggleEmptyState(isEmpty) {
+            const list = document.getElementById('supplier-list');
+            const empty = document.getElementById('empty-state');
+            const fab = document.getElementById('fab');
+            
+            if (isEmpty) {
+                // Keep only search and empty state
+                Array.from(list.children).forEach(child => {
+                    if (child.id !== 'empty-state') child.classList.add('hidden');
+                });
+                empty.classList.remove('hidden');
+                fab.classList.add('scale-0');
+            } else {
+                empty.classList.add('hidden');
+                fab.classList.remove('scale-0');
+            }
+        }
+
+        // FAB scroll behavior: Collapse on scroll down
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', () => {
+            const fab = document.getElementById('fab');
+            const label = fab.querySelector('span:last-child');
+            let st = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (st > lastScrollTop && st > 100) {
+                // Scrolling down - collapse
+                label.style.width = '0px';
+                label.style.opacity = '0';
+                label.style.marginLeft = '0px';
+                fab.style.paddingRight = '16px';
+            } else {
+                // Scrolling up - expand
+                label.style.width = 'auto';
+                label.style.opacity = '1';
+                label.style.marginLeft = '12px';
+                fab.style.paddingRight = '24px';
+            }
+            lastScrollTop = st <= 0 ? 0 : st;
+        }, false);
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        #fab span:last-child {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</div></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-20 px-xs"><a aria-current="page" class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-primary font-bold" data-path="dashboard" href="#"><span class="material-symbols-outlined">dashboard</span><span class="text-label-md font-label-md">Dashboard</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="produk" href="#"><span class="material-symbols-outlined">inventory_2</span><span class="text-label-md font-label-md">Produk</span></a><a class="flex flex-col items-center justify-center -mt-8" data-path="penjualan" href="#"><div class="w-14 h-14 bg-primary rounded-xl shadow-lg flex items-center justify-center text-on-primary mb-1 transform active:scale-95 transition-transform"><span class="material-symbols-outlined text-[32px]">point_of_sale</span></div><span class="text-label-md font-label-md text-primary">Penjualan</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="kas" href="#"><span class="material-symbols-outlined">account_balance_wallet</span><span class="text-label-md font-label-md">Kas</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[64px] h-touch-target text-on-surface-variant" data-path="lainnya" href="#"><span class="material-symbols-outlined">menu</span><span class="text-label-md font-label-md">Lainnya</span></a></div></nav>
+
+</body></html>
