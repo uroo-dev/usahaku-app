@@ -13,6 +13,7 @@ part 'app_database.g.dart';
 
 @DriftDatabase(tables: [
   Categories,
+  Units,
   Products,
   Customers,
   Suppliers,
@@ -27,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -35,9 +36,15 @@ class AppDatabase extends _$AppDatabase {
           await m.createAll();
           await _seedDefaults();
         },
+        onUpgrade: (Migrator m, int from, int to) async {
+          if (from < 2) {
+            await m.createTable(units);
+            await _seedUnits();
+          }
+        },
       );
 
-  /// Data awal: kategori produk & kas default, profil bisnis kosong.
+  /// Data awal: kategori produk & kas default, satuan, profil bisnis kosong.
   Future<void> _seedDefaults() async {
     await categories.insertAll([
       CategoriesCompanion.insert(name: 'Makanan', type: Value('product')),
@@ -52,7 +59,22 @@ class AppDatabase extends _$AppDatabase {
       CategoriesCompanion.insert(name: 'Gaji', type: Value('cash'), icon: Value('payments')),
       CategoriesCompanion.insert(name: 'Lainnya', type: Value('cash'), icon: Value('category')),
     ]);
+    await _seedUnits();
     await into(businessProfiles).insert(BusinessProfilesCompanion.insert());
+  }
+
+  Future<void> _seedUnits() async {
+    await units.insertAll([
+      UnitsCompanion.insert(name: 'Pcs (Biji)'),
+      UnitsCompanion.insert(name: 'Kg (Kilogram)'),
+      UnitsCompanion.insert(name: 'Box (Kotak)'),
+      UnitsCompanion.insert(name: 'Liter'),
+      UnitsCompanion.insert(name: 'Botol'),
+      UnitsCompanion.insert(name: 'Dus'),
+      UnitsCompanion.insert(name: 'Lusin'),
+      UnitsCompanion.insert(name: 'Pack'),
+      UnitsCompanion.insert(name: 'Set'),
+    ]);
   }
 
   Future<void> deleteAllData() async {

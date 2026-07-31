@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:usahaku/controllers/produk_controller.dart';
+import 'package:usahaku/controllers/unit_controller.dart';
 import 'package:usahaku/models/product_model.dart';
 import 'package:usahaku/theme/app_theme.dart';
 import 'package:usahaku/widgets/labeled_field.dart';
@@ -20,6 +21,7 @@ class AddProductScreen extends StatefulWidget {
 
 class _AddProductScreenState extends State<AddProductScreen> {
   late final ProdukController _c = ProdukController();
+  final UnitController _unitCtrl = UnitController();
   final _nameCtrl = TextEditingController();
   final _barcodeCtrl = TextEditingController();
   final _purchaseCtrl = TextEditingController();
@@ -27,18 +29,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final _descCtrl = TextEditingController();
 
   int? _categoryId;
-  String _unit = 'pcs';
+  String _unit = 'Pcs (Biji)';
   int _stock = 0;
   int _minStock = 5;
   String? _imagePath;
   bool _saving = false;
 
-  final List<String> _units = ['pcs', 'kg', 'box', 'liter'];
-
   @override
   void initState() {
     super.initState();
     _c.load();
+    _unitCtrl.load();
     final p = widget.product;
     if (p != null) {
       _nameCtrl.text = p.name;
@@ -57,6 +58,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   void dispose() {
     _c.dispose();
+    _unitCtrl.dispose();
     _nameCtrl.dispose();
     _barcodeCtrl.dispose();
     _purchaseCtrl.dispose();
@@ -328,26 +330,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   Widget _unitDropdown() {
+    final units = _unitCtrl.units.map((u) => u.name).toList();
+    if (!units.contains(_unit)) units.add(_unit);
     return DropdownButtonFormField<String>(
       initialValue: _unit,
       isExpanded: true,
-      items: _units.map((u) => DropdownMenuItem(value: u, child: Text(_unitLabel(u)))).toList(),
-      onChanged: (v) => setState(() => _unit = v ?? 'pcs'),
+      items: units.map((u) => DropdownMenuItem(value: u, child: Text(u))).toList(),
+      onChanged: (v) => setState(() => _unit = v ?? _unit),
     );
-  }
-
-  String _unitLabel(String u) {
-    switch (u) {
-      case 'pcs':
-        return 'Pcs (Biji)';
-      case 'kg':
-        return 'Kg (Kilogram)';
-      case 'box':
-        return 'Box (Kotak)';
-      case 'liter':
-        return 'Liter';
-    }
-    return u;
   }
 }
 

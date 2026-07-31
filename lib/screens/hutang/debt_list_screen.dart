@@ -48,7 +48,6 @@ class _DebtListScreenState extends State<DebtListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(isPiutang ? 'Piutang' : 'Utang'),
-        automaticallyImplyLeading: false,
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {

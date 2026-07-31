@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:usahaku/screens/home_screen.dart';
 import 'package:usahaku/theme/app_theme.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('id_ID');
+  Intl.defaultLocale = 'id_ID';
   runApp(const UsahaKuApp());
 }
 

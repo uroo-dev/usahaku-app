@@ -1,8 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:usahaku/controllers/dashboard_controller.dart';
 import 'package:usahaku/models/dashboard_model.dart';
-import 'package:usahaku/screens/penjualan/sales_screen.dart';
-import 'package:usahaku/screens/produk/add_product_screen.dart';
 import 'package:usahaku/theme/app_theme.dart';
 import 'package:usahaku/utils/format_util.dart';
 import 'package:usahaku/widgets/section_header.dart';
@@ -10,7 +8,11 @@ import 'package:usahaku/widgets/stat_card.dart';
 
 /// Dashboard — sesuai dashboard.html.
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  /// Callback untuk berpindah tab di HomeScreen.
+  /// Index: 0=Dashboard, 1=Produk, 2=Penjualan, 3=Kas, 4=Lainnya
+  final void Function(int index)? onSwitchTab;
+
+  const DashboardScreen({super.key, this.onSwitchTab});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -86,9 +88,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Text(
-                  'Halo, Selamat Pagi! 👋',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColor.onSurface),
+                Text(
+                  _greeting(now),
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColor.onSurface),
                 ),
                 const SizedBox(height: 2),
                 const Text(
@@ -230,7 +232,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           label: 'Jual Baru',
           bg: AppColor.primaryContainer,
           color: AppColor.primary,
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SalesScreen())),
+          // Pindah ke tab Penjualan (index 2) agar BottomNavBar tetap tampil
+          onTap: () => widget.onSwitchTab?.call(2),
         ),
         const SizedBox(width: 12),
         _actionItem(
@@ -238,7 +241,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           label: 'Tambah Produk',
           bg: AppColor.surfaceContainerHigh,
           color: AppColor.onSurfaceVariant,
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AddProductScreen())),
+          // Pindah ke tab Produk (index 1) agar BottomNavBar tetap tampil
+          onTap: () => widget.onSwitchTab?.call(1),
         ),
         const SizedBox(width: 12),
         _actionItem(
@@ -246,7 +250,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           label: 'Kas Masuk',
           bg: AppColor.green50,
           color: AppColor.green600,
-          onTap: () {},
+          // Pindah ke tab Kas (index 3)
+          onTap: () => widget.onSwitchTab?.call(3),
         ),
         const SizedBox(width: 12),
         _actionItem(
@@ -254,7 +259,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           label: 'Kas Keluar',
           bg: AppColor.red50,
           color: AppColor.red600,
-          onTap: () {},
+          // Pindah ke tab Kas (index 3)
+          onTap: () => widget.onSwitchTab?.call(3),
         ),
       ],
     );
@@ -566,5 +572,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Tidak ada notifikasi baru')),
     );
+  }
+
+  String _greeting(DateTime now) {
+    final hour = now.hour;
+    if (hour >= 4 && hour < 11) return 'Halo, Selamat Pagi! 🌤️';
+    if (hour >= 11 && hour < 15) return 'Halo, Selamat Siang! ☀️';
+    if (hour >= 15 && hour < 18) return 'Halo, Selamat Sore! 🌇';
+    return 'Halo, Selamat Malam! 🌙';
   }
 }

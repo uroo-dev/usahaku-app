@@ -43,7 +43,6 @@ class _SupplierScreenState extends State<SupplierScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Supplier'),
-        automaticallyImplyLeading: false,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

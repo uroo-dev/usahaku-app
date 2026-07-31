@@ -5,6 +5,7 @@ import 'package:usahaku/models/settings_model.dart';
 import 'package:usahaku/screens/pengaturan/business_info_screen.dart';
 import 'package:usahaku/screens/pengaturan/qris_screen.dart';
 import 'package:usahaku/theme/app_theme.dart';
+import 'package:usahaku/widgets/app_about_dialog.dart';
 import 'package:usahaku/widgets/list_menu_tile.dart';
 
 /// Pengaturan — sesuai pengaturan.html: profil, umum, data, dukungan.
@@ -122,30 +123,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _c.load();
                   },
                 ),
-                ListMenuTile(
-                  icon: Icons.payments_outlined,
-                  iconBg: AppColor.secondaryFixed,
-                  iconColor: AppColor.onSecondaryFixedVariant,
-                  title: 'Mata Uang',
-                  subtitle: 'IDR - Rupiah',
-                  onTap: () {},
-                ),
-                ListMenuTile(
-                  icon: Icons.language,
-                  iconBg: AppColor.secondaryFixed,
-                  iconColor: AppColor.onSecondaryFixedVariant,
-                  title: 'Bahasa',
-                  subtitle: 'Indonesia',
-                  onTap: () {},
-                ),
-                ListMenuTile(
-                  icon: Icons.dark_mode_outlined,
-                  iconBg: AppColor.secondaryFixed,
-                  iconColor: AppColor.onSecondaryFixedVariant,
-                  title: 'Mode Gelap',
-                  subtitle: 'Belum tersedia',
-                  onTap: () {},
-                ),
               ]),
               const SizedBox(height: 20),
               _sectionLabel('Manajemen Data'),
@@ -178,7 +155,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   iconColor: AppColor.onPrimaryFixedVariant,
                   title: 'Pusat Bantuan',
                   subtitle: 'Cara menggunakan UsahaKu',
-                  onTap: () {},
+                  onTap: _showHelp,
                 ),
                 ListMenuTile(
                   icon: Icons.info_outline,
@@ -186,13 +163,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   iconColor: AppColor.onPrimaryFixedVariant,
                   title: 'Tentang Aplikasi',
                   subtitle: 'UsahaKu v1.0.0',
-                  onTap: () {},
+                  onTap: () => showAppAboutDialog(context),
                 ),
               ]),
               const SizedBox(height: 24),
             ],
           );
         },
+      ),
+    );
+  }
+
+  void _showHelp() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Pusat Bantuan'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _helpItem(Icons.dashboard_outlined, 'Dashboard', 'Lihat ringkasan penjualan, laba, dan stok hari ini.'),
+            _helpItem(Icons.inventory_2_outlined, 'Produk', 'Kelola produk, stok, dan kategori di halaman Produk.'),
+            _helpItem(Icons.point_of_sale, 'Penjualan', 'Buat transaksi kasir cepat lewat tombol tengah Penjualan.'),
+            _helpItem(Icons.account_balance_wallet_outlined, 'Kas', 'Catat pemasukan dan pengeluaran harian.'),
+            _helpItem(Icons.menu, 'Lainnya', 'Akses pelanggan, supplier, piutang, utang, laporan, dan pengaturan.'),
+          ],
+        ),
+        actions: [
+          FilledButton(onPressed: () => Navigator.pop(ctx), child: const Text('Tutup')),
+        ],
+      ),
+    );
+  }
+
+  Widget _helpItem(IconData icon, String title, String desc) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 20, color: AppColor.primary),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: '$title  ', style: const TextStyle(fontWeight: FontWeight.w700, color: AppColor.onSurface)),
+                  TextSpan(text: desc, style: const TextStyle(color: AppColor.onSurfaceVariant)),
+                ],
+              ),
+              style: const TextStyle(fontSize: 13),
+            ),
+          ),
+        ],
       ),
     );
   }

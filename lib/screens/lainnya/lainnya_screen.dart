@@ -1,15 +1,22 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:usahaku/controllers/settings_controller.dart';
 import 'package:usahaku/database/app_database.dart';
 import 'package:usahaku/database/db.dart';
 import 'package:usahaku/screens/hutang/debt_list_screen.dart';
 import 'package:usahaku/screens/laporan/laporan_screen.dart';
+import 'package:usahaku/screens/master/kalkulator_screen.dart';
+import 'package:usahaku/screens/master/kategori_kas_screen.dart';
+import 'package:usahaku/screens/master/kategori_produk_screen.dart';
+import 'package:usahaku/screens/master/satuan_produk_screen.dart';
 import 'package:usahaku/screens/pelanggan/customer_screen.dart';
-import 'package:usahaku/screens/pengaturan/settings_screen.dart';
+import 'package:usahaku/screens/pengaturan/business_info_screen.dart';
+import 'package:usahaku/screens/pengaturan/qris_screen.dart';
 import 'package:usahaku/screens/suplier/supplier_screen.dart';
 import 'package:usahaku/theme/app_theme.dart';
+import 'package:usahaku/widgets/app_about_dialog.dart';
 import 'package:usahaku/widgets/list_menu_tile.dart';
 
-/// Lainnya — sesuai lainnya.html: menu Bisnis, Laporan & Alat, Sistem.
+/// Lainnya — menu lengkap: DATA MASTER, KEUANGAN, PENGATURAN.
 class LainnyaScreen extends StatefulWidget {
   const LainnyaScreen({super.key});
 
@@ -19,11 +26,19 @@ class LainnyaScreen extends StatefulWidget {
 
 class _LainnyaScreenState extends State<LainnyaScreen> {
   String _businessName = 'Usaha Ku';
+  final SettingsController _settingsC = SettingsController();
 
   @override
   void initState() {
     super.initState();
     _load();
+    _settingsC.load();
+  }
+
+  @override
+  void dispose() {
+    _settingsC.dispose();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -63,15 +78,22 @@ class _LainnyaScreenState extends State<LainnyaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lainnya'),
         automaticallyImplyLeading: false,
+        title: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.menu, size: 20),
+            SizedBox(width: 8),
+            Text('Lainnya'),
+          ],
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
           _businessCard(),
           const SizedBox(height: 20),
-          _sectionLabel('Bisnis'),
+          _sectionLabel('📂 DATA MASTER'),
           const SizedBox(height: 8),
           _group(
             children: [
@@ -79,7 +101,7 @@ class _LainnyaScreenState extends State<LainnyaScreen> {
                 icon: Icons.group_outlined,
                 iconBg: AppColor.secondary.withValues(alpha: 0.12),
                 iconColor: AppColor.secondary,
-                title: 'Pelanggan',
+                title: '👥 Pelanggan',
                 subtitle: 'Kelola data pelanggan',
                 onTap: () => _push(const CustomerScreen()),
               ),
@@ -87,15 +109,46 @@ class _LainnyaScreenState extends State<LainnyaScreen> {
                 icon: Icons.local_shipping_outlined,
                 iconBg: AppColor.tertiary.withValues(alpha: 0.12),
                 iconColor: AppColor.tertiary,
-                title: 'Supplier',
+                title: '🚚 Supplier',
                 subtitle: 'Kelola data supplier',
                 onTap: () => _push(const SupplierScreen()),
               ),
               ListMenuTile(
+                icon: Icons.category_outlined,
+                iconBg: AppColor.primary.withValues(alpha: 0.12),
+                iconColor: AppColor.primary,
+                title: '📂 Kategori Produk',
+                subtitle: 'Kelola kategori produk',
+                onTap: () => _push(const KategoriProdukScreen()),
+              ),
+              ListMenuTile(
+                icon: Icons.straighten,
+                iconBg: AppColor.secondaryFixed,
+                iconColor: AppColor.onSecondaryFixedVariant,
+                title: '📏 Satuan Produk',
+                subtitle: 'Kelola satuan: pcs, kg, liter',
+                onTap: () => _push(const SatuanProdukScreen()),
+              ),
+              ListMenuTile(
+                icon: Icons.label_outline,
+                iconBg: AppColor.tertiaryFixed,
+                iconColor: AppColor.onTertiaryFixedVariant,
+                title: '💵 Kategori Kas',
+                subtitle: 'Kelola kategori pemasukan & pengeluaran',
+                onTap: () => _push(const KategoriKasScreen()),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          _sectionLabel('💳 KEUANGAN'),
+          const SizedBox(height: 8),
+          _group(
+            children: [
+              ListMenuTile(
                 icon: Icons.receipt_long_outlined,
                 iconBg: AppColor.error.withValues(alpha: 0.12),
                 iconColor: AppColor.error,
-                title: 'Piutang',
+                title: '📄 Piutang',
                 subtitle: 'Tagihan kepada pelanggan',
                 onTap: () => _push(DebtListScreen(type: DebtType.piutang)),
               ),
@@ -103,39 +156,56 @@ class _LainnyaScreenState extends State<LainnyaScreen> {
                 icon: Icons.account_balance_wallet_outlined,
                 iconBg: AppColor.primary.withValues(alpha: 0.12),
                 iconColor: AppColor.primary,
-                title: 'Utang',
+                title: '🧾 Utang',
                 subtitle: 'Kewajiban kepada supplier',
                 onTap: () => _push(DebtListScreen(type: DebtType.utang)),
               ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          _sectionLabel('Laporan & Alat'),
-          const SizedBox(height: 8),
-          _group(
-            children: [
               ListMenuTile(
                 icon: Icons.insert_chart_outlined,
                 iconBg: AppColor.primary.withValues(alpha: 0.12),
                 iconColor: AppColor.primary,
-                title: 'Laporan',
+                title: '📊 Laporan',
                 subtitle: 'Laba rugi, penjualan, arus kas',
                 onTap: () => _push(const LaporanScreen()),
+              ),
+              ListMenuTile(
+                icon: Icons.calculate_outlined,
+                iconBg: AppColor.secondary.withValues(alpha: 0.12),
+                iconColor: AppColor.secondary,
+                title: '🧮 Kalkulator',
+                subtitle: 'Kalkulator cepat untuk menghitung',
+                onTap: () => _push(const KalkulatorScreen()),
               ),
             ],
           ),
           const SizedBox(height: 20),
-          _sectionLabel('Sistem'),
+          _sectionLabel('⚙ PENGATURAN'),
           const SizedBox(height: 8),
           _group(
             children: [
               ListMenuTile(
-                icon: Icons.settings_outlined,
-                iconBg: AppColor.onSurfaceVariant.withValues(alpha: 0.12),
-                iconColor: AppColor.onSurfaceVariant,
-                title: 'Pengaturan',
-                subtitle: 'Profil bisnis, QRIS, backup',
-                onTap: () => _push(const SettingsScreen()),
+                icon: Icons.store_outlined,
+                iconBg: AppColor.primary.withValues(alpha: 0.12),
+                iconColor: AppColor.primary,
+                title: '🏪 Profil Usaha',
+                subtitle: 'Nama, pemilik, alamat bisnis',
+                onTap: () => _push(BusinessInfoScreen(controller: _settingsC)),
+              ),
+              ListMenuTile(
+                icon: Icons.qr_code_2,
+                iconBg: AppColor.tertiary.withValues(alpha: 0.12),
+                iconColor: AppColor.tertiary,
+                title: '💳 QRIS',
+                subtitle: 'Pasang kode QR pembayaran',
+                onTap: () => _push(QrisScreen(controller: _settingsC)),
+              ),
+              ListMenuTile(
+                icon: Icons.info_outline,
+                iconBg: AppColor.primaryFixed,
+                iconColor: AppColor.onPrimaryFixedVariant,
+                title: 'ℹ Tentang',
+                subtitle: 'UsahaKu v1.0.0',
+                onTap: () => showAppAboutDialog(context),
               ),
             ],
           ),
@@ -216,8 +286,8 @@ class _LainnyaScreenState extends State<LainnyaScreen> {
 
   Widget _sectionLabel(String label) {
     return Text(
-      label.toUpperCase(),
-      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColor.onSurfaceVariant),
+      label,
+      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColor.onSurfaceVariant),
     );
   }
 
