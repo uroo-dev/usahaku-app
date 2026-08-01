@@ -4,6 +4,7 @@ import 'package:usahaku/controllers/dashboard_controller.dart';
 import 'package:usahaku/database/app_database.dart';
 import 'package:usahaku/database/db.dart';
 import 'package:usahaku/models/dashboard_model.dart';
+import 'package:usahaku/providers/app_settings_provider.dart';
 import 'package:usahaku/screens/penjualan/invoice_detail_screen.dart';
 import 'package:usahaku/theme/app_theme.dart';
 import 'package:usahaku/utils/format_util.dart';
@@ -51,7 +52,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Icon(Icons.storefront, color: Colors.white, size: 18),
             ),
             const SizedBox(width: 8),
-            const Text('UsahaKu'),
+            Text(AppSettingsProvider.businessNameOf(context)),
           ],
         ),
         actions: [

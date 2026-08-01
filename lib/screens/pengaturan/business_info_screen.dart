@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:usahaku/controllers/settings_controller.dart';
 import 'package:usahaku/models/settings_model.dart';
+import 'package:usahaku/providers/app_settings_provider.dart';
 import 'package:usahaku/theme/app_theme.dart';
 
 /// Form informasi bisnis — sesuai informasi-bisnis.html.
@@ -152,6 +153,8 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
       logoPath: _logoPath,
     ));
     if (mounted) {
+      // Refresh global provider agar semua screen update nama bisnis
+      AppSettingsProvider.of(context).refresh();
       setState(() => _saving = false);
       Navigator.pop(context, true);
     }
