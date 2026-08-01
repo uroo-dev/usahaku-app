@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:usahaku/database/app_database.dart';
 import 'package:usahaku/models/sale_model.dart';
+import 'package:usahaku/screens/penjualan/invoice_detail_screen.dart';
 import 'package:usahaku/theme/app_theme.dart';
 import 'package:usahaku/utils/format_util.dart';
 
@@ -59,11 +61,28 @@ class PaymentSuccessScreen extends StatelessWidget {
                     label: const Text('Transaksi Baru'),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,
-                  height: 52,
+                  height: 48,
                   child: OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => InvoiceDetailScreen(sale: sale),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.receipt_long_outlined, size: 20),
+                    label: const Text('Lihat Detail Invoice'),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  height: 44,
+                  child: TextButton.icon(
                     onPressed: () => _done(context),
                     icon: const Icon(Icons.check_circle_outline, size: 20),
                     label: const Text('Selesai'),
@@ -99,18 +118,54 @@ class PaymentSuccessScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Rincian Pembayaran',
+            'Rincian Pesanan',
             style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w800,
                 color: AppColor.onSurface),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
+          // Daftar item
+          if (sale.items.isNotEmpty) ...[
+            ...sale.items.map((item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.productName,
+                          style: const TextStyle(fontSize: 13, color: AppColor.onSurface, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Text(
+                        '${item.quantity}x',
+                        style: const TextStyle(fontSize: 13, color: AppColor.onSurfaceVariant),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        FormatUtil.rupiah(item.total),
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColor.onSurface),
+                      ),
+                    ],
+                  ),
+                )),
+            const Divider(height: 20),
+          ],
           _row('Subtotal', FormatUtil.rupiah(sale.subtotal)),
           if (sale.discount > 0)
             _row('Diskon', '- ${FormatUtil.rupiah(sale.discount)}'),
-          _row('Total', FormatUtil.rupiah(sale.total)),
+          const Divider(height: 16),
+          _row('Total', FormatUtil.rupiah(sale.total), bold: true),
           _row('Metode', sale.paymentMethodLabel),
+          if (sale.paymentMethod == PaymentMethod.cash) ...[
+            _row('Dibayar', FormatUtil.rupiah(sale.paidAmount)),
+            if (sale.changeAmount >= 0)
+              _row('Kembalian', FormatUtil.rupiah(sale.changeAmount), valueColor: AppColor.green700)
+            else
+              _row('Piutang', FormatUtil.rupiah(-sale.changeAmount), valueColor: AppColor.error),
+          ],
+          if (sale.customerName.isNotEmpty && sale.customerName != 'Pelanggan Umum')
+            _row('Pelanggan', sale.customerName),
           if (sale.notes != null && sale.notes!.isNotEmpty)
             _row('Catatan', sale.notes!),
         ],
@@ -118,9 +173,9 @@ class PaymentSuccessScreen extends StatelessWidget {
     );
   }
 
-  Widget _row(String label, String value) {
+  Widget _row(String label, String value, {bool bold = false, Color? valueColor}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -128,10 +183,10 @@ class PaymentSuccessScreen extends StatelessWidget {
               style: const TextStyle(
                   fontSize: 13, color: AppColor.onSurfaceVariant)),
           Text(value,
-              style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: AppColor.onSurface)),
+              style: TextStyle(
+                  fontSize: bold ? 15 : 13,
+                  fontWeight: bold ? FontWeight.w800 : FontWeight.w700,
+                  color: valueColor ?? AppColor.onSurface)),
         ],
       ),
     );

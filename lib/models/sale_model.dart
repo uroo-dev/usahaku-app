@@ -11,6 +11,7 @@ class SaleModel {
   final double subtotal;
   final double discount;
   final double total;
+  final double paidAmount; // jumlah yang dibayar (cash)
   final PaymentMethod paymentMethod;
   final String? notes;
   final DateTime date;
@@ -24,6 +25,7 @@ class SaleModel {
     this.subtotal = 0,
     this.discount = 0,
     this.total = 0,
+    this.paidAmount = 0,
     this.paymentMethod = PaymentMethod.cash,
     this.notes,
     required this.date,
@@ -34,6 +36,8 @@ class SaleModel {
     final modal = items.fold<double>(0, (sum, item) => sum + (item.price * item.quantity));
     return total - modal;
   }
+
+  double get changeAmount => paidAmount - total; // positif = kembalian, negatif = sisa hutang
 
   String get paymentMethodLabel {
     switch (paymentMethod) {

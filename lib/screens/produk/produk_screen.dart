@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:usahaku/controllers/produk_controller.dart';
+import 'package:usahaku/models/product_model.dart';
 import 'package:usahaku/screens/produk/add_product_screen.dart';
 import 'package:usahaku/theme/app_theme.dart';
 import 'package:usahaku/widgets/empty_state.dart';
@@ -38,6 +39,71 @@ class _ProdukScreenState extends State<ProdukScreen> {
       MaterialPageRoute(builder: (_) => AddProductScreen(product: product)),
     );
     _c.load();
+  }
+
+  /// Restok langsung via dialog — input jumlah tambah stok tanpa membuka form edit
+  Future<void> _restok(int productId) async {
+    final product = _c.products.firstWhere((p) => p.id == productId);
+    int addStock = 0;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        final ctrl = TextEditingController();
+        return AlertDialog(
+          title: Text('Restok: ${product.name}'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Stok saat ini: ${product.stock} ${product.unit}',
+                style: const TextStyle(color: AppColor.onSurfaceVariant, fontSize: 13),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: ctrl,
+                autofocus: true,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Tambah stok',
+                  hintText: 'Contoh: 10',
+                  suffixText: product.unit,
+                ),
+                onChanged: (v) => addStock = int.tryParse(v) ?? 0,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Batal')),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Tambah Stok'),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed != true || addStock <= 0) return;
+    final updated = ProductModel(
+      id: product.id,
+      name: product.name,
+      barcode: product.barcode,
+      categoryId: product.categoryId,
+      categoryName: product.categoryName,
+      purchasePrice: product.purchasePrice,
+      sellPrice: product.sellPrice,
+      stock: product.stock + addStock,
+      minStock: product.minStock,
+      unit: product.unit,
+      imagePath: product.imagePath,
+      description: product.description,
+    );
+    await _c.updateProduct(updated);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Stok ${product.name} berhasil ditambah $addStock ${product.unit}')),
+      );
+    }
   }
 
   Future<void> _confirmDelete(int id) async {
@@ -183,6 +249,7 @@ class _ProdukScreenState extends State<ProdukScreen> {
             product: p,
             onEdit: () => _openForm(productId: p.id),
             onDelete: () => _confirmDelete(p.id!),
+            onRestok: () => _restok(p.id!),
           );
         },
       ),

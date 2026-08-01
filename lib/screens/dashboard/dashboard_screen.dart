@@ -1,12 +1,15 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:usahaku/controllers/dashboard_controller.dart';
+import 'package:usahaku/database/app_database.dart';
+import 'package:usahaku/database/db.dart';
 import 'package:usahaku/models/dashboard_model.dart';
-import 'package:usahaku/screens/produk/add_product_screen.dart';
-import 'package:usahaku/models/product_model.dart';
+import 'package:usahaku/screens/penjualan/invoice_detail_screen.dart';
 import 'package:usahaku/theme/app_theme.dart';
 import 'package:usahaku/utils/format_util.dart';
 import 'package:usahaku/widgets/section_header.dart';
 import 'package:usahaku/widgets/stat_card.dart';
+import 'package:usahaku/widgets/sales_bar_chart.dart';
 
 class DashboardScreen extends StatefulWidget {
   final void Function(int index)? onSwitchTab;
@@ -123,6 +126,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SectionHeader(title: 'Ringkasan Bisnis'),
                 const SizedBox(height: 12),
                 _overviewGrid(data),
+                const SizedBox(height: 24),
+                const SectionHeader(title: 'Grafik Penjualan 7 Hari'),
+                const SizedBox(height: 12),
+                SalesBarChart(values: data.weeklyRevenue, dates: data.weeklyDates),
                 const SizedBox(height: 24),
                 const SectionHeader(title: 'Stok Rendah'),
                 const SizedBox(height: 12),
@@ -518,22 +525,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  /// Buka AddProductScreen untuk produk stok rendah yang dipilih.
+  /// Dialog restok langsung dari dashboard stok rendah.
   Future<void> _restok(BuildContext context, DashboardProduct p) async {
-    // Buat ProductModel minimal dari DashboardProduct agar form terisi
-    final product = ProductModel(
-      id: p.id,
-      name: p.name,
-      stock: p.stock,
-      minStock: p.minStock,
-      imagePath: p.imagePath,
+    int addStock = 0;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        final ctrl = TextEditingController();
+        return AlertDialog(
+          title: Text('Restok: ${p.name}'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Stok saat ini: ${p.stock}',
+                style: const TextStyle(color: AppColor.onSurfaceVariant, fontSize: 13),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: ctrl,
+                autofocus: true,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Tambah stok',
+                  hintText: 'Contoh: 10',
+                ),
+                onChanged: (v) => addStock = int.tryParse(v) ?? 0,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Batal')),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Tambah Stok'),
+            ),
+          ],
+        );
+      },
     );
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (_) => AddProductScreen(product: product)),
-    );
-    // Reload dashboard setelah kembali
+    if (confirmed != true || addStock <= 0) return;
+    // Update stok via database langsung
+    final db = DB.instance;
+    await (db.update(db.products)..where((t) => t.id.equals(p.id)))
+        .write(ProductsCompanion(stock: Value(p.stock + addStock)));
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Stok ${p.name} berhasil ditambah $addStock')),
+      );
+    }
     _c.load();
   }
 
@@ -548,72 +589,82 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
     return Column(
       children: data.recentSales.take(3).map((s) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColor.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2)),
-            ],
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                    color: AppColor.green50,
-                    borderRadius: BorderRadius.circular(10)),
-                child: const Icon(Icons.receipt_long,
-                    color: AppColor.green600, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => InvoiceDetailScreen(saleId: s.id)),
+            );
+          },
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColor.surfaceContainerLowest,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2)),
+              ],
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: AppColor.green50,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: const Icon(Icons.receipt_long,
+                      color: AppColor.green600, size: 20),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        s.invoiceNo,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppColor.onSurface),
+                      ),
+                      Text(
+                        '${FormatUtil.time(s.date)} • ${s.paymentMethod.label}',
+                        style: const TextStyle(
+                            fontSize: 11, color: AppColor.onSurfaceVariant),
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      s.invoiceNo,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      FormatUtil.rupiah(s.total),
                       style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: AppColor.onSurface),
                     ),
                     Text(
-                      '${FormatUtil.time(s.date)} • ${s.paymentMethod.label}',
-                      style: const TextStyle(
-                          fontSize: 11, color: AppColor.onSurfaceVariant),
+                      'SUKSES',
+                      style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w900,
+                          color: AppColor.green700),
                     ),
                   ],
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    FormatUtil.rupiah(s.total),
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppColor.onSurface),
-                  ),
-                  Text(
-                    'SUKSES',
-                    style: TextStyle(
-                        fontSize: 9,
-                        fontWeight: FontWeight.w900,
-                        color: AppColor.green700),
-                  ),
-                ],
-              ),
-            ],
+                const SizedBox(width: 4),
+                const Icon(Icons.chevron_right, size: 16, color: AppColor.onSurfaceVariant),
+              ],
+            ),
           ),
         );
       }).toList(),

@@ -31,6 +31,22 @@ class DashboardController extends BaseController {
           .getSingle()
           .then((r) => r.read(todayRevExpr) ?? 0.0);
 
+      // ── Pendapatan 7 hari terakhir ───────────────────────────────
+      final weeklyRevenue = <double>[];
+      final weeklyDates = <DateTime>[];
+      for (var i = 6; i >= 0; i--) {
+        final day = today.subtract(Duration(days: i));
+        final dayEnd = day.add(const Duration(days: 1));
+        final dayRev = await (db.selectOnly(db.sales)
+              ..addColumns([todayRevExpr])
+              ..where(db.sales.date.isBiggerOrEqualValue(day) &
+                  db.sales.date.isSmallerThanValue(dayEnd)))
+            .getSingle()
+            .then((r) => r.read(todayRevExpr) ?? 0.0);
+        weeklyRevenue.add(dayRev);
+        weeklyDates.add(day);
+      }
+
       // ── Pendapatan kemarin ──────────────────────────────────────
       final yesterdayRevenue = await (db.selectOnly(db.sales)
             ..addColumns([todayRevExpr])
@@ -214,6 +230,8 @@ class DashboardController extends BaseController {
         customerCount: customerCount,
         totalProducts: totalProducts,
         businessName: businessName,
+        weeklyRevenue: weeklyRevenue,
+        weeklyDates: weeklyDates,
       );
       setError(null);
     } catch (e) {

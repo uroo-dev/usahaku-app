@@ -17,6 +17,8 @@ class DashboardModel {
   final int customerCount;
   final int totalProducts;
   final String businessName;       // dari BusinessProfiles
+  final List<double> weeklyRevenue; // pendapatan 7 hari terakhir, index 0 = hari tertua
+  final List<DateTime> weeklyDates; // tanggal tiap hari pada weeklyRevenue
 
   DashboardModel({
     this.todayRevenue = 0,
@@ -36,6 +38,8 @@ class DashboardModel {
     this.customerCount = 0,
     this.totalProducts = 0,
     this.businessName = 'Usaha Saya',
+    this.weeklyRevenue = const [],
+    this.weeklyDates = const [],
   });
 
   /// Persentase perubahan pendapatan vs kemarin.

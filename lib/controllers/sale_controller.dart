@@ -29,6 +29,8 @@ class SaleController extends BaseController {
   double _discount = 0;
   String notes = '';
   String? _qrisPath;
+  // Jumlah yang dibayar (untuk cash – bisa kurang dari total = piutang)
+  double _paidAmount = 0;
 
   List<ProductModel> get products => _products;
   List<Category> get categories => _categories;
@@ -37,10 +39,17 @@ class SaleController extends BaseController {
   PaymentMethod get paymentMethod => _paymentMethod;
   double get discount => _discount;
   String? get qrisPath => _qrisPath;
+  double get paidAmount => _paidAmount;
 
   double get subtotal => cart.fold(0, (s, i) => s + i.subtotal);
   double get total => (subtotal - _discount).clamp(0, double.infinity);
   int get itemCount => cart.fold(0, (s, i) => s + i.quantity);
+  /// Sisa yang harus dibayar (nilai positif = piutang)
+  double get changeAmount => _paidAmount - total;
+  /// True jika ada sisa piutang (bayar < total)
+  bool get hasDebt => _paymentMethod == PaymentMethod.cash && _paidAmount < total && _paidAmount > 0;
+  /// True jika bayar lunas (>= total)
+  bool get isPaidFull => _paymentMethod == PaymentMethod.cash && _paidAmount >= total;
 
   Future<void> load() async {
     setLoading(true);
@@ -130,6 +139,13 @@ class SaleController extends BaseController {
 
   void setPaymentMethod(PaymentMethod m) {
     _paymentMethod = m;
+    // Reset paid amount saat ganti metode
+    _paidAmount = 0;
+    notifyListeners();
+  }
+
+  void setPaidAmount(double amount) {
+    _paidAmount = amount.clamp(0, double.infinity);
     notifyListeners();
   }
 
@@ -177,11 +193,12 @@ class SaleController extends BaseController {
             ));
       }
 
-      // Catat transaksi kas (income)
+      // Catat transaksi kas (income) — hanya sebesar yang dibayar
+      final paidNow = (_paymentMethod == PaymentMethod.cash ? _paidAmount.clamp(0, total) : total).toDouble();
       await db.into(db.transactions).insert(
             TransactionsCompanion.insert(
               type: TransactionType.income,
-              amount: Value(total),
+              amount: Value(paidNow),
               description: 'Penjualan $invoiceNo',
               date: Value(now),
               paymentMethod: Value(_paymentMethod),
@@ -189,19 +206,14 @@ class SaleController extends BaseController {
             ),
           );
 
-      // Jika metode = debt, buat piutang
-      if (_paymentMethod == PaymentMethod.debt) {
-        // Gunakan limit(1) agar tidak crash jika ada lebih dari 1 customer di DB
-        final firstCustomer =
-            await (db.select(db.customers)..limit(1)).getSingleOrNull();
-        final relatedId = selectedCustomer?.id ??
-            firstCustomer?.id ??
-            await _ensureGeneralCustomer(db);
+      // Jika metode cash dan bayar < total → buat piutang otomatis
+      final debtAmount = total - paidNow;
+      if (_paymentMethod == PaymentMethod.cash && debtAmount > 0 && customerId != null) {
         await db.into(db.debts).insert(
               DebtsCompanion.insert(
                 type: DebtType.piutang,
-                relatedId: relatedId,
-                amount: Value(total),
+                relatedId: customerId,
+                amount: Value(debtAmount),
                 dueDate: now.add(const Duration(days: 30)),
                 description: Value('Piutang dari $invoiceNo'),
               ),
@@ -219,6 +231,7 @@ class SaleController extends BaseController {
       subtotal: subtotal,
       discount: _discount,
       total: total,
+      paidAmount: _paymentMethod == PaymentMethod.cash ? _paidAmount.clamp(0, double.infinity) : total,
       paymentMethod: _paymentMethod,
       notes: notes,
       date: now,
@@ -232,16 +245,11 @@ class SaleController extends BaseController {
     );
     cart.clear();
     _discount = 0;
+    _paidAmount = 0;
     notes = '';
     selectedCustomer = null;
     notifyListeners();
     return result;
-  }
-
-  Future<int> _ensureGeneralCustomer(AppDatabase db) async {
-    final existing = await (db.select(db.customers)..where((c) => c.name.equals(defaultCustomerName))).getSingleOrNull();
-    if (existing != null) return existing.id;
-    return db.into(db.customers).insert(CustomersCompanion.insert(name: defaultCustomerName));
   }
 
   Future<int> _nextSeq(AppDatabase db, DateTime d) async {

@@ -11,8 +11,9 @@ class ProductCard extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final VoidCallback? onRestok;
 
-  const ProductCard({super.key, required this.product, this.onTap, this.onEdit, this.onDelete});
+  const ProductCard({super.key, required this.product, this.onTap, this.onEdit, this.onDelete, this.onRestok});
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +64,15 @@ class ProductCard extends StatelessWidget {
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColor.onSurface),
                         ),
                       ),
+                      if (onRestok != null)
+                        Tooltip(
+                          message: 'Restok',
+                          child: IconButton(
+                            visualDensity: VisualDensity.compact,
+                            icon: const Icon(Icons.add_box_outlined, size: 18, color: AppColor.primary),
+                            onPressed: onRestok,
+                          ),
+                        ),
                       if (onEdit != null)
                         IconButton(
                           visualDensity: VisualDensity.compact,

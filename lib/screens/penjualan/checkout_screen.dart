@@ -1,4 +1,6 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:usahaku/controllers/customer_controller.dart';
 import 'package:usahaku/controllers/sale_controller.dart';
 import 'package:usahaku/database/app_database.dart';
@@ -19,6 +21,7 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final _notesCtrl = TextEditingController();
   final _discountCtrl = TextEditingController();
+  final _paidCtrl = TextEditingController();
   bool _saving = false;
 
   SaleController get c => widget.controller;
@@ -27,6 +30,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void dispose() {
     _notesCtrl.dispose();
     _discountCtrl.dispose();
+    _paidCtrl.dispose();
     super.dispose();
   }
 
@@ -39,29 +43,53 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     if (customer != null) c.setCustomer(customer);
   }
 
+  /// Tampilkan popup QRIS dengan nominal, lalu checkout
+  Future<void> _showQrisPopup() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => _QrisPaymentDialog(
+        total: c.total,
+        qrisPath: c.qrisPath,
+      ),
+    );
+    if (confirmed == true) await _doCheckout();
+  }
+
   Future<void> _checkout() async {
     final method = c.paymentMethod;
-    if (method == PaymentMethod.qris && c.qrisPath == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text(
-                'Tambahkan gambar QRIS di Pengaturan terlebih dahulu')),
-      );
+    if (method == PaymentMethod.qris) {
+      await _showQrisPopup();
       return;
     }
+    // Cash: validasi
+    if (method == PaymentMethod.cash) {
+      final paid = c.paidAmount;
+      if (paid <= 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Masukkan jumlah bayar terlebih dahulu')),
+        );
+        return;
+      }
+      if (paid < c.total && c.selectedCustomer == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Pilih pelanggan untuk mencatat piutang')),
+        );
+        return;
+      }
+    }
+    await _doCheckout();
+  }
+
+  Future<void> _doCheckout() async {
     setState(() => _saving = true);
     try {
       final sale = await c.checkout();
       if (!mounted) return;
-      // Push PaymentSuccessScreen, tunggu hasilnya.
-      // Saat user tap Selesai/Transaksi Baru di PaymentSuccessScreen,
-      // ia pop dengan result=true → kita teruskan ke SalesScreen.
       final result = await Navigator.push<bool>(
         context,
         MaterialPageRoute(builder: (_) => PaymentSuccessScreen(sale: sale)),
       );
       if (!mounted) return;
-      // Pop CheckoutScreen sambil membawa result = true ke SalesScreen
       Navigator.pop(context, result ?? true);
     } catch (e) {
       if (mounted) {
@@ -99,19 +127,38 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           );
         },
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-        color: AppColor.surface.withValues(alpha: 0.95),
-        child: SafeArea(
-          child: SizedBox(
-            height: 56,
-            child: ElevatedButton.icon(
-              onPressed: _saving ? null : _checkout,
-              icon: Icon(_saving ? Icons.hourglass_top : Icons.payments_outlined, size: 20),
-              label: Text(_saving ? 'Memproses...' : 'Bayar ${FormatUtil.rupiah(c.total)}'),
+      bottomNavigationBar: ListenableBuilder(
+        listenable: c,
+        builder: (context, _) {
+          // Tentukan apakah tombol aktif
+          bool canPay = !_saving;
+          String buttonLabel = 'Bayar ${FormatUtil.rupiah(c.total)}';
+          if (c.paymentMethod == PaymentMethod.cash) {
+            if (c.paidAmount <= 0) {
+              canPay = false;
+              buttonLabel = 'Masukkan jumlah bayar';
+            } else if (c.paidAmount < c.total && c.selectedCustomer == null) {
+              canPay = false;
+              buttonLabel = 'Pilih pelanggan untuk hutang';
+            } else if (c.paidAmount < c.total && c.selectedCustomer != null) {
+              buttonLabel = 'Catat Hutang';
+            }
+          }
+          return Container(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+            color: AppColor.surface.withValues(alpha: 0.95),
+            child: SafeArea(
+              child: SizedBox(
+                height: 56,
+                child: ElevatedButton.icon(
+                  onPressed: (canPay && !_saving) ? _checkout : null,
+                  icon: Icon(_saving ? Icons.hourglass_top : Icons.payments_outlined, size: 20),
+                  label: Text(_saving ? 'Memproses...' : buttonLabel),
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -297,8 +344,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final options = [
       (PaymentMethod.cash, Icons.payments_outlined, 'Tunai'),
       (PaymentMethod.qris, Icons.qr_code_2, 'QRIS'),
-      (PaymentMethod.transfer, Icons.account_balance_outlined, 'Transfer'),
-      (PaymentMethod.debt, Icons.receipt_long, 'Hutang'),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,19 +363,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   onTap: () => c.setPaymentMethod(opt.$1),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 150),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                     decoration: BoxDecoration(
                       color: selected ? AppColor.primary : AppColor.surfaceContainerHigh,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Column(
                       children: [
-                        Icon(opt.$2, color: selected ? Colors.white : AppColor.onSurfaceVariant, size: 22),
-                        const SizedBox(height: 4),
+                        Icon(opt.$2, color: selected ? Colors.white : AppColor.onSurfaceVariant, size: 26),
+                        const SizedBox(height: 6),
                         Text(
                           opt.$3,
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color: selected ? Colors.white : AppColor.onSurfaceVariant,
                           ),
@@ -343,8 +388,120 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             );
           }).toList(),
         ),
+        const SizedBox(height: 16),
+        // Input bayar untuk Cash
+        if (c.paymentMethod == PaymentMethod.cash) _cashInputSection(),
       ],
     );
+  }
+
+  Widget _cashInputSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Jumlah Bayar',
+          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColor.onSurfaceVariant),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          controller: _paidCtrl,
+          keyboardType: TextInputType.number,
+          onChanged: (v) => c.setPaidAmount(double.tryParse(v.replaceAll('.', '')) ?? 0),
+          decoration: const InputDecoration(
+            hintText: '0',
+            prefixText: 'Rp ',
+          ),
+        ),
+        const SizedBox(height: 8),
+        // Tombol nominal cepat
+        Wrap(
+          spacing: 8,
+          children: _quickAmounts().map((amount) {
+            return ActionChip(
+              label: Text(
+                amount >= 1000
+                    ? 'Rp ${(amount / 1000).toStringAsFixed(0)}rb'
+                    : 'Pas',
+                style: const TextStyle(fontSize: 12),
+              ),
+              onPressed: () {
+                final val = amount == 0 ? c.total : amount;
+                _paidCtrl.text = val.toStringAsFixed(0);
+                c.setPaidAmount(val);
+              },
+            );
+          }).toList(),
+        ),
+        if (c.paidAmount > 0) ...[
+          const SizedBox(height: 8),
+          _cashStatusRow(),
+        ],
+      ],
+    );
+  }
+
+  List<double> _quickAmounts() {
+    final t = c.total;
+    // "Pas" = 0 marker, lalu nominal di atasnya
+    final List<double> amounts = [0]; // 0 = uang pas
+    final steps = [5000, 10000, 20000, 50000, 100000];
+    for (final s in steps) {
+      final rounded = (t / s).ceil() * s;
+      if (!amounts.contains(rounded.toDouble()) && rounded >= t) {
+        amounts.add(rounded.toDouble());
+        if (amounts.length >= 5) break;
+      }
+    }
+    return amounts;
+  }
+
+  Widget _cashStatusRow() {
+    final change = c.paidAmount - c.total;
+    if (change >= 0) {
+      // Kembalian
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColor.green50,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Kembalian', style: TextStyle(fontSize: 13, color: AppColor.green700, fontWeight: FontWeight.w600)),
+            Text(
+              'Rp ${change.toStringAsFixed(0)}',
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColor.green700),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // Kurang / Piutang
+      final debt = -change;
+      final hasCustomer = c.selectedCustomer != null;
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: hasCustomer ? AppColor.amber50 : AppColor.red50,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              hasCustomer ? 'Akan jadi piutang' : 'Kurang (butuh pelanggan)',
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: hasCustomer ? AppColor.amber700 : AppColor.red700),
+            ),
+            Text(
+              'Rp ${debt.toStringAsFixed(0)}',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: hasCustomer ? AppColor.amber700 : AppColor.red700),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _summarySection() {
@@ -480,5 +637,111 @@ class _CustomerPickerSheetState extends State<_CustomerPickerSheet> {
     if (parts.isEmpty) return '?';
     if (parts.length == 1) return parts.first.substring(0, 1).toUpperCase();
     return (parts.first.substring(0, 1) + parts.last.substring(0, 1)).toUpperCase();
+  }
+}
+
+/// Dialog popup QRIS — tampilkan nominal + gambar QR, lalu konfirmasi bayar.
+class _QrisPaymentDialog extends StatelessWidget {
+  final double total;
+  final String? qrisPath;
+  const _QrisPaymentDialog({required this.total, this.qrisPath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Bayar via QRIS',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Scan kode QR di bawah untuk membayar',
+              style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            // Nominal
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+              decoration: BoxDecoration(
+                color: AppColor.primaryContainer,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                children: [
+                  const Text(
+                    'TOTAL PEMBAYARAN',
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColor.primary),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    FormatUtil.rupiah(total),
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AppColor.primary),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Gambar QRIS
+            if (qrisPath != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.file(
+                  File(qrisPath!),
+                  width: 220,
+                  height: 220,
+                  fit: BoxFit.contain,
+                ),
+              )
+            else
+              Container(
+                width: 220,
+                height: 220,
+                decoration: BoxDecoration(
+                  color: AppColor.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.qr_code_2, size: 80, color: AppColor.onSurfaceVariant),
+                    SizedBox(height: 8),
+                    Text(
+                      'Gambar QRIS belum diatur\nPergi ke Pengaturan → QRIS',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: AppColor.onSurfaceVariant),
+                    ),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: FilledButton.icon(
+                onPressed: () => Navigator.pop(context, true),
+                icon: const Icon(Icons.check_circle_outline, size: 20),
+                label: const Text('Sudah Dibayar'),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              height: 44,
+              child: TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Batal'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
