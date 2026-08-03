@@ -12,7 +12,15 @@ import 'checkout_screen.dart';
 
 /// Penjualan (POS) — sesuai penjualan.html.
 class SalesScreen extends StatefulWidget {
-  const SalesScreen({super.key});
+  const SalesScreen({
+    super.key,
+    this.landscape = false,
+    this.onLandscapeChanged,
+  });
+
+  /// Apakah halaman Penjualan sedang dalam mode landscape.
+  final bool landscape;
+  final ValueChanged<bool>? onLandscapeChanged;
 
   @override
   State<SalesScreen> createState() => _SalesScreenState();
@@ -21,30 +29,32 @@ class SalesScreen extends StatefulWidget {
 class _SalesScreenState extends State<SalesScreen> {
   final SaleController _c = SaleController();
   final _searchCtrl = TextEditingController();
+  late bool _landscape;
 
   @override
   void initState() {
     super.initState();
-    // Force landscape untuk tampilan grid POS yang lebih baik
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
+    _landscape = widget.landscape;
     _c.load();
   }
 
   @override
   void dispose() {
-    // Kembalikan orientasi normal saat keluar dari POS
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
     _c.dispose();
     _searchCtrl.dispose();
     super.dispose();
+  }
+
+  /// Toggle orientasi layar antara portrait dan landscape.
+  Future<void> _toggleLandscape() async {
+    final next = !_landscape;
+    setState(() => _landscape = next);
+    widget.onLandscapeChanged?.call(next);
+    await SystemChrome.setPreferredOrientations(
+      next
+          ? [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]
+          : [DeviceOrientation.portraitUp],
+    );
   }
 
   /// Scan barcode lalu cari produk yang cocok
@@ -63,6 +73,11 @@ class _SalesScreenState extends State<SalesScreen> {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
+            icon: Icon(_landscape ? Icons.portrait : Icons.landscape),
+            tooltip: _landscape ? 'Ubah ke Portrait' : 'Ubah ke Landscape',
+            onPressed: _toggleLandscape,
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh),
             tooltip: 'Reload produk',
             onPressed: () => _c.load(),
@@ -73,19 +88,212 @@ class _SalesScreenState extends State<SalesScreen> {
       body: ListenableBuilder(
         listenable: _c,
         builder: (context, _) {
-          return Column(
+          return _landscape ? _landscapeLayout() : _portraitLayout();
+        },
+      ),
+    );
+  }
+
+  Widget _portraitLayout() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
+          child: _searchSection(),
+        ),
+        const SizedBox(height: 8),
+        _categoryRow(),
+        Expanded(child: _productGrid()),
+        if (_c.cart.isNotEmpty) _checkoutBar(),
+      ],
+    );
+  }
+
+  /// Layout landscape: menu produk di kiri, detail pesanan di kanan.
+  Widget _landscapeLayout() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 4, 12, 0),
                 child: _searchSection(),
               ),
               const SizedBox(height: 8),
               _categoryRow(),
               Expanded(child: _productGrid()),
-              if (_c.cart.isNotEmpty) _checkoutBar(),
             ],
-          );
-        },
+          ),
+        ),
+        _orderPanel(),
+      ],
+    );
+  }
+
+  /// Panel detail pesanan (keranjang) di sisi kanan.
+  Widget _orderPanel() {
+    return Container(
+      width: 360,
+      margin: const EdgeInsets.fromLTRB(0, 12, 16, 16),
+      decoration: BoxDecoration(
+        color: AppColor.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColor.outlineVariant.withValues(alpha: 0.4)),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 12, offset: const Offset(0, 4)),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+            child: Row(
+              children: [
+                const Icon(Icons.receipt_long, color: AppColor.primary, size: 20),
+                const SizedBox(width: 8),
+                const Text(
+                  'Detail Pesanan',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColor.onSurface),
+                ),
+                const Spacer(),
+                if (_c.cart.isNotEmpty)
+                  Text(
+                    '${_c.itemCount} item',
+                    style: const TextStyle(fontSize: 12, color: AppColor.onSurfaceVariant),
+                  ),
+              ],
+            ),
+          ),
+          const Divider(height: 1),
+          Expanded(
+            child: _c.cart.isEmpty
+                ? _emptyCart()
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    itemCount: _c.cart.length,
+                    itemBuilder: (context, i) => _cartItemTile(_c.cart[i]),
+                  ),
+          ),
+          if (_c.cart.isNotEmpty) _orderSummary(),
+        ],
+      ),
+    );
+  }
+
+  Widget _emptyCart() {
+    return const Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.shopping_basket_outlined, size: 40, color: AppColor.outline),
+          SizedBox(height: 8),
+          Text('Belum ada item', style: TextStyle(fontSize: 13, color: AppColor.onSurfaceVariant)),
+          SizedBox(height: 4),
+          Text('Klik produk untuk menambah', style: TextStyle(fontSize: 11, color: AppColor.outline)),
+        ],
+      ),
+    );
+  }
+
+  Widget _cartItemTile(CartItem item) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: AppColor.surfaceContainer,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.product.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColor.onSurface),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '${FormatUtil.rupiah(item.product.sellPrice)} x ${item.quantity}',
+                  style: const TextStyle(fontSize: 11, color: AppColor.onSurfaceVariant),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            padding: EdgeInsets.zero,
+            icon: const Icon(Icons.remove_circle_outline, color: AppColor.error, size: 20),
+            tooltip: 'Kurangi',
+            onPressed: () => _c.decrement(item.product.id!),
+          ),
+          Text('${item.quantity}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColor.primary)),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            padding: EdgeInsets.zero,
+            icon: const Icon(Icons.add_circle_outline, color: AppColor.primary, size: 20),
+            tooltip: 'Tambah',
+            onPressed: () => _c.increment(item.product.id!),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            FormatUtil.rupiah(item.subtotal),
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColor.onSurface),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _orderSummary() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColor.outlineVariant, width: 0.5)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Subtotal', style: TextStyle(fontSize: 12, color: AppColor.onSurfaceVariant)),
+              Text(
+                FormatUtil.rupiah(_c.subtotal),
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColor.onSurface),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Total', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColor.onSurface)),
+              Text(
+                FormatUtil.rupiah(_c.total),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColor.primary),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ElevatedButton(
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => CheckoutScreen(controller: _c)),
+              );
+              if (result == true && mounted) _c.load();
+            },
+            style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+            child: const Text('Bayar'),
+          ),
+        ],
       ),
     );
   }
@@ -175,19 +383,24 @@ class _SalesScreenState extends State<SalesScreen> {
         ),
       );
     }
-    return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        childAspectRatio: 0.85,
-      ),
-      itemCount: _c.filteredProducts.length,
-      itemBuilder: (context, i) {
-        final p = _c.filteredProducts[i];
-        final inCart = _c.cart.where((x) => x.product.id == p.id).firstOrNull;
-        return _productGridCard(p, inCart?.quantity);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cols = ((constraints.maxWidth / 150).floor()).clamp(2, 5);
+        return GridView.builder(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: cols,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 0.8,
+          ),
+          itemCount: _c.filteredProducts.length,
+          itemBuilder: (context, i) {
+            final p = _c.filteredProducts[i];
+            final inCart = _c.cart.where((x) => x.product.id == p.id).firstOrNull;
+            return _productGridCard(p, inCart?.quantity);
+          },
+        );
       },
     );
   }
