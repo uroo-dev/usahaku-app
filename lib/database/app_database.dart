@@ -25,7 +25,7 @@ part 'app_database.g.dart';
   BusinessProfiles,
 ])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
+  AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
   int get schemaVersion => 3;
@@ -42,7 +42,17 @@ class AppDatabase extends _$AppDatabase {
             await _seedUnits();
           }
           if (from < 3) {
-            await m.alterTable(TableMigration(businessProfiles));
+            // Sisa tabel dari migrasi v3 lama yang gagal (jika ada) harus
+            // dibersihkan sebelum menambah kolom baru.
+            await customStatement('DROP TABLE IF EXISTS tmp_for_copy_business_profiles');
+            await m.addColumn(businessProfiles, businessProfiles.receiptPaperWidth);
+            await m.addColumn(businessProfiles, businessProfiles.receiptShowLogo);
+            await m.addColumn(businessProfiles, businessProfiles.receiptShowAddress);
+            await m.addColumn(businessProfiles, businessProfiles.receiptShowQris);
+            await m.addColumn(businessProfiles, businessProfiles.receiptFooter);
+            await m.addColumn(businessProfiles, businessProfiles.printerType);
+            await m.addColumn(businessProfiles, businessProfiles.printerAddress);
+            await m.addColumn(businessProfiles, businessProfiles.printerName);
           }
         },
       );
