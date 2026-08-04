@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:usahaku/database/app_database.dart';
 import 'package:usahaku/database/db.dart';
 import 'package:usahaku/models/sale_model.dart';
+import 'package:usahaku/models/settings_model.dart';
 import 'package:usahaku/theme/app_theme.dart';
 import 'package:usahaku/utils/format_util.dart';
+import 'package:usahaku/utils/receipt_printer.dart';
 
 /// Halaman detail invoice — menampilkan struk lengkap dari ID sale.
 class InvoiceDetailScreen extends StatefulWidget {
@@ -83,12 +85,49 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
     return {for (final r in rows) r.id: r.name};
   }
 
+  Future<SettingsModel> _loadSettings() async {
+    final db = DB.instance;
+    final rows = await db.select(db.businessProfiles).get();
+    if (rows.isEmpty) return SettingsModel();
+    return SettingsModel.fromRow(rows.first);
+  }
+
+  Future<void> _printInvoice() async {
+    final sale = _sale;
+    if (sale == null) return;
+    try {
+      final settings = await _loadSettings();
+      await ReceiptPrinter.printReceipt(
+        sale: sale,
+        settings: settings,
+        onStatus: (msg) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(msg), duration: const Duration(seconds: 1)),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal mencetak: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(_sale?.invoiceNo ?? 'Detail Invoice'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.print_outlined),
+            tooltip: 'Cetak Struk',
+            onPressed: _sale != null ? _printInvoice : null,
+          ),
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: widget.saleId != null ? _loadSale : null,

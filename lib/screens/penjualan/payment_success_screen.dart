@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:usahaku/database/app_database.dart';
+import 'package:usahaku/database/db.dart';
 import 'package:usahaku/models/sale_model.dart';
+import 'package:usahaku/models/settings_model.dart';
 import 'package:usahaku/screens/penjualan/invoice_detail_screen.dart';
 import 'package:usahaku/theme/app_theme.dart';
 import 'package:usahaku/utils/format_util.dart';
+import 'package:usahaku/utils/receipt_printer.dart';
 
 /// Halaman sukses pembayaran dengan animasi tenang + suara cengkereng.
 class PaymentSuccessScreen extends StatefulWidget {
@@ -75,6 +78,31 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
     Navigator.of(context).pop(true);
   }
 
+  Future<void> _printReceipt() async {
+    try {
+      final db = DB.instance;
+      final rows = await db.select(db.businessProfiles).get();
+      final settings = rows.isEmpty ? SettingsModel() : SettingsModel.fromRow(rows.first);
+      await ReceiptPrinter.printReceipt(
+        sale: widget.sale,
+        settings: settings,
+        onStatus: (msg) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(msg), duration: const Duration(seconds: 1)),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal mencetak: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -120,6 +148,16 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                     onPressed: () => _done(context),
                     icon: const Icon(Icons.add_shopping_cart, size: 20),
                     label: const Text('Transaksi Baru'),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: OutlinedButton.icon(
+                    onPressed: _printReceipt,
+                    icon: const Icon(Icons.print_outlined, size: 20),
+                    label: const Text('Cetak Struk'),
                   ),
                 ),
                 const SizedBox(height: 10),

@@ -128,6 +128,22 @@ class BusinessProfiles extends Table {
   TextColumn get theme => text().withDefault(const Constant('light'))();
   TextColumn get qrisImagePath => text().nullable()();
   TextColumn get logoPath => text().nullable()();
+  /// Lebar kertas struk: '58' (mm) atau '80' (mm).
+  TextColumn get receiptPaperWidth => text().withDefault(const Constant('58'))();
+  /// Tampilkan logo bisnis di struk.
+  BoolColumn get receiptShowLogo => boolean().withDefault(const Constant(true))();
+  /// Tampilkan alamat & telepon bisnis di struk.
+  BoolColumn get receiptShowAddress => boolean().withDefault(const Constant(true))();
+  /// Tampilkan QRIS pembayaran di struk.
+  BoolColumn get receiptShowQris => boolean().withDefault(const Constant(true))();
+  /// Pesan footer struk (ucapan terima kasih, dsb).
+  TextColumn get receiptFooter => text().nullable()();
+  /// Metode printer: 'system' | 'bluetooth'.
+  TextColumn get printerType => text().withDefault(const Constant('system'))();
+  /// Alamat perangkat printer Bluetooth (MAC address).
+  TextColumn get printerAddress => text().nullable()();
+  /// Nama perangkat printer Bluetooth.
+  TextColumn get printerName => text().nullable()();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }

@@ -4628,6 +4628,108 @@ class $BusinessProfilesTable extends BusinessProfiles
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _receiptPaperWidthMeta = const VerificationMeta(
+    'receiptPaperWidth',
+  );
+  @override
+  late final GeneratedColumn<String> receiptPaperWidth =
+      GeneratedColumn<String>(
+        'receipt_paper_width',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('58'),
+      );
+  static const VerificationMeta _receiptShowLogoMeta = const VerificationMeta(
+    'receiptShowLogo',
+  );
+  @override
+  late final GeneratedColumn<bool> receiptShowLogo = GeneratedColumn<bool>(
+    'receipt_show_logo',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("receipt_show_logo" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _receiptShowAddressMeta =
+      const VerificationMeta('receiptShowAddress');
+  @override
+  late final GeneratedColumn<bool> receiptShowAddress = GeneratedColumn<bool>(
+    'receipt_show_address',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("receipt_show_address" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _receiptShowQrisMeta = const VerificationMeta(
+    'receiptShowQris',
+  );
+  @override
+  late final GeneratedColumn<bool> receiptShowQris = GeneratedColumn<bool>(
+    'receipt_show_qris',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("receipt_show_qris" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _receiptFooterMeta = const VerificationMeta(
+    'receiptFooter',
+  );
+  @override
+  late final GeneratedColumn<String> receiptFooter = GeneratedColumn<String>(
+    'receipt_footer',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _printerTypeMeta = const VerificationMeta(
+    'printerType',
+  );
+  @override
+  late final GeneratedColumn<String> printerType = GeneratedColumn<String>(
+    'printer_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('system'),
+  );
+  static const VerificationMeta _printerAddressMeta = const VerificationMeta(
+    'printerAddress',
+  );
+  @override
+  late final GeneratedColumn<String> printerAddress = GeneratedColumn<String>(
+    'printer_address',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _printerNameMeta = const VerificationMeta(
+    'printerName',
+  );
+  @override
+  late final GeneratedColumn<String> printerName = GeneratedColumn<String>(
+    'printer_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -4664,6 +4766,14 @@ class $BusinessProfilesTable extends BusinessProfiles
     theme,
     qrisImagePath,
     logoPath,
+    receiptPaperWidth,
+    receiptShowLogo,
+    receiptShowAddress,
+    receiptShowQris,
+    receiptFooter,
+    printerType,
+    printerAddress,
+    printerName,
     createdAt,
     updatedAt,
   ];
@@ -4739,6 +4849,78 @@ class $BusinessProfilesTable extends BusinessProfiles
         logoPath.isAcceptableOrUnknown(data['logo_path']!, _logoPathMeta),
       );
     }
+    if (data.containsKey('receipt_paper_width')) {
+      context.handle(
+        _receiptPaperWidthMeta,
+        receiptPaperWidth.isAcceptableOrUnknown(
+          data['receipt_paper_width']!,
+          _receiptPaperWidthMeta,
+        ),
+      );
+    }
+    if (data.containsKey('receipt_show_logo')) {
+      context.handle(
+        _receiptShowLogoMeta,
+        receiptShowLogo.isAcceptableOrUnknown(
+          data['receipt_show_logo']!,
+          _receiptShowLogoMeta,
+        ),
+      );
+    }
+    if (data.containsKey('receipt_show_address')) {
+      context.handle(
+        _receiptShowAddressMeta,
+        receiptShowAddress.isAcceptableOrUnknown(
+          data['receipt_show_address']!,
+          _receiptShowAddressMeta,
+        ),
+      );
+    }
+    if (data.containsKey('receipt_show_qris')) {
+      context.handle(
+        _receiptShowQrisMeta,
+        receiptShowQris.isAcceptableOrUnknown(
+          data['receipt_show_qris']!,
+          _receiptShowQrisMeta,
+        ),
+      );
+    }
+    if (data.containsKey('receipt_footer')) {
+      context.handle(
+        _receiptFooterMeta,
+        receiptFooter.isAcceptableOrUnknown(
+          data['receipt_footer']!,
+          _receiptFooterMeta,
+        ),
+      );
+    }
+    if (data.containsKey('printer_type')) {
+      context.handle(
+        _printerTypeMeta,
+        printerType.isAcceptableOrUnknown(
+          data['printer_type']!,
+          _printerTypeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('printer_address')) {
+      context.handle(
+        _printerAddressMeta,
+        printerAddress.isAcceptableOrUnknown(
+          data['printer_address']!,
+          _printerAddressMeta,
+        ),
+      );
+    }
+    if (data.containsKey('printer_name')) {
+      context.handle(
+        _printerNameMeta,
+        printerName.isAcceptableOrUnknown(
+          data['printer_name']!,
+          _printerNameMeta,
+        ),
+      );
+    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -4800,6 +4982,38 @@ class $BusinessProfilesTable extends BusinessProfiles
         DriftSqlType.string,
         data['${effectivePrefix}logo_path'],
       ),
+      receiptPaperWidth: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}receipt_paper_width'],
+      )!,
+      receiptShowLogo: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}receipt_show_logo'],
+      )!,
+      receiptShowAddress: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}receipt_show_address'],
+      )!,
+      receiptShowQris: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}receipt_show_qris'],
+      )!,
+      receiptFooter: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}receipt_footer'],
+      ),
+      printerType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}printer_type'],
+      )!,
+      printerAddress: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}printer_address'],
+      ),
+      printerName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}printer_name'],
+      ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -4828,6 +5042,30 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
   final String theme;
   final String? qrisImagePath;
   final String? logoPath;
+
+  /// Lebar kertas struk: '58' (mm) atau '80' (mm).
+  final String receiptPaperWidth;
+
+  /// Tampilkan logo bisnis di struk.
+  final bool receiptShowLogo;
+
+  /// Tampilkan alamat & telepon bisnis di struk.
+  final bool receiptShowAddress;
+
+  /// Tampilkan QRIS pembayaran di struk.
+  final bool receiptShowQris;
+
+  /// Pesan footer struk (ucapan terima kasih, dsb).
+  final String? receiptFooter;
+
+  /// Metode printer: 'system' | 'bluetooth'.
+  final String printerType;
+
+  /// Alamat perangkat printer Bluetooth (MAC address).
+  final String? printerAddress;
+
+  /// Nama perangkat printer Bluetooth.
+  final String? printerName;
   final DateTime createdAt;
   final DateTime updatedAt;
   const BusinessProfile({
@@ -4841,6 +5079,14 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
     required this.theme,
     this.qrisImagePath,
     this.logoPath,
+    required this.receiptPaperWidth,
+    required this.receiptShowLogo,
+    required this.receiptShowAddress,
+    required this.receiptShowQris,
+    this.receiptFooter,
+    required this.printerType,
+    this.printerAddress,
+    this.printerName,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -4869,6 +5115,20 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
     if (!nullToAbsent || logoPath != null) {
       map['logo_path'] = Variable<String>(logoPath);
     }
+    map['receipt_paper_width'] = Variable<String>(receiptPaperWidth);
+    map['receipt_show_logo'] = Variable<bool>(receiptShowLogo);
+    map['receipt_show_address'] = Variable<bool>(receiptShowAddress);
+    map['receipt_show_qris'] = Variable<bool>(receiptShowQris);
+    if (!nullToAbsent || receiptFooter != null) {
+      map['receipt_footer'] = Variable<String>(receiptFooter);
+    }
+    map['printer_type'] = Variable<String>(printerType);
+    if (!nullToAbsent || printerAddress != null) {
+      map['printer_address'] = Variable<String>(printerAddress);
+    }
+    if (!nullToAbsent || printerName != null) {
+      map['printer_name'] = Variable<String>(printerName);
+    }
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
@@ -4896,6 +5156,20 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
       logoPath: logoPath == null && nullToAbsent
           ? const Value.absent()
           : Value(logoPath),
+      receiptPaperWidth: Value(receiptPaperWidth),
+      receiptShowLogo: Value(receiptShowLogo),
+      receiptShowAddress: Value(receiptShowAddress),
+      receiptShowQris: Value(receiptShowQris),
+      receiptFooter: receiptFooter == null && nullToAbsent
+          ? const Value.absent()
+          : Value(receiptFooter),
+      printerType: Value(printerType),
+      printerAddress: printerAddress == null && nullToAbsent
+          ? const Value.absent()
+          : Value(printerAddress),
+      printerName: printerName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(printerName),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
@@ -4917,6 +5191,14 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
       theme: serializer.fromJson<String>(json['theme']),
       qrisImagePath: serializer.fromJson<String?>(json['qrisImagePath']),
       logoPath: serializer.fromJson<String?>(json['logoPath']),
+      receiptPaperWidth: serializer.fromJson<String>(json['receiptPaperWidth']),
+      receiptShowLogo: serializer.fromJson<bool>(json['receiptShowLogo']),
+      receiptShowAddress: serializer.fromJson<bool>(json['receiptShowAddress']),
+      receiptShowQris: serializer.fromJson<bool>(json['receiptShowQris']),
+      receiptFooter: serializer.fromJson<String?>(json['receiptFooter']),
+      printerType: serializer.fromJson<String>(json['printerType']),
+      printerAddress: serializer.fromJson<String?>(json['printerAddress']),
+      printerName: serializer.fromJson<String?>(json['printerName']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -4935,6 +5217,14 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
       'theme': serializer.toJson<String>(theme),
       'qrisImagePath': serializer.toJson<String?>(qrisImagePath),
       'logoPath': serializer.toJson<String?>(logoPath),
+      'receiptPaperWidth': serializer.toJson<String>(receiptPaperWidth),
+      'receiptShowLogo': serializer.toJson<bool>(receiptShowLogo),
+      'receiptShowAddress': serializer.toJson<bool>(receiptShowAddress),
+      'receiptShowQris': serializer.toJson<bool>(receiptShowQris),
+      'receiptFooter': serializer.toJson<String?>(receiptFooter),
+      'printerType': serializer.toJson<String>(printerType),
+      'printerAddress': serializer.toJson<String?>(printerAddress),
+      'printerName': serializer.toJson<String?>(printerName),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
@@ -4951,6 +5241,14 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
     String? theme,
     Value<String?> qrisImagePath = const Value.absent(),
     Value<String?> logoPath = const Value.absent(),
+    String? receiptPaperWidth,
+    bool? receiptShowLogo,
+    bool? receiptShowAddress,
+    bool? receiptShowQris,
+    Value<String?> receiptFooter = const Value.absent(),
+    String? printerType,
+    Value<String?> printerAddress = const Value.absent(),
+    Value<String?> printerName = const Value.absent(),
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => BusinessProfile(
@@ -4966,6 +5264,18 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
         ? qrisImagePath.value
         : this.qrisImagePath,
     logoPath: logoPath.present ? logoPath.value : this.logoPath,
+    receiptPaperWidth: receiptPaperWidth ?? this.receiptPaperWidth,
+    receiptShowLogo: receiptShowLogo ?? this.receiptShowLogo,
+    receiptShowAddress: receiptShowAddress ?? this.receiptShowAddress,
+    receiptShowQris: receiptShowQris ?? this.receiptShowQris,
+    receiptFooter: receiptFooter.present
+        ? receiptFooter.value
+        : this.receiptFooter,
+    printerType: printerType ?? this.printerType,
+    printerAddress: printerAddress.present
+        ? printerAddress.value
+        : this.printerAddress,
+    printerName: printerName.present ? printerName.value : this.printerName,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
@@ -4983,6 +5293,30 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
           ? data.qrisImagePath.value
           : this.qrisImagePath,
       logoPath: data.logoPath.present ? data.logoPath.value : this.logoPath,
+      receiptPaperWidth: data.receiptPaperWidth.present
+          ? data.receiptPaperWidth.value
+          : this.receiptPaperWidth,
+      receiptShowLogo: data.receiptShowLogo.present
+          ? data.receiptShowLogo.value
+          : this.receiptShowLogo,
+      receiptShowAddress: data.receiptShowAddress.present
+          ? data.receiptShowAddress.value
+          : this.receiptShowAddress,
+      receiptShowQris: data.receiptShowQris.present
+          ? data.receiptShowQris.value
+          : this.receiptShowQris,
+      receiptFooter: data.receiptFooter.present
+          ? data.receiptFooter.value
+          : this.receiptFooter,
+      printerType: data.printerType.present
+          ? data.printerType.value
+          : this.printerType,
+      printerAddress: data.printerAddress.present
+          ? data.printerAddress.value
+          : this.printerAddress,
+      printerName: data.printerName.present
+          ? data.printerName.value
+          : this.printerName,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -5001,6 +5335,14 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
           ..write('theme: $theme, ')
           ..write('qrisImagePath: $qrisImagePath, ')
           ..write('logoPath: $logoPath, ')
+          ..write('receiptPaperWidth: $receiptPaperWidth, ')
+          ..write('receiptShowLogo: $receiptShowLogo, ')
+          ..write('receiptShowAddress: $receiptShowAddress, ')
+          ..write('receiptShowQris: $receiptShowQris, ')
+          ..write('receiptFooter: $receiptFooter, ')
+          ..write('printerType: $printerType, ')
+          ..write('printerAddress: $printerAddress, ')
+          ..write('printerName: $printerName, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -5019,6 +5361,14 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
     theme,
     qrisImagePath,
     logoPath,
+    receiptPaperWidth,
+    receiptShowLogo,
+    receiptShowAddress,
+    receiptShowQris,
+    receiptFooter,
+    printerType,
+    printerAddress,
+    printerName,
     createdAt,
     updatedAt,
   );
@@ -5036,6 +5386,14 @@ class BusinessProfile extends DataClass implements Insertable<BusinessProfile> {
           other.theme == this.theme &&
           other.qrisImagePath == this.qrisImagePath &&
           other.logoPath == this.logoPath &&
+          other.receiptPaperWidth == this.receiptPaperWidth &&
+          other.receiptShowLogo == this.receiptShowLogo &&
+          other.receiptShowAddress == this.receiptShowAddress &&
+          other.receiptShowQris == this.receiptShowQris &&
+          other.receiptFooter == this.receiptFooter &&
+          other.printerType == this.printerType &&
+          other.printerAddress == this.printerAddress &&
+          other.printerName == this.printerName &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -5051,6 +5409,14 @@ class BusinessProfilesCompanion extends UpdateCompanion<BusinessProfile> {
   final Value<String> theme;
   final Value<String?> qrisImagePath;
   final Value<String?> logoPath;
+  final Value<String> receiptPaperWidth;
+  final Value<bool> receiptShowLogo;
+  final Value<bool> receiptShowAddress;
+  final Value<bool> receiptShowQris;
+  final Value<String?> receiptFooter;
+  final Value<String> printerType;
+  final Value<String?> printerAddress;
+  final Value<String?> printerName;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   const BusinessProfilesCompanion({
@@ -5064,6 +5430,14 @@ class BusinessProfilesCompanion extends UpdateCompanion<BusinessProfile> {
     this.theme = const Value.absent(),
     this.qrisImagePath = const Value.absent(),
     this.logoPath = const Value.absent(),
+    this.receiptPaperWidth = const Value.absent(),
+    this.receiptShowLogo = const Value.absent(),
+    this.receiptShowAddress = const Value.absent(),
+    this.receiptShowQris = const Value.absent(),
+    this.receiptFooter = const Value.absent(),
+    this.printerType = const Value.absent(),
+    this.printerAddress = const Value.absent(),
+    this.printerName = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
@@ -5078,6 +5452,14 @@ class BusinessProfilesCompanion extends UpdateCompanion<BusinessProfile> {
     this.theme = const Value.absent(),
     this.qrisImagePath = const Value.absent(),
     this.logoPath = const Value.absent(),
+    this.receiptPaperWidth = const Value.absent(),
+    this.receiptShowLogo = const Value.absent(),
+    this.receiptShowAddress = const Value.absent(),
+    this.receiptShowQris = const Value.absent(),
+    this.receiptFooter = const Value.absent(),
+    this.printerType = const Value.absent(),
+    this.printerAddress = const Value.absent(),
+    this.printerName = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
@@ -5092,6 +5474,14 @@ class BusinessProfilesCompanion extends UpdateCompanion<BusinessProfile> {
     Expression<String>? theme,
     Expression<String>? qrisImagePath,
     Expression<String>? logoPath,
+    Expression<String>? receiptPaperWidth,
+    Expression<bool>? receiptShowLogo,
+    Expression<bool>? receiptShowAddress,
+    Expression<bool>? receiptShowQris,
+    Expression<String>? receiptFooter,
+    Expression<String>? printerType,
+    Expression<String>? printerAddress,
+    Expression<String>? printerName,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
   }) {
@@ -5106,6 +5496,15 @@ class BusinessProfilesCompanion extends UpdateCompanion<BusinessProfile> {
       if (theme != null) 'theme': theme,
       if (qrisImagePath != null) 'qris_image_path': qrisImagePath,
       if (logoPath != null) 'logo_path': logoPath,
+      if (receiptPaperWidth != null) 'receipt_paper_width': receiptPaperWidth,
+      if (receiptShowLogo != null) 'receipt_show_logo': receiptShowLogo,
+      if (receiptShowAddress != null)
+        'receipt_show_address': receiptShowAddress,
+      if (receiptShowQris != null) 'receipt_show_qris': receiptShowQris,
+      if (receiptFooter != null) 'receipt_footer': receiptFooter,
+      if (printerType != null) 'printer_type': printerType,
+      if (printerAddress != null) 'printer_address': printerAddress,
+      if (printerName != null) 'printer_name': printerName,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
     });
@@ -5122,6 +5521,14 @@ class BusinessProfilesCompanion extends UpdateCompanion<BusinessProfile> {
     Value<String>? theme,
     Value<String?>? qrisImagePath,
     Value<String?>? logoPath,
+    Value<String>? receiptPaperWidth,
+    Value<bool>? receiptShowLogo,
+    Value<bool>? receiptShowAddress,
+    Value<bool>? receiptShowQris,
+    Value<String?>? receiptFooter,
+    Value<String>? printerType,
+    Value<String?>? printerAddress,
+    Value<String?>? printerName,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
   }) {
@@ -5136,6 +5543,14 @@ class BusinessProfilesCompanion extends UpdateCompanion<BusinessProfile> {
       theme: theme ?? this.theme,
       qrisImagePath: qrisImagePath ?? this.qrisImagePath,
       logoPath: logoPath ?? this.logoPath,
+      receiptPaperWidth: receiptPaperWidth ?? this.receiptPaperWidth,
+      receiptShowLogo: receiptShowLogo ?? this.receiptShowLogo,
+      receiptShowAddress: receiptShowAddress ?? this.receiptShowAddress,
+      receiptShowQris: receiptShowQris ?? this.receiptShowQris,
+      receiptFooter: receiptFooter ?? this.receiptFooter,
+      printerType: printerType ?? this.printerType,
+      printerAddress: printerAddress ?? this.printerAddress,
+      printerName: printerName ?? this.printerName,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -5174,6 +5589,30 @@ class BusinessProfilesCompanion extends UpdateCompanion<BusinessProfile> {
     if (logoPath.present) {
       map['logo_path'] = Variable<String>(logoPath.value);
     }
+    if (receiptPaperWidth.present) {
+      map['receipt_paper_width'] = Variable<String>(receiptPaperWidth.value);
+    }
+    if (receiptShowLogo.present) {
+      map['receipt_show_logo'] = Variable<bool>(receiptShowLogo.value);
+    }
+    if (receiptShowAddress.present) {
+      map['receipt_show_address'] = Variable<bool>(receiptShowAddress.value);
+    }
+    if (receiptShowQris.present) {
+      map['receipt_show_qris'] = Variable<bool>(receiptShowQris.value);
+    }
+    if (receiptFooter.present) {
+      map['receipt_footer'] = Variable<String>(receiptFooter.value);
+    }
+    if (printerType.present) {
+      map['printer_type'] = Variable<String>(printerType.value);
+    }
+    if (printerAddress.present) {
+      map['printer_address'] = Variable<String>(printerAddress.value);
+    }
+    if (printerName.present) {
+      map['printer_name'] = Variable<String>(printerName.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -5196,6 +5635,14 @@ class BusinessProfilesCompanion extends UpdateCompanion<BusinessProfile> {
           ..write('theme: $theme, ')
           ..write('qrisImagePath: $qrisImagePath, ')
           ..write('logoPath: $logoPath, ')
+          ..write('receiptPaperWidth: $receiptPaperWidth, ')
+          ..write('receiptShowLogo: $receiptShowLogo, ')
+          ..write('receiptShowAddress: $receiptShowAddress, ')
+          ..write('receiptShowQris: $receiptShowQris, ')
+          ..write('receiptFooter: $receiptFooter, ')
+          ..write('printerType: $printerType, ')
+          ..write('printerAddress: $printerAddress, ')
+          ..write('printerName: $printerName, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -7565,6 +8012,14 @@ typedef $$BusinessProfilesTableCreateCompanionBuilder =
       Value<String> theme,
       Value<String?> qrisImagePath,
       Value<String?> logoPath,
+      Value<String> receiptPaperWidth,
+      Value<bool> receiptShowLogo,
+      Value<bool> receiptShowAddress,
+      Value<bool> receiptShowQris,
+      Value<String?> receiptFooter,
+      Value<String> printerType,
+      Value<String?> printerAddress,
+      Value<String?> printerName,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
     });
@@ -7580,6 +8035,14 @@ typedef $$BusinessProfilesTableUpdateCompanionBuilder =
       Value<String> theme,
       Value<String?> qrisImagePath,
       Value<String?> logoPath,
+      Value<String> receiptPaperWidth,
+      Value<bool> receiptShowLogo,
+      Value<bool> receiptShowAddress,
+      Value<bool> receiptShowQris,
+      Value<String?> receiptFooter,
+      Value<String> printerType,
+      Value<String?> printerAddress,
+      Value<String?> printerName,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
     });
@@ -7640,6 +8103,46 @@ class $$BusinessProfilesTableFilterComposer
 
   ColumnFilters<String> get logoPath => $composableBuilder(
     column: $table.logoPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get receiptPaperWidth => $composableBuilder(
+    column: $table.receiptPaperWidth,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get receiptShowLogo => $composableBuilder(
+    column: $table.receiptShowLogo,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get receiptShowAddress => $composableBuilder(
+    column: $table.receiptShowAddress,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get receiptShowQris => $composableBuilder(
+    column: $table.receiptShowQris,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get receiptFooter => $composableBuilder(
+    column: $table.receiptFooter,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get printerType => $composableBuilder(
+    column: $table.printerType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get printerAddress => $composableBuilder(
+    column: $table.printerAddress,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get printerName => $composableBuilder(
+    column: $table.printerName,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7713,6 +8216,46 @@ class $$BusinessProfilesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get receiptPaperWidth => $composableBuilder(
+    column: $table.receiptPaperWidth,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get receiptShowLogo => $composableBuilder(
+    column: $table.receiptShowLogo,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get receiptShowAddress => $composableBuilder(
+    column: $table.receiptShowAddress,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get receiptShowQris => $composableBuilder(
+    column: $table.receiptShowQris,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get receiptFooter => $composableBuilder(
+    column: $table.receiptFooter,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get printerType => $composableBuilder(
+    column: $table.printerType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get printerAddress => $composableBuilder(
+    column: $table.printerAddress,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get printerName => $composableBuilder(
+    column: $table.printerName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -7764,6 +8307,46 @@ class $$BusinessProfilesTableAnnotationComposer
 
   GeneratedColumn<String> get logoPath =>
       $composableBuilder(column: $table.logoPath, builder: (column) => column);
+
+  GeneratedColumn<String> get receiptPaperWidth => $composableBuilder(
+    column: $table.receiptPaperWidth,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get receiptShowLogo => $composableBuilder(
+    column: $table.receiptShowLogo,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get receiptShowAddress => $composableBuilder(
+    column: $table.receiptShowAddress,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get receiptShowQris => $composableBuilder(
+    column: $table.receiptShowQris,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get receiptFooter => $composableBuilder(
+    column: $table.receiptFooter,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get printerType => $composableBuilder(
+    column: $table.printerType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get printerAddress => $composableBuilder(
+    column: $table.printerAddress,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get printerName => $composableBuilder(
+    column: $table.printerName,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -7819,6 +8402,14 @@ class $$BusinessProfilesTableTableManager
                 Value<String> theme = const Value.absent(),
                 Value<String?> qrisImagePath = const Value.absent(),
                 Value<String?> logoPath = const Value.absent(),
+                Value<String> receiptPaperWidth = const Value.absent(),
+                Value<bool> receiptShowLogo = const Value.absent(),
+                Value<bool> receiptShowAddress = const Value.absent(),
+                Value<bool> receiptShowQris = const Value.absent(),
+                Value<String?> receiptFooter = const Value.absent(),
+                Value<String> printerType = const Value.absent(),
+                Value<String?> printerAddress = const Value.absent(),
+                Value<String?> printerName = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => BusinessProfilesCompanion(
@@ -7832,6 +8423,14 @@ class $$BusinessProfilesTableTableManager
                 theme: theme,
                 qrisImagePath: qrisImagePath,
                 logoPath: logoPath,
+                receiptPaperWidth: receiptPaperWidth,
+                receiptShowLogo: receiptShowLogo,
+                receiptShowAddress: receiptShowAddress,
+                receiptShowQris: receiptShowQris,
+                receiptFooter: receiptFooter,
+                printerType: printerType,
+                printerAddress: printerAddress,
+                printerName: printerName,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
               ),
@@ -7847,6 +8446,14 @@ class $$BusinessProfilesTableTableManager
                 Value<String> theme = const Value.absent(),
                 Value<String?> qrisImagePath = const Value.absent(),
                 Value<String?> logoPath = const Value.absent(),
+                Value<String> receiptPaperWidth = const Value.absent(),
+                Value<bool> receiptShowLogo = const Value.absent(),
+                Value<bool> receiptShowAddress = const Value.absent(),
+                Value<bool> receiptShowQris = const Value.absent(),
+                Value<String?> receiptFooter = const Value.absent(),
+                Value<String> printerType = const Value.absent(),
+                Value<String?> printerAddress = const Value.absent(),
+                Value<String?> printerName = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => BusinessProfilesCompanion.insert(
@@ -7860,6 +8467,14 @@ class $$BusinessProfilesTableTableManager
                 theme: theme,
                 qrisImagePath: qrisImagePath,
                 logoPath: logoPath,
+                receiptPaperWidth: receiptPaperWidth,
+                receiptShowLogo: receiptShowLogo,
+                receiptShowAddress: receiptShowAddress,
+                receiptShowQris: receiptShowQris,
+                receiptFooter: receiptFooter,
+                printerType: printerType,
+                printerAddress: printerAddress,
+                printerName: printerName,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
               ),

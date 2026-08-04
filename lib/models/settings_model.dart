@@ -13,6 +13,22 @@ class SettingsModel {
   final String theme;
   final String? qrisImagePath;
   final String? logoPath;
+  /// Lebar kertas struk: '58' atau '80' (mm).
+  final String receiptPaperWidth;
+  /// Tampilkan logo bisnis di struk.
+  final bool receiptShowLogo;
+  /// Tampilkan alamat & telepon bisnis di struk.
+  final bool receiptShowAddress;
+  /// Tampilkan QRIS pembayaran di struk.
+  final bool receiptShowQris;
+  /// Pesan footer struk.
+  final String receiptFooter;
+  /// Metode print: 'system' | 'bluetooth' | 'usb'.
+  final String printerType;
+  /// Alamat perangkat printer (MAC Bluetooth / path USB).
+  final String? printerAddress;
+  /// Nama perangkat printer.
+  final String? printerName;
 
   SettingsModel({
     this.id,
@@ -25,6 +41,14 @@ class SettingsModel {
     this.theme = 'light',
     this.qrisImagePath,
     this.logoPath,
+    this.receiptPaperWidth = '58',
+    this.receiptShowLogo = true,
+    this.receiptShowAddress = true,
+    this.receiptShowQris = true,
+    this.receiptFooter = '',
+    this.printerType = 'system',
+    this.printerAddress,
+    this.printerName,
   });
 
   BusinessProfilesCompanion toCompanion() {
@@ -39,6 +63,14 @@ class SettingsModel {
       theme: Value(theme),
       qrisImagePath: Value(qrisImagePath),
       logoPath: Value(logoPath),
+      receiptPaperWidth: Value(receiptPaperWidth),
+      receiptShowLogo: Value(receiptShowLogo),
+      receiptShowAddress: Value(receiptShowAddress),
+      receiptShowQris: Value(receiptShowQris),
+      receiptFooter: Value(receiptFooter.isEmpty ? null : receiptFooter),
+      printerType: Value(printerType),
+      printerAddress: Value(printerAddress),
+      printerName: Value(printerName),
     );
   }
 
@@ -54,6 +86,14 @@ class SettingsModel {
       theme: row.theme,
       qrisImagePath: row.qrisImagePath,
       logoPath: row.logoPath,
+      receiptPaperWidth: row.receiptPaperWidth,
+      receiptShowLogo: row.receiptShowLogo,
+      receiptShowAddress: row.receiptShowAddress,
+      receiptShowQris: row.receiptShowQris,
+      receiptFooter: row.receiptFooter ?? '',
+      printerType: row.printerType,
+      printerAddress: row.printerAddress,
+      printerName: row.printerName,
     );
   }
 
@@ -68,6 +108,14 @@ class SettingsModel {
     String? theme,
     String? Function()? qrisImagePath,
     String? Function()? logoPath,
+    String? receiptPaperWidth,
+    bool? receiptShowLogo,
+    bool? receiptShowAddress,
+    bool? receiptShowQris,
+    String? receiptFooter,
+    String? printerType,
+    String? Function()? printerAddress,
+    String? Function()? printerName,
   }) {
     return SettingsModel(
       id: id ?? this.id,
@@ -80,6 +128,14 @@ class SettingsModel {
       theme: theme ?? this.theme,
       qrisImagePath: qrisImagePath != null ? qrisImagePath() : this.qrisImagePath,
       logoPath: logoPath != null ? logoPath() : this.logoPath,
+      receiptPaperWidth: receiptPaperWidth ?? this.receiptPaperWidth,
+      receiptShowLogo: receiptShowLogo ?? this.receiptShowLogo,
+      receiptShowAddress: receiptShowAddress ?? this.receiptShowAddress,
+      receiptShowQris: receiptShowQris ?? this.receiptShowQris,
+      receiptFooter: receiptFooter ?? this.receiptFooter,
+      printerType: printerType ?? this.printerType,
+      printerAddress: printerAddress != null ? printerAddress() : this.printerAddress,
+      printerName: printerName != null ? printerName() : this.printerName,
     );
   }
 }

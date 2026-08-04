@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:usahaku/controllers/settings_controller.dart';
 import 'package:usahaku/models/settings_model.dart';
 import 'package:usahaku/screens/pengaturan/business_info_screen.dart';
+import 'package:usahaku/screens/pengaturan/print_struk_screen.dart';
 import 'package:usahaku/screens/pengaturan/qris_screen.dart';
 import 'package:usahaku/theme/app_theme.dart';
 import 'package:usahaku/widgets/app_about_dialog.dart';
@@ -123,6 +124,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _c.load();
                   },
                 ),
+                ListMenuTile(
+                  icon: Icons.print_outlined,
+                  iconBg: AppColor.tertiaryFixed,
+                  iconColor: AppColor.onTertiaryFixedVariant,
+                  title: 'Print Struk',
+                  subtitle: _printSubtitle(s),
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => PrintStrukScreen(controller: _c)),
+                    );
+                    _c.load();
+                  },
+                ),
               ]),
               const SizedBox(height: 20),
               _sectionLabel('Manajemen Data'),
@@ -219,6 +234,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
+  }
+
+  String _printSubtitle(SettingsModel s) {
+    final method = s.printerType == 'bluetooth'
+        ? (s.printerName != null ? 'Bluetooth: ${s.printerName}' : 'Bluetooth')
+        : 'Cetak Sistem / PDF';
+    return '${s.receiptPaperWidth}mm • $method';
   }
 
   Widget _profileCard(SettingsModel s) {

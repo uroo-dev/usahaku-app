@@ -49,34 +49,12 @@ class SettingsController extends BaseController {
   }
 
   Future<void> saveQris(String path) async {
-    final updated = SettingsModel(
-      id: _settings.id,
-      businessName: _settings.businessName,
-      owner: _settings.owner,
-      phone: _settings.phone,
-      address: _settings.address,
-      npwp: _settings.npwp,
-      currency: _settings.currency,
-      theme: _settings.theme,
-      qrisImagePath: path,
-      logoPath: _settings.logoPath,
-    );
+    final updated = _settings.copyWith(qrisImagePath: () => path);
     await save(updated);
   }
 
   Future<void> removeQris() async {
-    final updated = SettingsModel(
-      id: _settings.id,
-      businessName: _settings.businessName,
-      owner: _settings.owner,
-      phone: _settings.phone,
-      address: _settings.address,
-      npwp: _settings.npwp,
-      currency: _settings.currency,
-      theme: _settings.theme,
-      qrisImagePath: null,
-      logoPath: _settings.logoPath,
-    );
+    final updated = _settings.copyWith(qrisImagePath: () => null);
     await save(updated);
   }
 
